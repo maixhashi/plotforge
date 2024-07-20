@@ -1,12 +1,13 @@
 Rails.application.routes.draw do
   root 'welcome#index'
+
+  get 'login', to: 'sessions#new'  # 追記
+  post 'login', to: 'sessions#create'  # 追記
+  get 'logout', to: 'sessions#destroy'  #
+  delete 'logout', to: 'sessions#destroy'  #
   resources :users, only: [:new, :create, :destroy]
-  resources :sessions, only: [:new, :create, :destroy]
-  get 'login', to: 'sessions#new'
-  post 'login', to: 'sessions#create'
-  delete 'logout', to: 'sessions#destroy'
     # サインアップ関連のルーティング（仮定）
-  get 'signup', to: 'users#new'
+  get 'signup', to: 'users#new', as: :signup
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

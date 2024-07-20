@@ -1,23 +1,27 @@
-<%= form_with url: login_path, local: true do |form| %>
-  <div class="form-container">
-    <h1 class="form-title">ログイン</h1>
-    <p class="form-description">アカウントにアクセスするためには、メールアドレスとパスワードを入力してください。</p>
+<div class="form-container">
+  <h2>PlotForgeにログインしましょう</h2>
+　　<p class="form-description">
+　　　　ユーザー名とメールアドレスとパスワードを入力してください。
+　　</p>
+　　<%= form_with url: login_path, local: true do |form| %>
+        <div class="form-group">
+        <i class="fas fa-envelope icon"></i>
+        <%= form.email_field :email, class: 'form-control', placeholder: 'メールアドレス' %>
+        <% if @user && @user.errors[:email].any? %>
+            <div class="error-message"><%= @user.errors[:email].first %></div>
+        <% end %>
+        </div>
 
-    <div class="form-group">
-      <%= form.label :email %>
-      <%= form.text_field :email, class: 'form-control' %>
-      <% if flash[:alert] %>
-        <div class="error-message"><%= flash[:alert] %></div>
-      <% end %>
-    </div>
+        <div class="form-group">
+        <i class="fas fa-lock icon"></i>
+        <%= form.password_field :password, class: 'form-control', placeholder: 'パスワード' %>
+        <% if @user && @user.errors[:password].any? %>
+            <div class="error-message"><%= @user.errors[:password].first %></div>
+        <% end %>
+        </div>
 
-    <div class="form-group">
-      <%= form.label :password %>
-      <%= form.password_field :password, class: 'form-control' %>
-    </div>
-
-    <div class="form-group">
-      <%= form.submit 'ログイン', class: 'btn-primary' %>
-    </div>
-  </div>
-<% end %>
+        <div class="form-group">
+        <%= form.submit 'ログイン', class: 'btn btn-primary' %>
+        </div>
+  <% end %>
+</div>

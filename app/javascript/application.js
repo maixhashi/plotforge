@@ -1,6 +1,5 @@
 // app/javascript/application.js
-import "@fortawesome/fontawesome-free/js/all";
-
+import "@fortawesome/fontawesome-free"
 
 document.addEventListener('DOMContentLoaded', () => {
     function generateRandomPhrase(length) {

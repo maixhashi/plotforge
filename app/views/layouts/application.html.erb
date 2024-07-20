@@ -11,10 +11,16 @@
   <body>
     <div class="background-text"> </div>
     <header>
-      <img src="<%= asset_path('logo_on_header.png') %>" alt="Logo" class="logo_on_header">
+      <%= link_to root_path do %>
+        <img src="<%= asset_path('logo_on_header.png') %>" alt="Logo" class="logo_on_header">
+      <% end %>
       <div class="header-buttons">
-        <a href="/login" class="btn">ログイン</a>
-        <a href="/signup" class="btn">サインアップ</a>
+        <% if current_user %> 
+          <%= link_to 'ログアウト', logout_path, method: :delete, class: 'btn btn-logout' %>
+        <% else %> 
+          <%= link_to 'ログイン', login_path, class: 'btn btn-login' %>
+          <%= link_to 'サインアップ', signup_path, class: 'btn btn-signup' %>
+        <% end %>
       </div>
     </header>
 

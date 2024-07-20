@@ -1,34 +1,43 @@
-<%= form_with model: @user, local: true do |form| %>
-  <div class="form-container">
-    <h1 class="form-title">サインアップ</h1>
-    <p class="form-description">新しいアカウントを作成するには、下記の情報を入力してください。</p>
-
+<div class="form-container">
+  <h2>PlotForgeのアカウントを作成しましょう</h2>
+　　<p class="form-description">
+　　　　アカウントを作成するために、ユーザー名とメールアドレスとパスワードを入力してください。
+　　</p>
+  <%= form_with model: @user, local: true do |form| %>
     <div class="form-group">
-      <%= form.label :name %>
-      <%= form.text_field :name, class: 'form-control' %>
-      <% if @user.errors[:name].any? %>
+      <i class="fas fa-user icon"></i>
+      <%= form.text_field :name, class: 'form-control', placeholder: '名前' %>
+      <% if @user && @user.errors[:name].any? %>
         <div class="error-message"><%= @user.errors[:name].first %></div>
       <% end %>
     </div>
 
     <div class="form-group">
-      <%= form.label :email %>
-      <%= form.email_field :email, class: 'form-control' %>
-      <% if @user.errors[:email].any? %>
+      <i class="fas fa-envelope icon"></i>
+      <%= form.email_field :email, class: 'form-control', placeholder: 'メールアドレス' %>
+      <% if @user && @user.errors[:email].any? %>
         <div class="error-message"><%= @user.errors[:email].first %></div>
       <% end %>
     </div>
 
     <div class="form-group">
-      <%= form.label :password %>
-      <%= form.password_field :password, class: 'form-control' %>
-      <% if @user.errors[:password].any? %>
+      <i class="fas fa-lock icon"></i>
+      <%= form.password_field :password, class: 'form-control', placeholder: 'パスワード' %>
+      <% if @user && @user.errors[:password].any? %>
         <div class="error-message"><%= @user.errors[:password].first %></div>
       <% end %>
     </div>
 
     <div class="form-group">
-      <%= form.submit 'サインアップ', class: 'btn-primary' %>
+      <i class="fas fa-lock icon"></i>
+      <%= form.password_field :password_confirmation, class: 'form-control', placeholder: 'パスワード' %>
+      <% if @user && @user.errors[:password_confirmation].any? %>
+        <div class="error-message"><%= @user.errors[:password_confirmation].first %></div>
+      <% end %>
     </div>
-  </div>
-<% end %>
+
+    <div class="form-group">
+      <%= form.submit 'サインアップ', class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+</div>
