@@ -1,3 +1,7 @@
+// app/javascript/application.js
+import "@fortawesome/fontawesome-free/js/all";
+
+
 document.addEventListener('DOMContentLoaded', () => {
     function generateRandomPhrase(length) {
       const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
