@@ -262,10 +262,18 @@ main {
   height: 100px; /* 必要に応じて調整 */
 }
 
+/* アイコンとテキストを縦に並べる */
 .user-info {
-  display: table;
-  border-collapse: collapse;
+  display: flex;
+  flex-direction: column; /* 縦に並べる */
+  align-items: center; /* 中央に配置 */
+  margin-right: 25px;
 }
+
+.user-info i {
+  margin-bottom: 0.5rem; /* アイコンとテキストの間にスペースを追加 */
+}
+
 
 .info-row {
   display: table-row;
