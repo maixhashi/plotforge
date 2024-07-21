@@ -1,3 +1,5 @@
+@import 'movies';
+
 :root {
   --header-height: 60px; /* ヘッダーの高さ */
   --background-text-height: 200px; /* 背景テキストの高さ */
@@ -295,3 +297,4 @@ main {
 .info-value {
   text-align: left;
 }
+

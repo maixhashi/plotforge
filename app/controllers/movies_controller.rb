@@ -16,5 +16,11 @@ class MoviesController < ApplicationController
     def show_multiple_random
         @movies = TmdbService.new.random_movies(5) # 例えば5つの映画を取得
     end
-  end
+
+    def show_random_movies
+      tmdb_service = TmdbService.new
+      @movies = tmdb_service.random_movies(5)
   
+      @shuffled_synopsis = SynopsisShuffler.shuffle_synopsis(@movies, view_context)
+    end
+end
