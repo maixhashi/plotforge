@@ -1,0 +1,17 @@
+<h1>設定</h1>
+
+<%= form_with(model: @setting, url: settings_path, local: true) do |form| %>
+  <div class="field">
+    <%= form.label :notification, "通知" %>
+    <%= form.check_box :notification %>
+  </div>
+
+  <div class="field">
+    <%= form.label :dark_mode, "ダークモード" %>
+    <%= form.check_box :dark_mode %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "更新" %>
+  </div>
+<% end %>
