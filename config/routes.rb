@@ -19,6 +19,11 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'movies/:id', to: 'movies#show', as: 'movie'
+  get 'search', to: 'movies#search'
+  get 'random_movie', to: 'movies#show_random'
+  get 'random_movies', to: 'movies#show_multiple_random'
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
