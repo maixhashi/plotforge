@@ -15,8 +15,26 @@ class UsersController < ApplicationController
     end
   end
 
+  # パスワード変更フォームを表示
+  def edit_password
+  end
+
+  # パスワード変更の処理
+  def update_password
+    if current_user.update(password_params)
+      redirect_to user_path(current_user), notice: 'パスワードが変更されました'
+    else
+      render :edit_password
+    end
+  end
+
   private
+
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
+  end
+
+  def password_params
+    params.require(:user).permit(:password, :password_confirmation)
   end
 end

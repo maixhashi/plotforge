@@ -6,9 +6,18 @@ Rails.application.routes.draw do
   get 'logout', to: 'sessions#destroy'  #
   delete 'logout', to: 'sessions#destroy'  #
   resources :users, only: [:new, :create, :destroy]
+  resources :settings, only: [:index, :show]
     # サインアップ関連のルーティング（仮定）
   get 'signup', to: 'users#new', as: :signup
+  get 'profile', to: 'users#show', as: :profile
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+
+  resource :users, only: [] do
+    member do
+      get 'edit_password', to: 'users#edit_password'
+      patch 'update_password', to: 'users#update_password'
+    end
+  end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

@@ -54,4 +54,21 @@ document.addEventListener('DOMContentLoaded', () => {
       createRandomTextElement(generateRandomPhrase(10)); // 10文字のランダムな文字列を生成
     }
   });
-  
+
+  document.addEventListener("DOMContentLoaded", function() {
+  const hamburgerButton = document.getElementById("hamburger-button");
+  const hamburgerMenu = document.getElementById("hamburger-menu");
+  const closeButton = document.getElementById("close-button");
+
+  if (hamburgerButton && hamburgerMenu) {
+    hamburgerButton.addEventListener("click", function() {
+      hamburgerMenu.classList.toggle("show");
+    });
+  }
+
+  if (closeButton) {
+    closeButton.addEventListener("click", function() {
+      hamburgerMenu.classList.remove("show");
+    });
+  }
+});

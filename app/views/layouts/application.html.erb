@@ -22,7 +22,19 @@
             <i class="fa fa-user-circle fa-2x"></i>
             <p><%= current_user.name %></p>
           <% end %>
-          <%= link_to 'ログアウト', logout_path, method: :delete, class: 'btn btn-login'%>
+          <button id="hamburger-button" class="hamburger-button">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav id="hamburger-menu" class="hamburger-menu hidden">
+            <button id="close-button" class="close-button">
+              <i class="fas fa-times"></i>
+          ]</button>
+            <ul>
+              <li><%= link_to 'プロフィール', profile_path %></li>
+              <li><%= link_to '設定', settings_path %></li>
+              <li><%= link_to 'ログアウト', logout_path, method: :delete %></li>
+            </ul>
+          </nav>
         <% else %>
           <%= link_to 'ログイン', login_path, class: 'btn btn-login' %>
           <%= link_to 'サインアップ', signup_path, class: 'btn btn-signup' %>
