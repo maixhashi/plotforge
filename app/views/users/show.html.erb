@@ -1,0 +1,26 @@
+<div class="user-profile">
+  <!-- アバター -->
+  <div class="avatar-container">
+    <% if @user.avatar? %>
+      <%= image_tag @user.avatar.url, class: 'user-avatar' %>
+    <% else %>
+      <i class="fa fa-user-circle fa-5x"></i>
+    <% end %>
+  </div>
+
+  <!-- ユーザー情報を「テーブルのように」配置 -->
+  <div class="user-info">
+    <div class="info-row">
+      <div class="info-label">Name:</div>
+      <div class="info-value"><%= @user.name %></div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">Email:</div>
+      <div class="info-value"><%= @user.email %></div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">Password:</div>
+      <div class="info-value"><%= render 'password_mask' %></div>
+    </div>
+  </div>
+</div>
