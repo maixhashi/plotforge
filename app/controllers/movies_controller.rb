@@ -21,6 +21,9 @@ class MoviesController < ApplicationController
       tmdb_service = TmdbService.new
       @movies = tmdb_service.random_movies(5)
   
-      @shuffled_synopsis = SynopsisShuffler.shuffle_synopsis(@movies, view_context)
+      shuffled_synopsis = SynopsisShuffler.shuffle_synopsis(@movies, view_context)
+      @shuffled_synopsis = shuffled_synopsis.html_safe
+
+
     end
 end

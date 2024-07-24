@@ -1,17 +1,20 @@
-<!-- app/views/movies/show_multiple_random.html.erb -->
-<h1>ランダムな映画たち</h1>
-<% if @movies.present? %>
-  <div class="movies-list">
-    <% @movies.each do |movie| %>
-      <div class="movie-item">
-        <h2><%= movie['title'] %></h2>
-        <p><%= movie['overview'] %></p>
-        <% if movie['poster_path'].present? %>
-          <img src="https://image.tmdb.org/t/p/w500<%= movie['poster_path'] %>" alt="<%= movie['title'] %>">
-        <% end %>
-      </div>
-    <% end %>
-  </div>
-<% else %>
-  <p>映画情報を取得できませんでした。</p>
-<% end %>
+<h1>ランダム映画のあらすじ</h1>
+<p id="shuffled-synopsis"></p>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const text = `<%= j @shuffled_synopsis %>`;
+    const element = document.getElementById('shuffled-synopsis');
+    let index = 0;
+    
+    function typeEffect() {
+      if (index < text.length) {
+        element.innerHTML += text.charAt(index);
+        index++;
+        setTimeout(typeEffect, 50); // 速度を調整
+      }
+    }
+    
+    typeEffect();
+  });
+</script>

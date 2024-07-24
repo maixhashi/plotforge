@@ -1,3 +1,33 @@
-<!-- app/views/movies/show_random_movies.html.erb -->
-<h1>ランダム映画のあらすじ</h1>
-<p><%= @shuffled_synopsis.html_safe %></p>
+<div id="shuffled-synopsis-container">
+  <h1>ランダム映画のあらすじ</h1>
+  <p id="shuffled-synopsis"></p>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const text = `<%= j @shuffled_synopsis %>`;
+    const element = document.getElementById('shuffled-synopsis');
+    let index = 0;
+    let output = '';
+
+    function typeEffect() {
+      if (index < text.length) {
+        if (text.charAt(index) === '<') {
+          // HTMLタグが始まった場合
+          const tagEnd = text.indexOf('>', index);
+          output += text.substring(index, tagEnd + 1);
+          index = tagEnd + 1;
+        } else {
+          // 通常の文字の場合
+          output += text.charAt(index);
+          index++;
+        }
+        element.innerHTML = output;
+        setTimeout(typeEffect, 25); // 速度を調整
+      }
+    }
+
+    // 最初にエフェクトを開始
+    typeEffect();
+  });
+</script>

@@ -19,13 +19,11 @@ module SynopsisShuffler
       end.join(' ')
   
       # 最後が「。」「！」「？」で終わるかを確認し、終わっていない場合のみ「。」を追加
-      shuffled_synopsis = if shuffled_synopsis.strip.match(/.*[ 。！？]$/)
-                            shuffled_synopsis
-                          else
-                            "#{shuffled_synopsis}。"
-                          end
-  
-      shuffled_synopsis
+      if shuffled_synopsis.strip.match(/.*[。！？、]$/)
+        shuffled_synopsis
+      else
+        "#{shuffled_synopsis}。"
+      end
     end
   end
   
