@@ -27,6 +27,7 @@ header {
   position: relative; /* headerにrelativeを設定 */
   z-index: 10; /* headerを前面に配置 */
   height: var(--header-height); /* ヘッダーの高さ */
+  border: 3px solid #333;
 }
 
 header img.logo_on_header {
@@ -165,9 +166,12 @@ footer {
   padding: 1rem;
   text-align: center;
   margin-top: auto; /* フッターをページの底に固定 */
-  z-index: 10; /* footerを前面に配置 */
+  position: relative;
+  z-index: 100; /* 例: フッターの z-index */
   height: var(--footer-height); /* フッターの高さ */
+  border: 3px solid #333;
 }
+
 
 main {
   flex: 1;
@@ -298,23 +302,3 @@ main {
   text-align: left;
 }
 
-#shuffled-synopsis {
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 16px;
-  white-space: pre-wrap; /* 改行をそのまま反映 */
-}
-
-/* app/assets/stylesheets/application.css */
-
-#shuffled-synopsis-container {
-  position: fixed; /* 固定位置にする */
-  top: 200px; /* 上からの距離。ここで 80px は h1 の高さ + 余白を考慮 */
-  right: 20px; /* 左からの距離 */
-  left: 20px; /* 左からの距離 */
-  width: calc(100% - 40px); /* コンテナの幅 */
-  padding: 20px; /* 内側の余白 */
-  background-color: white; /* 背景色 */
-  border: 1px solid #ddd; /* 枠線 */
-  box-shadow: 0 0 10px rgba(0,0,0,0.1); /* 影をつける */
-  z-index: 1000; /* 他の要素の上に表示する */
-}

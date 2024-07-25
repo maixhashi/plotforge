@@ -2,19 +2,29 @@
 <p id="shuffled-synopsis"></p>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const text = `<%= j @shuffled_synopsis %>`;
-    const element = document.getElementById('shuffled-synopsis');
-    let index = 0;
-    
-    function typeEffect() {
-      if (index < text.length) {
-        element.innerHTML += text.charAt(index);
-        index++;
-        setTimeout(typeEffect, 50); // 速度を調整
-      }
+// app/javascript/packs/application.js
+
+document.addEventListener("DOMContentLoaded", () => {
+  const text = `<%= @shuffled_synopsis %>`; // RailsのERBを使用してRubyの変数を埋め込む
+  const container = document.getElementById('shuffled-synopsis');
+  const containerDiv = document.getElementById('shuffled-synopsis-container');
+  let index = 0;
+
+  // <h1> の高さを取得
+  const header = document.querySelector('h1');
+  const headerHeight = header ? header.offsetHeight : 0;
+
+  // コンテナの位置を調整
+  containerDiv.style.top = `${headerHeight + 20}px`; // 20px は余白の調整
+
+  function type() {
+    if (index < text.length) {
+      container.innerHTML += text[index];
+      index++;
+      setTimeout(type, 50); // タイピングの速度を調整
     }
-    
-    typeEffect();
-  });
+  }
+
+  type(); // タイピングを開始
+});
 </script>

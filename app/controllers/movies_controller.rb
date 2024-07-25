@@ -18,12 +18,17 @@ class MoviesController < ApplicationController
     end
 
     def show_random_movies
+      self.clear_cache
       tmdb_service = TmdbService.new
-      @movies = tmdb_service.random_movies(5)
+      @movies = tmdb_service.random_movies(2)
   
       shuffled_synopsis = SynopsisShuffler.shuffle_synopsis(@movies, view_context)
       @shuffled_synopsis = shuffled_synopsis.html_safe
 
+      self.clear_cache
+    end
 
+    def clear_cache
+      Rails.cache.clear
     end
 end
