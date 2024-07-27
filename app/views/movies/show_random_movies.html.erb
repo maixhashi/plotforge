@@ -1,20 +1,27 @@
-<div class="shuffled-synopsis-container">
-  <div id="shuffled-synopsis-generating-container">
-    <div id="shuffled-synopsis-title"></div>
-    <div id="shuffled-synopsis"></div>
+<div>
+  <div id="progress-container">
+    <i class="fas fa-spinner fa-spin"></i> 
+    <div id="progress-bar"></div>
   </div>
-  <div id="button-container">
-    <button id="read-aloud-button" class="btn btn-login">
-      <i class="fas fa-volume-up"></i> 読み上げ
-    </button>
-    <button id="stop-button" class="btn btn-login">
-      停止
-    </button>
+
+  <div class="shuffled-synopsis-container">
+    <div id="shuffled-synopsis-generating-container">
+      <div id="shuffled-synopsis-title"></div>
+      <div id="shuffled-synopsis"></div>
+    </div>
+    <div id="button-container">
+      <button id="read-aloud-button" class="btn btn-login">
+        <i class="fas fa-volume-up"></i> 読み上げ
+      </button>
+      <button id="stop-button" class="btn btn-login">
+        停止
+      </button>
+    </div>
   </div>
-</div>
-<div id="movie-info-popup">
-  <div id="popup-title"></div>
-  <img id="popup-image" src="" alt="Movie Image">
+  <div id="movie-info-popup">
+    <div id="popup-title"></div>
+    <img id="popup-image" src="" alt="Movie Image">
+  </div>
 </div>
 
 <style>
@@ -119,6 +126,54 @@
   color: black;
   text-decoration: none;
 }
+
+/* プログレスバーのスタイリング */
+#progress-container {
+  position: relative;
+  height: 20px;
+  width: 1200px; /* プログレスバーの幅をコンテナに合わせる */
+  margin: 0 auto; /* 中央に配置 */
+  background-color: #e0f7fa; /* プログレスバーの背景色 */
+  border-radius: 10px;
+  border: 1px solid #333;
+  margin-bottom: 50px; /* プログレスバーとコンテナの間に余白を追加 */
+}
+
+#progress-bar {
+  height: 100%;
+  background-color: #00796b; /* プログレスバーの色 */
+  opacity: 0.5;
+  width: 0%;
+  border-radius: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+/* fa-spin のスタイル */
+#progress-bar.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner-icon {
+  font-size: 16px;
+  color: white;
+  margin-right: 5px;
+  animation: fa-spin 1s infinite linear;
+}
+
+@keyframes fa-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 </style>
 
 <script>
@@ -127,6 +182,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const text = `<%= j @shuffled_synopsis %>`;
   const titleElement = document.getElementById('shuffled-synopsis-title');
   const container = document.getElementById('shuffled-synopsis');
+  const progressBar = document.getElementById('progress-bar');
+  const progressContainer = document.getElementById('progress-container');
   const popup = document.getElementById('movie-info-popup');
   const popupTitle = document.getElementById('popup-title');
   const popupImage = document.getElementById('popup-image');
@@ -169,6 +226,18 @@ document.addEventListener("DOMContentLoaded", () => {
     speechSynthesis.cancel(); // 読み上げを停止
   }
 
+  // プログレスバーの更新
+  function updateProgressBar() {
+    const progress = (index / text.length) * 100;
+    progressBar.style.width = `${progress}%`;
+
+    if (progress < 100) {
+      progressBar.classList.add('spinner');
+    } else {
+      progressBar.classList.remove('spinner');
+    }
+  }
+
   // タイトルにタイピングエフェクトを追加
   function typeTitle() {
     if (index < titleText.length) {
@@ -185,6 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (index < text.length) {
       container.innerHTML = text.substring(0, index + 1);
       index++;
+      updateProgressBar(); // プログレスバーを更新
       setTimeout(type, 10); // タイピングの速度を速くする
     } else {
       enableLinksAndHoverEvents(); // 全てのリンクを有効にし、ホバーイベントを設定
@@ -241,5 +311,4 @@ document.addEventListener("DOMContentLoaded", () => {
   // 音声リストを取得する
   getVoices();
 });
-
 </script>
