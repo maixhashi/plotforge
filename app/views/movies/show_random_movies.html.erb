@@ -1,8 +1,17 @@
-<div id="shuffled-synopsis-container">
-  <div id="shuffled-synopsis-title">あらすじ</div>
-  <div id="shuffled-synopsis"></div>
+<div class="shuffled-synopsis-container">
+  <div id="shuffled-synopsis-generating-container">
+    <div id="shuffled-synopsis-title"></div>
+    <div id="shuffled-synopsis"></div>
+  </div>
+  <div id="button-container">
+    <button id="read-aloud-button" class="btn btn-login">
+      <i class="fas fa-volume-up"></i> 読み上げ
+    </button>
+    <button id="stop-button" class="btn btn-login">
+      停止
+    </button>
+  </div>
 </div>
-
 <div id="movie-info-popup">
   <div id="popup-title"></div>
   <img id="popup-image" src="" alt="Movie Image">
@@ -10,13 +19,13 @@
 
 <style>
 /* コンテナ全体のスタイリング */
-#shuffled-synopsis-container {
-  top: -50px;
+#shuffled-synopsis-generating-container {
+  top: -25px;
   overflow-y: auto;
   padding: 20px;
   position: relative;
   height: 300px;
-  width: 90%;
+  width: 1200px; /* 固定幅 */
   margin: 0 auto; /* コンテナを中央に配置 */
   background: #e0f7fa; /* 薄い明るい青 */
   box-sizing: border-box; /* パディングとボーダーを含めて幅を計算 */
@@ -49,14 +58,40 @@
   text-align: center;
   color: #333; /* タイトルの色 */
   animation: bounce 0.5s ease-in-out 3; /* アニメーションの設定（3回だけ繰り返す） */
+  font-family: 'Gloock', serif; /* 古代風フォントの適用 */
 }
-
-
 
 /* タイピングエフェクト部分のスタイリング */
 #shuffled-synopsis {
   position: relative;
   white-space: pre-wrap; /* テキストをそのまま改行 */
+  font-family: 'Gloock', serif; /* 古代風フォントの適用 */
+}
+
+/* ボタンコンテナのスタイリング */
+#button-container {
+  text-align: center; /* ボタンを中央に配置 */
+  margin-top: 10px; /* コンテナの下に余白を追加 */
+}
+
+#read-aloud-button {
+  background: #b2ebf2;
+  color: #00796b;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+#stop-button {
+  background: #ffccbc;
+  color: #d32f2f;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: background 0.3s;
 }
 
 /* 映画情報ポップアップのスタイリング */
@@ -72,14 +107,12 @@
   overflow: hidden;
 }
 
-
 /* ポップアップ内の画像のスタイリング */
 #popup-image {
   max-width: 100%; /* 画像の最大幅を親要素に合わせる */
   max-height: 150px; /* 画像の最大高さを設定 */
   display: block; /* 画像の余白をなくす */
 }
-
 
 /* リンクのスタイル */
 .movie-link {
@@ -97,7 +130,44 @@ document.addEventListener("DOMContentLoaded", () => {
   const popup = document.getElementById('movie-info-popup');
   const popupTitle = document.getElementById('popup-title');
   const popupImage = document.getElementById('popup-image');
+  const readAloudButton = document.getElementById('read-aloud-button');
+  const stopButton = document.getElementById('stop-button'); // 停止ボタン
   let index = 0;
+  let voices = [];
+  let isFemaleVoice = true; // 初期状態で女性の声を使用する
+
+  // 音声リストを取得する
+  async function getVoices() {
+    return new Promise((resolve) => {
+      voices = speechSynthesis.getVoices();
+      if (voices.length) {
+        resolve(voices);
+      } else {
+        speechSynthesis.onvoiceschanged = () => {
+          voices = speechSynthesis.getVoices();
+          resolve(voices);
+        };
+      }
+    });
+  }
+
+  async function readAloud() {
+    await getVoices(); // 音声リストを取得
+
+    const utterance = new SpeechSynthesisUtterance(container.textContent);
+    utterance.lang = 'ja-JP'; // 日本語設定
+
+    // 音声の選択
+    const voiceName = 'Kyoko'; // 音声名を固定
+    const voice = voices.find(v => v.name.includes(voiceName)) || voices[0];
+    utterance.voice = voice;
+
+    speechSynthesis.speak(utterance);
+  }
+
+  function stopReading() {
+    speechSynthesis.cancel(); // 読み上げを停止
+  }
 
   // タイトルにタイピングエフェクトを追加
   function typeTitle() {
@@ -129,37 +199,47 @@ document.addEventListener("DOMContentLoaded", () => {
         const movieImage = event.target.dataset.movieImage;
         popupTitle.textContent = movieInfo;
         popupImage.src = movieImage;
-  
+
         popup.style.display = 'block';
-  
+
         let top = event.clientY + window.scrollY + 10;
         let left = event.clientX + window.scrollX + 10;
-  
+
         // ポップアップの幅と高さを取得
         const popupWidth = popup.offsetWidth;
         const popupHeight = popup.offsetHeight;
-  
+
         // 画面の右端にはみ出ないように調整
         if (left + popupWidth > window.innerWidth + window.scrollX) {
           left = window.innerWidth + window.scrollX - popupWidth - 10;
         }
-  
+
         // 画面の下端にはみ出ないように調整
         if (top + popupHeight > window.innerHeight + window.scrollY) {
           top = window.innerHeight + window.scrollY - popupHeight - 10;
         }
-  
+
         popup.style.top = `${top}px`;
         popup.style.left = `${left}px`;
       });
-  
+
       link.addEventListener('mouseout', () => {
         popup.style.display = 'none';
       });
     });
   }
-  
+
+  // 読み上げボタンにイベントリスナーを追加
+  readAloudButton.addEventListener('click', readAloud);
+
+  // 停止ボタンにイベントリスナーを追加
+  stopButton.addEventListener('click', stopReading);
+
   // タイトルのタイピングエフェクトを開始
   typeTitle();
+
+  // 音声リストを取得する
+  getVoices();
 });
+
 </script>
