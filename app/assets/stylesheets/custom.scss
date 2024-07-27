@@ -8,3 +8,77 @@
     border-radius: 0.25em;
     font-size: 0.9em;
   }
+
+/* app/assets/stylesheets/custom.css */
+.header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* ハンバーガーボタンとユーザーアイコンの間隔 */
+  }
+  
+  .header-buttons　{
+    display: flex;
+    align-items: center;
+    gap: 10px; /* ユーザーアイコンと名前の間隔 */
+  }
+  
+  .header-buttons .user-avatar {
+    border-radius: 50%;
+    width: 40px; /* アイコンのサイズ */
+    height: 40px; /* アイコンのサイズ */
+    object-fit: cover;
+  }
+  
+  /* app/assets/stylesheets/custom.css */
+
+/* ユーザーアイコンと名前の間隔を調整 */
+/* ヘッダー内のボタンとユーザー情報の間隔を調整 */
+.header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 30px; /* ユーザー情報とナビバーの間隔を広げる */
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* アイコンと名前の間隔を広げる */
+  }
+  
+  .user-info i {
+    /* アイコンに追加のマージンを設定する場合はここに記述 */
+  }
+  
+  .user-info p {
+    margin: 0; /* デフォルトのマージンをリセット */
+  }
+  
+  /* app/assets/stylesheets/custom.css または app/assets/stylesheets/application.scss */
+
+/* リンクの下線を削除 */
+.header-link a {
+    text-decoration: none; /* リンクの下線を削除 */
+    color: inherit; /* テキストの色を継承 */
+  }
+  
+  /* アイコンとテキストの間のスペースを調整 */
+  .header-link {
+    display: flex;
+    align-items: center; /* アイコンとテキストを中央に揃える */
+    gap: 8px; /* アイコンとテキストの間にスペースを追加 */
+  }
+  
+  /* アイコンとテキストの上下の距離を調整 */
+  .header-link i, .header-link p {
+    margin: 0; /* デフォルトのマージンを削除 */
+    padding: 0; /* デフォルトのパディングを削除 */
+  }
+  
+  .header-link i {
+    font-size: 2rem; /* アイコンのサイズを指定 */
+  }
+  
+  .header-link p {
+    margin-left: 4px; /* アイコンとテキストの間にスペースを追加 */
+  }
+  
