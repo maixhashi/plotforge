@@ -1,5 +1,5 @@
 module MoviesHelper
-    def get_genre_names(genres)
+    def genre_tags(genres)
       if genres.nil? || genres.empty?
         Rails.logger.debug "ジャンル情報がありません: genres=#{genres}"
         return 'ジャンル情報がありません'
@@ -7,12 +7,12 @@ module MoviesHelper
   
       Rails.logger.debug "genres: #{genres}"
   
-      genre_names = genres.map do |genre|
-        genre['name']
-      end.join(', ')
+      genre_tags = genres.map do |genre|
+        content_tag(:span, genre['name'], class: 'genre-tag')
+      end.join(' ')
   
-      Rails.logger.debug "Genre names: #{genre_names}"
-      genre_names
+      Rails.logger.debug "Genre tags: #{genre_tags}"
+      genre_tags.html_safe
     end
   end
   
