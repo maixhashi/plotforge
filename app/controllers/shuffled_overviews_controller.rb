@@ -3,6 +3,7 @@ class ShuffledOverviewsController < ApplicationController
 
   def index
     @shuffled_overviews = current_user.shuffled_overviews
+    @grouped_overviews = current_user.shuffled_overviews.group_by_day(:created_at).count
     render 'users/shuffled_overviews/index'
   end
 

@@ -49,6 +49,9 @@ gem 'sorcery'
 gem 'sassc-rails'
 gem 'httparty'
 gem 'dotenv-rails', groups: [:development, :test]
+gem 'simple_calendar'
+gem 'groupdate'
+gem 'rails-i18n'
 
 
 

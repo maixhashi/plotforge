@@ -1,6 +1,6 @@
 @import 'movies';
 @import 'custom';
-
+@import "simple_calendar";
 
 :root {
   --header-height: 60px; /* ヘッダーの高さ */
@@ -303,4 +303,3 @@ main {
 .info-value {
   text-align: left;
 }
-

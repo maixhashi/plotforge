@@ -1,22 +1,39 @@
-<div class="shuffled-overview-list">
-  <% @shuffled_overviews.each do |shuffled_overview| %>
-    <div class="shuffled-overview-item">
-      <div class="shuffled-overview-content">
-        <%= raw shuffled_overview.content %>
+<div class="fixed-calendar hidden" id="calendar-container">
+  <div class="calendar-container">
+    <%= month_calendar do |date| %>
+      <div class="day">
+        <%= date.day %>
+        <% if @grouped_overviews[date] %>
+          <div class="count">
+            <%= @grouped_overviews[date] %>
+          </div>
+        <% end %>
       </div>
-      <div class="shuffled-overview-meta">
-        <p>保存日時: <%= shuffled_overview.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
+    <% end %>
+  </div>
+</div>
+
+<div class="content">
+  <div class="shuffled-overview-list">
+    <% @shuffled_overviews.each do |shuffled_overview| %>
+      <div class="shuffled-overview-item">
+        <div class="shuffled-overview-content">
+          <%= raw shuffled_overview.content %>
+        </div>
+        <div class="shuffled-overview-meta">
+          <p>保存日時: <%= shuffled_overview.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
+        </div>
+        <div class="button-container">
+          <button class="read-aloud-button btn btn-login">
+            <i class="fas fa-volume-up"></i> 読み上げ
+          </button>
+          <button class="stop-button btn btn-login">
+            停止
+          </button>
+        </div>
       </div>
-      <div class="button-container">
-        <button class="read-aloud-button btn btn-login">
-          <i class="fas fa-volume-up"></i> 読み上げ
-        </button>
-        <button class="stop-button btn btn-login">
-          停止
-        </button>
-      </div>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 </div>
 
 <div id="movie-info-popup" class="hidden">
@@ -24,7 +41,66 @@
   <img id="popup-image" src="" alt="Movie Image">
 </div>
 
+<div class="calendar-toggle" id="calendar-icon">
+  <i class="fa fa-3x fa-calendar"></i>
+</div>
+
+
+
 <style>
+.calendar-toggle {
+  position: fixed;
+  bottom: 70px; /* ヘッダーの高さに応じて調整 */
+  right: 30px;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+.fixed-calendar {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 900;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: none; /* 初期状態で非表示 */
+  flex-direction: column;
+  align-items: center;
+}
+
+.fixed-calendar.visible {
+  display: flex; /* 表示時にフレックスに変更 */
+}
+
+.calendar-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 1100px; /* カレンダーの最大幅を設定 */
+}
+
+.content {
+  margin-top: 150px; /* アイコンの高さに応じて調整 */
+  padding: 20px;
+}
+
+.count {
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  padding: 5px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
 .shuffled-overview-list {
   display: flex;
   flex-direction: column;
@@ -77,6 +153,7 @@
   max-height: 150px;
   display: block;
 }
+
 </style>
 
 <script>
@@ -84,6 +161,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const popup = document.getElementById('movie-info-popup');
   const popupTitle = document.getElementById('popup-title');
   const popupImage = document.getElementById('popup-image');
+  const calendarIcon = document.getElementById('calendar-icon');
+  const calendarContainer = document.getElementById('calendar-container');
+
+  calendarIcon.addEventListener('click', () => {
+    calendarContainer.classList.toggle('visible');
+    // カレンダーが表示されたら内容を調整してマージントップを変更
+    if (calendarContainer.classList.contains('visible')) {
+      document.querySelector('.content').style.marginTop = calendarContainer.offsetHeight + 150 + 'px'; // 120pxはアイコンの高さ + 30pxの余裕
+    } else {
+      document.querySelector('.content').style.marginTop = '150px';
+    }
+  });
 
   function enableLinksAndHoverEvents() {
     document.querySelectorAll('.movie-link').forEach(link => {
