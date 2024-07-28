@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'shuffled_overviews/create'
   root 'welcome#index'
 
   get 'login', to: 'sessions#new'  # 追記
@@ -24,6 +25,11 @@ Rails.application.routes.draw do
   get 'random_movie', to: 'movies#show_random'
   get 'random_multiple_movies', to: 'movies#show_multiple_random'
   get 'shuffled_overview', to: 'movies#show_shuffled_overview', as:'shuffled_overview'
+
+  resources :users do
+    resources :shuffled_overviews, only: [:index, :create]
+  end
+  
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

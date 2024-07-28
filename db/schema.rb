@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_21_003713) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_28_045559) do
   create_table "settings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.boolean "notification"
@@ -18,6 +18,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_21_003713) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_settings_on_user_id"
+  end
+
+  create_table "shuffled_overviews", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.text "content"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_shuffled_overviews_on_user_id"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -32,4 +40,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_21_003713) do
   end
 
   add_foreign_key "settings", "users"
+  add_foreign_key "shuffled_overviews", "users"
 end

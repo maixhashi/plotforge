@@ -11,6 +11,7 @@
       <div id="shuffled-overview"></div>
     </div>
     <div id="button-container">
+      <button id="save-button" class="btn btn-save">保存</button> 
       <button id="read-aloud-button" class="btn btn-login">
         <i class="fas fa-volume-up"></i> 読み上げ
       </button>
@@ -19,7 +20,7 @@
       </button>
     </div>
   </div>
-  </div>
+</div>
 <div id="movie-info-popup">
   <div id="popup-title"></div>
   <img id="popup-image" src="" alt="Movie Image">
@@ -189,6 +190,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const titleText = 'あらすじ';
   const text = `<%= j @shuffled_overview.html_safe %>`;
+  const userId = `<%= current_user.id %>`;
   const titleElement = document.getElementById('shuffled-overview-title');
   const container = document.getElementById('shuffled-overview');
   const progressBar = document.getElementById('progress-bar');
@@ -199,6 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const popupTitle = document.getElementById('popup-title');
   const popupImage = document.getElementById('popup-image');
   const readAloudButton = document.getElementById('read-aloud-button');
+  const saveButton = document.getElementById('save-button');
   const stopButton = document.getElementById('stop-button');
   let index = 0;
   let voices = [];
@@ -264,6 +267,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   readAloudButton.addEventListener('click', readAloud);
   stopButton.addEventListener('click', stopReading);
+
+  saveButton.addEventListener('click', saveShuffledOverview);
+  function saveShuffledOverview() {
+  const content = container.innerHTML;
+
+  fetch(`/users/${userId}/shuffled_overviews`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
+    body: JSON.stringify({ shuffled_overview: { content: content } })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.message) {
+      console.log(data.message);
+    } else if (data.errors) {
+      console.error(data.errors);
+    }
+  })
+  .catch(error => console.error('Error:', error));
+  }
+
 
   function enableLinksAndHoverEvents() {
     document.querySelectorAll('.movie-link').forEach(link => {

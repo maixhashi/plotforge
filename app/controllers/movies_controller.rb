@@ -27,7 +27,7 @@ class MoviesController < ApplicationController
 
     shuffled_overview = OverviewShuffler.shuffle_overview(@movies, view_context)
     @shuffled_overview = shuffled_overview.html_safe
-
+    
     clear_cache
   end
 
