@@ -1,6 +1,6 @@
-module SynopsisShuffler
+module OverviewShuffler
   # Rubyでのデバッグ
-  def self.shuffle_synopsis(movies, view_context)
+  def self.shuffle_overview(movies, view_context)
     sentences_with_movies = []
     # color_classes = ['link-black', 'link-gray']
 
@@ -18,18 +18,18 @@ module SynopsisShuffler
     end
 
     shuffled = sentences_with_movies.shuffle
-    shuffled_synopsis = shuffled.each_with_index.map do |item, index|
+    shuffled_overview = shuffled.each_with_index.map do |item, index|
       # color_class = color_classes[index % color_classes.length]
       # "<a href='#{item[:movie_url]}' class='#{color_class} movie-link' data-movie-info='#{item[:movie_info]}' data-movie-image='#{item[:movie_image_url]}'>#{item[:sentence]}</a>"
       "<a href='#{item[:movie_url]}' class='movie-link' data-movie-info='#{item[:movie_info]}' data-movie-image='#{item[:movie_image_url]}'>#{item[:sentence]}</a>"
     end.join(' ')
 
-    shuffled_synopsis = if shuffled_synopsis.strip.match(/.*[。！？、]$/)
-                          shuffled_synopsis
+    shuffled_overview = if shuffled_overview.strip.match(/.*[。！？、]$/)
+                          shuffled_overview
                         else
-                          "#{shuffled_synopsis}。"
+                          "#{shuffled_overview}。"
                         end
 
-    shuffled_synopsis.html_safe
+    shuffled_overview.html_safe
   end
 end

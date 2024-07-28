@@ -1,13 +1,13 @@
 <h1>ランダム映画のあらすじ</h1>
-<p id="shuffled-synopsis"></p>
+<p id="shuffled-overview"></p>
 
 <script>
 // app/javascript/packs/application.js
 
 document.addEventListener("DOMContentLoaded", () => {
-  const text = `<%= @shuffled_synopsis %>`; // RailsのERBを使用してRubyの変数を埋め込む
-  const container = document.getElementById('shuffled-synopsis');
-  const containerDiv = document.getElementById('shuffled-synopsis-container');
+  const text = `<%= @shuffled_overview %>`; // RailsのERBを使用してRubyの変数を埋め込む
+  const container = document.getElementById('shuffled-overview');
+  const containerDiv = document.getElementById('shuffled-overview-container');
   let index = 0;
 
   // <h1> の高さを取得

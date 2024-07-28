@@ -20,13 +20,13 @@ class MoviesController < ApplicationController
     @movies = tmdb_service.random_movies(5)
   end
 
-  def show_random_movies
+  def show_shuffled_overview
     clear_cache
     tmdb_service = TmdbService.new
     @movies = tmdb_service.random_movies(2)
 
-    shuffled_synopsis = SynopsisShuffler.shuffle_synopsis(@movies, view_context)
-    @shuffled_synopsis = shuffled_synopsis.html_safe
+    shuffled_overview = OverviewShuffler.shuffle_overview(@movies, view_context)
+    @shuffled_overview = shuffled_overview.html_safe
 
     clear_cache
   end
