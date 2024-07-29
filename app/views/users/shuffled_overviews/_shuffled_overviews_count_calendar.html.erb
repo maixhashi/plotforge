@@ -3,10 +3,10 @@
     <%= month_calendar do |date| %>
       <div class="calendar-day">
         <%= date.day %>
-        <% if @grouped_overviews[date] %>
-          <div class="count">
-            <%= @grouped_overviews[date] %>
-          </div>
+         <% if @grouped_overviews[date] %>
+            <%= link_to filter_by_date_user_shuffled_overviews_path(date: date), remote: true, class: "count" do %>
+                <div><%= @grouped_overviews[date] %></div>
+            <% end %>
         <% end %>
       </div>
     <% end %>
@@ -67,6 +67,7 @@
   position:absolute;
   top: 100%;
   left: 30%;
+  text-decoration: none;
 }
 </style>
 

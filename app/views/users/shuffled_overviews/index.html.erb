@@ -2,28 +2,8 @@
   <%= render 'users/shuffled_overviews/shuffled_overviews_count_calendar' %>
 </div>
 
-
-<div class="content">
-  <div class="shuffled-overview-list">
-    <% @shuffled_overviews.each do |shuffled_overview| %>
-      <div class="shuffled-overview-item">
-        <div class="shuffled-overview-content">
-          <%= raw shuffled_overview.content %>
-        </div>
-        <div class="shuffled-overview-meta">
-          <p>保存日時: <%= shuffled_overview.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
-        </div>
-        <div class="button-container">
-          <button class="read-aloud-button btn btn-login">
-            <i class="fas fa-volume-up"></i> 読み上げ
-          </button>
-          <button class="stop-button btn btn-login">
-            停止
-          </button>
-        </div>
-      </div>
-    <% end %>
-  </div>
+<div>
+  <%= render partial: 'users/shuffled_overviews/shuffled_overview_list', locals: { shuffled_overviews: @shuffled_overviews } %>
 </div>
 
 <div id="movie-info-popup" class="hidden">

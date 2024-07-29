@@ -27,7 +27,11 @@ Rails.application.routes.draw do
   get 'shuffled_overview', to: 'movies#show_shuffled_overview', as:'shuffled_overview'
 
   resources :users do
-    resources :shuffled_overviews, only: [:index, :create]
+    resources :shuffled_overviews, only: [:index, :create] do
+      collection do
+        get 'filter_by_date/:date', action: :filter_by_date, as: :filter_by_date
+      end
+    end
   end
   
 

@@ -21,6 +21,17 @@ class ShuffledOverviewsController < ApplicationController
     end
   end
 
+  def filter_by_date
+    @start_date = params.fetch(:start_date, Date.today).to_date
+    @grouped_overviews = ShuffledOverview.group_by_day(:created_at).count
+    @shuffled_overviews = ShuffledOverview.where(created_at: params[:date].to_date.all_day)
+
+    respond_to do |format|
+      format.html { render 'users/shuffled_overviews/index' }
+      format.js   { render :filter_by_date }
+    end
+  end
+
   private
 
   def set_user

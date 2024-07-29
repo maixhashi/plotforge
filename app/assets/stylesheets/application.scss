@@ -257,7 +257,6 @@ main {
 .user-profile {
   display: flex;
   align-items: center;
-  gap: 20px; /* アバターとユーザー情報の間隔 */
 }
 
 .avatar-container {
@@ -276,10 +275,6 @@ main {
   flex-direction: column; /* 縦に並べる */
   align-items: center; /* 中央に配置 */
   margin-right: 25px;
-}
-
-.user-info i {
-  margin-bottom: 0.5rem; /* アイコンとテキストの間にスペースを追加 */
 }
 
 

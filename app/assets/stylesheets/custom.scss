@@ -13,7 +13,6 @@
 .header-buttons {
     display: flex;
     align-items: center;
-    gap: 20px; /* ハンバーガーボタンとユーザーアイコンの間隔 */
   }
   
   .header-buttons　{
@@ -38,23 +37,6 @@
     align-items: center;
     gap: 30px; /* ユーザー情報とナビバーの間隔を広げる */
   }
-  
-  .user-info {
-    display: flex;
-    align-items: center;
-    gap: 20px; /* アイコンと名前の間隔を広げる */
-  }
-  
-  .user-info i {
-    /* アイコンに追加のマージンを設定する場合はここに記述 */
-  }
-  
-  .user-info p {
-    margin: 0; /* デフォルトのマージンをリセット */
-  }
-  
-  /* app/assets/stylesheets/custom.css または app/assets/stylesheets/application.scss */
-
   
   /* アイコンとテキストの間のスペースを調整 */
   .header-link {

@@ -14,7 +14,7 @@
         <%= image_tag current_user.avatar.url, class: 'user-avatar' %>
     <% else %>
         <i class="fa fa-user-circle fa-2x"></i>
-        <p><%= current_user.name %></p>
+        <div class="user-name"><%= current_user.name %></div>
     <% end %>
     </div>
       <%= render 'layouts/header_navibar' %>
@@ -26,6 +26,11 @@
 
 <style>
 .header-link-of-shuffled-overview {
+    text-align: center;
+    text-decoration: none; /* リンクの下線を削除 */
+    color: inherit; /* テキストの色を継承 */
+}
+.user-info {
     text-align: center;
     text-decoration: none; /* リンクの下線を削除 */
     color: inherit; /* テキストの色を継承 */
