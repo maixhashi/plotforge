@@ -55,20 +55,15 @@
   
   /* app/assets/stylesheets/custom.css または app/assets/stylesheets/application.scss */
 
-/* リンクの下線を削除 */
-.header-link a {
-    text-decoration: none; /* リンクの下線を削除 */
-    color: inherit; /* テキストの色を継承 */
-  }
   
   /* アイコンとテキストの間のスペースを調整 */
   .header-link {
-    display: flex;
-    align-items: center; /* アイコンとテキストを中央に揃える */
     gap: 8px; /* アイコンとテキストの間にスペースを追加 */
+    margin-left: 10px;
   }
   
-  /* アイコンとテキストの上下の距離を調整 */
+  
+    /* アイコンとテキストの上下の距離を調整 */
   .header-link i, .header-link p {
     margin: 0; /* デフォルトのマージンを削除 */
     padding: 0; /* デフォルトのパディングを削除 */

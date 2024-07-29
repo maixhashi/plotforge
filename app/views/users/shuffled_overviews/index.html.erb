@@ -1,17 +1,7 @@
-<div class="fixed-calendar hidden" id="calendar-container">
-  <div class="calendar-container">
-    <%= month_calendar do |date| %>
-      <div class="day">
-        <%= date.day %>
-        <% if @grouped_overviews[date] %>
-          <div class="count">
-            <%= @grouped_overviews[date] %>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
-  </div>
+<div>
+  <%= render 'users/shuffled_overviews/shuffled_overviews_count_calendar' %>
 </div>
+
 
 <div class="content">
   <div class="shuffled-overview-list">
@@ -58,47 +48,6 @@
 
 .hidden {
   display: none;
-}
-
-.fixed-calendar {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  background-color: rgba(255, 255, 255, 0.9);
-  z-index: 900;
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: none; /* 初期状態で非表示 */
-  flex-direction: column;
-  align-items: center;
-}
-
-.fixed-calendar.visible {
-  display: flex; /* 表示時にフレックスに変更 */
-}
-
-.calendar-container {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  max-width: 1100px; /* カレンダーの最大幅を設定 */
-}
-
-.content {
-  margin-top: 150px; /* アイコンの高さに応じて調整 */
-  padding: 20px;
-}
-
-.count {
-  background-color: #007bff;
-  color: white;
-  border-radius: 50%;
-  padding: 5px;
-  position: absolute;
-  top: 5px;
-  right: 5px;
 }
 
 .shuffled-overview-list {
@@ -162,16 +111,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const popupTitle = document.getElementById('popup-title');
   const popupImage = document.getElementById('popup-image');
   const calendarIcon = document.getElementById('calendar-icon');
-  const calendarContainer = document.getElementById('calendar-container');
+  const calendarContainer = document.getElementById('shuffled_overviews_count_calendar');
 
   calendarIcon.addEventListener('click', () => {
     calendarContainer.classList.toggle('visible');
     // カレンダーが表示されたら内容を調整してマージントップを変更
-    if (calendarContainer.classList.contains('visible')) {
-      document.querySelector('.content').style.marginTop = calendarContainer.offsetHeight + 150 + 'px'; // 120pxはアイコンの高さ + 30pxの余裕
-    } else {
-      document.querySelector('.content').style.marginTop = '150px';
-    }
   });
 
   function enableLinksAndHoverEvents() {

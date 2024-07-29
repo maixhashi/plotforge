@@ -1,0 +1,126 @@
+<div class="fixed-calendar hidden" id="shuffled_overviews_count_calendar">
+  <div class="calendar-container">
+    <%= month_calendar do |date| %>
+      <div class="calendar-day">
+        <%= date.day %>
+        <% if @grouped_overviews[date] %>
+          <div class="count">
+            <%= @grouped_overviews[date] %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<style>
+.fixed-calendar.visible {
+  display: flex; /* 表示時にフレックスに変更 */
+}
+
+.hidden {
+  display: none;
+}
+
+
+.calendar-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 1100px; /* カレンダーの最大幅を設定 */
+  align-items: center;
+}
+
+
+.fixed-calendar {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 900;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: none; /* 初期状態で非表示 */
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+    padding: 20px;
+}
+
+.calendar-day {
+    position: relative;
+}
+
+.count {
+  width: 40px;
+  height: 40px;
+  background-color: #007bff;
+  opacity: 70%;
+  color: white;
+  border-radius: 50%;
+  text-align:center;
+  line-height: 40px;
+  position:absolute;
+  top: 100%;
+  left: 30%;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const calendarContainer = document.querySelector('#shuffled_overviews_count_calendar');
+  
+  document.addEventListener('click', function(event) {
+    const target = event.target.closest('.previous, .next, .today');
+    if (target) {
+      event.preventDefault();
+      const url = target.href;
+
+      fetch(url, {
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const newCalendar = doc.querySelector('#shuffled_overviews_count_calendar').innerHTML;
+        calendarContainer.innerHTML = newCalendar;
+        registerNavigationEvents();  // 必要な場合にイベントハンドラを再登録
+      });
+    }
+  });
+
+  function registerNavigationEvents() {
+    // ナビゲーションリンクのイベントハンドラを再登録
+    document.querySelectorAll('.previous, .next, .today').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const url = event.target.href;
+
+        fetch(url, {
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
+        .then(response => response.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const newCalendar = doc.querySelector('#shuffled_overviews_count_calendar').innerHTML;
+          calendarContainer.innerHTML = newCalendar;
+          registerNavigationEvents();  // 必要な場合にイベントハンドラを再登録
+        });
+      });
+    });
+  }
+
+  registerNavigationEvents();
+});
+
+</script>

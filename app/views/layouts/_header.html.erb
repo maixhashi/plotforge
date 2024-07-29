@@ -4,9 +4,9 @@
 <div class="header-buttons">
 <% if current_user %>
   <div class="header-link">
-    <%= link_to shuffled_overview_path do %>
+    <%= link_to shuffled_overview_path, class:"header-link-of-shuffled-overview" do %>
       <i class="fa fa-pencil fa-2x"></i>
-      <p>あらすじ</p>
+      <div>あらすじ</div>
     <% end %>
   </div>
   <div class="user-info">
@@ -23,3 +23,11 @@
       <%= link_to 'サインアップ', signup_path, class: 'btn btn-signup' %>
   <% end %>
 </div>
+
+<style>
+.header-link-of-shuffled-overview {
+    text-align: center;
+    text-decoration: none; /* リンクの下線を削除 */
+    color: inherit; /* テキストの色を継承 */
+}
+</style>
