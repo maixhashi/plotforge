@@ -207,6 +207,21 @@ document.addEventListener("DOMContentLoaded", () => {
   let voices = [];
   let isFemaleVoice = true;
 
+  function getVoices() {
+    return new Promise((resolve) => {
+      let availableVoices = speechSynthesis.getVoices();
+      if (availableVoices.length !== 0) {
+        voices = availableVoices;
+        resolve();
+      } else {
+        speechSynthesis.onvoiceschanged = () => {
+          voices = speechSynthesis.getVoices();
+          resolve();
+        };
+      }
+    });
+  }
+
   async function readAloud() {
     await getVoices();
 
@@ -267,6 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   readAloudButton.addEventListener('click', readAloud);
   stopButton.addEventListener('click', stopReading);
+
 
   saveButton.addEventListener('click', saveShuffledOverview);
   function saveShuffledOverview() {
