@@ -13,9 +13,16 @@ class ShuffledOverviewsController < ApplicationController
   end
 
   def create
-    @shuffled_overview = @user.shuffled_overviews.build(shuffled_overview_params)
+    content = shuffled_overview_params[:content]
+    movie_ids = shuffled_overview_params[:movie_ids].map(&:to_i)
+  
+    @shuffled_overview = current_user.shuffled_overviews.build(content: content, movie_ids: movie_ids)
+  
     if @shuffled_overview.save
-      render json: { message: 'Shuffled overview saved successfully' }, status: :created
+      Rails.logger.debug "ShuffledOverview movie_ids: #{@shuffled_overview.movie_ids.inspect}"
+      logger.debug("ShuffledOverview ID after save: #{@shuffled_overview.id}")
+  
+      render json: { message: 'Shuffled overview saved successfully' }, status: :ok
     else
       render json: { errors: @shuffled_overview.errors.full_messages }, status: :unprocessable_entity
     end
@@ -39,6 +46,6 @@ class ShuffledOverviewsController < ApplicationController
   end
 
   def shuffled_overview_params
-    params.require(:shuffled_overview).permit(:content)
+    params.require(:shuffled_overview).permit(:content, movie_ids:[])
   end
 end

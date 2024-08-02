@@ -282,31 +282,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
   readAloudButton.addEventListener('click', readAloud);
   stopButton.addEventListener('click', stopReading);
-
-
   saveButton.addEventListener('click', saveShuffledOverview);
+
   function saveShuffledOverview() {
-  const content = container.innerHTML;
-
-  fetch(`/users/${userId}/shuffled_overviews`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-    },
-    body: JSON.stringify({ shuffled_overview: { content: content } })
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.message) {
-      console.log(data.message);
-    } else if (data.errors) {
-      console.error(data.errors);
-    }
-  })
-  .catch(error => console.error('Error:', error));
-  }
-
+    const content = container.innerHTML;
+  
+    // ユニークな映画のIDを取得
+    const movieLinks = document.querySelectorAll('.movie-link');
+    const movieIds = Array.from(new Set(Array.from(movieLinks).map(link => link.dataset.movieId)));
+  
+    fetch(`/users/${userId}/shuffled_overviews`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify({ 
+        shuffled_overview: { 
+          content: content, 
+          movie_ids: movieIds // 映画のIDを送信
+        } 
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.message) {
+        console.log(data.message);
+      } else if (data.errors) {
+        console.error(data.errors);
+      }
+    })
+    .catch(error => console.error('Error:', error));
+  }  
 
   function enableLinksAndHoverEvents() {
     document.querySelectorAll('.movie-link').forEach(link => {
