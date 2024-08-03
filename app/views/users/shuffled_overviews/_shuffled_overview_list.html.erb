@@ -2,21 +2,90 @@
   <div class="shuffled-overview-list">
     <% @shuffled_overviews.each do |shuffled_overview| %>
       <div class="shuffled-overview-item">
+        <div class="movie-images-container">
+          <div class="movie-images">
+            <% shuffled_overview.movie_ids.each do |movie_id| %>
+              <% movie = @movies_data[movie_id] %>
+              <img src="https://image.tmdb.org/t/p/w200<%= movie['poster_path'] %>" alt="Movie Poster">
+            <% end %>
+          </div>
+        </div>
         <div class="shuffled-overview-content">
           <%= raw shuffled_overview.content %>
-        </div>
-        <div class="shuffled-overview-meta">
-          <p>保存日時: <%= shuffled_overview.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
-        </div>
-        <div class="button-container">
-          <button class="read-aloud-button btn btn-login">
-            <i class="fas fa-volume-up"></i> 読み上げ
-          </button>
-          <button class="stop-button btn btn-login">
-            停止
-          </button>
+          <div class="shuffled-overview-meta">
+            <p>保存日時: <%= shuffled_overview.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
+          </div>
+          <div class="button-container">
+            <button class="read-aloud-button btn btn-login">
+              <i class="fas fa-volume-up"></i> 読み上げ
+            </button>
+            <button class="stop-button btn btn-login">
+              停止
+            </button>
+          </div>
         </div>
       </div>
     <% end %>
   </div>
 </div>
+
+<style>
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 中央に配置 */
+}
+
+.shuffled-overview-list {
+  display: flex;
+  flex-direction: column; /* 縦並びにする */
+  width: 80%; /* 横幅を調整 */
+  box-sizing: border-box;
+}
+
+.shuffled-overview-item {
+  display: flex; /* 横並びにする */
+  align-items: flex-start; /* 上揃え */
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  width: 100%; /* 横幅を100%にして、親コンテナ内での幅を調整 */
+  box-sizing: border-box;
+}
+
+.movie-images-container {
+  display: flex;
+  flex-direction: column; /* 画像を縦に並べる */
+  margin-right: 20px; /* あらすじとの間隔を調整 */
+}
+
+.movie-images {
+  display: flex; /* 画像を横並びにする */
+  flex-direction: column; /* 画像を縦に並べる */
+  gap: 10px; /* 画像間の間隔 */
+}
+
+.movie-images img {
+  max-width: 100px; /* 画像の幅を制限 */
+  max-height: 150px; /* 画像の高さを制限 */
+  object-fit: cover; /* 画像が領域に収まるように調整 */
+}
+
+.shuffled-overview-content {
+  font-size: 16px;
+  margin-bottom: 10px;
+  flex: 1; /* コンテンツが残りのスペースを占めるようにする */
+}
+
+.shuffled-overview-meta {
+  font-size: 12px;
+  color: #888;
+}
+
+.button-container {
+  text-align: center;
+}
+
+</style>
