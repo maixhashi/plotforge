@@ -32,23 +32,24 @@
 
 .shuffled-overview-list {
   display: flex;
-  flex-direction: column;
+  flex-flow: column;
+  flex-wrap: nowrap;
   align-items: center; /* 中央に配置 */
-}
 
-.shuffled-overview-item {
-  margin-bottom: 20px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  width: 80%; /* 横幅を調整 */
-  box-sizing: border-box;
-}
+  .shuffled-overview-item {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    width: 80%; /* 横幅を調整 */
+    box-sizing: border-box;
 
-.shuffled-overview-content {
-  font-size: 16px;
-  margin-bottom: 10px;
+    .shuffled-overview-content {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+  }
 }
 
 .shuffled-overview-meta {
