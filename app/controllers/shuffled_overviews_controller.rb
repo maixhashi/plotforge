@@ -76,6 +76,31 @@ def filter_by_date
   end
 end
 
+def related_movies
+  @start_date = params.fetch(:start_date, Date.today)
+  
+  # 現在のユーザーのシャッフルされたあらすじを取得
+  @shuffled_overviews = current_user.shuffled_overviews
+
+  # 映画データを取得する
+  tmdb_service = TmdbService.new
+  @movies_data = {}
+  @shuffled_overviews.each do |shuffled_overview|
+    shuffled_overview.movie_ids.each do |movie_id|
+      @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
+    end
+  end
+
+  # あらすじのデータはビューに渡すが、表示には使わない
+  @grouped_overviews = current_user.shuffled_overviews.group_by_day(:created_at).count
+
+  respond_to do |format|
+    format.html # これで `related_movies.html.erb` がレンダリングされる
+    format.js   # 必要に応じてJSテンプレートも対応
+  end
+end
+
+
   private
 
   def set_user

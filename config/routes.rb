@@ -30,6 +30,7 @@ Rails.application.routes.draw do
     resources :shuffled_overviews, only: [:index, :create] do
       collection do
         get 'filter_by_date/:date', action: :filter_by_date, as: :filter_by_date
+        get 'related_movies', action: :related_movies, as: :related_movies
       end
     end
   end
