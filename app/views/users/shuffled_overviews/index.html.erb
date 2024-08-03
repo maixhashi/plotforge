@@ -11,8 +11,15 @@
   <img id="popup-image" src="" alt="Movie Image">
 </div>
 
-<div class="calendar-toggle" id="calendar-icon">
-  <i class="fa fa-3x fa-calendar"></i>
+<div class="link-icon-container">
+  <div class="calendar-toggle" id="calendar-icon">
+    <i class="fa fa-3x fa-calendar"></i>
+  </div>
+  <div>
+    <%= link_to related_movies_user_shuffled_overviews_path, class:"link-to-related-movies" do %>
+      <i class="fa fa-3x fa-film"></i>
+    <% end %>
+  </div>
 </div>
 
 
@@ -20,10 +27,18 @@
 <style>
 .calendar-toggle {
   position: fixed;
+  bottom: 140px; /* ヘッダーの高さに応じて調整 */
+  right: 30px;
+  z-index: 1000;
+  cursor: pointer;
+}
+.link-to-related-movies {
+  position: fixed;
   bottom: 70px; /* ヘッダーの高さに応じて調整 */
   right: 30px;
   z-index: 1000;
   cursor: pointer;
+  color: black;
 }
 
 .hidden {

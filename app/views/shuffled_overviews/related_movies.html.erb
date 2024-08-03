@@ -1,14 +1,14 @@
 <!-- app/views/shuffled_overviews/related_movies.html.erb -->
-<div class="movie-images">
+<div class="related-movie-images">
   <% @movies_data.each do |movie_id, movie| %>
-    <div class="movie-image">
+    <div class="related-movie-image">
       <img src="https://image.tmdb.org/t/p/w200<%= movie['poster_path'] %>" alt="Movie Poster">
     </div>
   <% end %>
 </div>
 
 <style>
-.movie-images {
+.related-movie-images {
   margin-top: 10px;
   margin-bottom: 10px;
   margin-left: 10px;
@@ -19,13 +19,13 @@
   justify-content: start /* 中央揃え */
 }
 
-.movie-image {
+.related-movie-image {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.movie-image img {
+.related-movie-image img {
   width: 150px;
   height: auto;
   object-fit: cover;
