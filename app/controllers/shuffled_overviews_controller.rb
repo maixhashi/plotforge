@@ -2,7 +2,8 @@ class ShuffledOverviewsController < ApplicationController
   before_action :set_user
 
   def index
-    @start_date = params.fetch(:start_date, Date.today).to_date
+    @start_date = params.fetch(:start_date, Date.today) 
+    
     @shuffled_overviews = current_user.shuffled_overviews
   
     # 映画データを取得する
@@ -39,31 +40,41 @@ class ShuffledOverviewsController < ApplicationController
     end
   end
   
-  def filter_by_date
-    @start_date = params.fetch(:start_date, Date.today).to_date
-    
-    @shuffled_overviews = ShuffledOverview.where(created_at: params[:date].to_date.all_day)
-
-    Rails.logger.debug "params.fetch(:start_date, Date.today): #{params.fetch(:start_date, Date.today)}"
-    Rails.logger.debug "@start_date: #{@start_date}"
-    Rails.logger.debug "params[:date].to_date.all_day: #{params[:date].to_date.all_day}"
-    
-    # 映画データを再取得する
-    tmdb_service = TmdbService.new
-    @movies_data = {}
-    @shuffled_overviews.each do |shuffled_overview|
-      shuffled_overview.movie_ids.each do |movie_id|
-        @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
-      end
-    end
-
-    @grouped_overviews = current_user.shuffled_overviews.group_by_day(:created_at).count
+def filter_by_date
+  # 日付パラメータが存在しない場合は Date.today を使用
+  date_param = params[:date].presence || Date.today.to_s
+  @start_date = params.fetch(:start_date, Date.today)
   
-    respond_to do |format|
-      format.html { render 'users/shuffled_overviews/index' }
-      format.js   { render :filter_by_date }
+  begin
+    date = date_param.to_date
+  rescue ArgumentError
+    date = Date.today
+  end
+
+  @shuffled_overviews = ShuffledOverview.where(created_at: date.all_day)
+
+  Rails.logger.debug "params.fetch(:start_date, Date.today): #{params.fetch(:start_date, Date.today)}"
+  Rails.logger.debug "@start_date: #{@start_date}"
+  Rails.logger.debug "@shuffled_overviews: #{@shuffled_overviews}"
+  Rails.logger.debug "params[:date]: #{params[:date]}"
+  Rails.logger.debug "date.to_date.all_day: #{date.all_day}"
+  
+  # 映画データを再取得する
+  tmdb_service = TmdbService.new
+  @movies_data = {}
+  @shuffled_overviews.each do |shuffled_overview|
+    shuffled_overview.movie_ids.each do |movie_id|
+      @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
     end
   end
+
+  @grouped_overviews = current_user.shuffled_overviews.group_by_day(:created_at).count
+  
+  respond_to do |format|
+    format.html { render 'users/shuffled_overviews/index' }
+    format.js   { render :filter_by_date }
+  end
+end
 
   private
 
