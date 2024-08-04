@@ -21,7 +21,6 @@ class RelatedMoviesController < ApplicationController
       .joins("CROSS JOIN JSON_TABLE(movie_ids, '$[*]' COLUMNS (movie_id BIGINT PATH '$')) AS movies")
       .select("DATE(created_at) AS date, COUNT(movies.movie_id) AS movie_count")
       .where(user_id: current_user.id)
-      .where(created_at: @start_date.beginning_of_day..@start_date.end_of_day)
       .group("DATE(created_at)")
       .map { |record| [record.date, record.movie_count] }
       .to_h
