@@ -1,7 +1,9 @@
 <div class="related-movie-images">
   <% @movies_data.each do |movie_id, movie| %>
     <div class="related-movie-image">
-      <img src="https://image.tmdb.org/t/p/w200<%= movie['poster_path'] %>" alt="Movie Poster">
+        <%= link_to movie_path(movie_id) do %>
+            <img src="https://image.tmdb.org/t/p/w200<%= movie['poster_path'] %>" alt="Movie Poster">
+        <% end %>
     </div>
   <% end %>
 </div>
