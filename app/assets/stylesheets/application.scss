@@ -20,16 +20,18 @@ body {
 }
 
 header {
-  background: #e0f7fa; /* 薄い明るい青 */
-  color: #333; /* 文字色を暗い色に */
+  background: #e0f7fa;
+  color: #333;
   padding: 1rem;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 左右に要素を配置 */
-  position: relative; /* headerにrelativeを設定 */
-  z-index: 10; /* headerを前面に配置 */
-  height: var(--header-height); /* ヘッダーの高さ */
+  justify-content: space-between;
+  position: fixed;
+  z-index: 10;
+  height: var(--header-height);
   border: 3px solid #333;
+  top: 0;
+  width: 100%;
 }
 
 header img.logo_on_header {
