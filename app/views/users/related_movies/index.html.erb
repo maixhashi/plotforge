@@ -1,0 +1,77 @@
+<div>
+  <%= render 'users/related_movies/shuffled_overviews_count_calendar_for_related_movies' %>
+</div>
+
+<div>
+  <%= render partial: 'users/related_movies/related_movie_list', locals: { movies_data: @movies_data } %>
+</div>
+
+<div class="link-icon-container">
+  <div class="calendar-toggle-for-related-movies" id="calendar-toggle-for-related-movies">
+    <i class="fa fa-3x fa-calendar"></i>
+  </div>
+</div>
+
+
+<style>
+.calendar-toggle-for-related-movies {
+  position: fixed;
+  bottom: 140px; /* ヘッダーの高さに応じて調整 */
+  right: 30px;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.related-movie-images {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: start /* 中央揃え */
+}
+
+.related-movie-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.related-movie-image img {
+  width: 150px;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const calendarContainer = document.querySelector('#shuffled_overviews_count_calendar_for_related_movies');
+
+  function showCalendar() {
+    calendarContainer.classList.remove('hidden');
+    calendarContainer.classList.add('visible');
+  }
+
+  function hideCalendar() {
+    calendarContainer.classList.remove('visible');
+    calendarContainer.classList.add('hidden');
+  }
+
+  // カレンダーを表示するボタンやイベントが必要ならここで設定
+  const calendarToggleBtn = document.querySelector('#calendar-toggle-for-related-movies');
+  if (calendarToggleBtn) {
+    calendarToggleBtn.addEventListener('click', () => {
+      if (calendarContainer.classList.contains('hidden')) {
+        showCalendar();
+      } else {
+        hideCalendar();
+      }
+    });
+  }
+});
+
+</script>
