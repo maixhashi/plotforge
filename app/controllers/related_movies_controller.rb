@@ -6,7 +6,7 @@ class RelatedMoviesController < ApplicationController
     
     # 現在のユーザーのシャッフルされたあらすじを取得
     @shuffled_overviews = current_user.shuffled_overviews
-
+  
     # 映画データを取得する
     tmdb_service = TmdbService.new
     @movies_data = {}
@@ -15,21 +15,25 @@ class RelatedMoviesController < ApplicationController
         @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
       end
     end
-
+  
+    # MySQL クエリで日付ごとの映画カウントを取得
     @grouped_overviews_with_movie_counts = ShuffledOverview
-    .joins("CROSS JOIN JSON_TABLE(movie_ids, '$[*]' COLUMNS (movie_id BIGINT PATH '$')) AS movies")
-    .group_by_day(:created_at)
-    .count("movies.movie_id")
-
-
+      .joins("CROSS JOIN JSON_TABLE(movie_ids, '$[*]' COLUMNS (movie_id BIGINT PATH '$')) AS movies")
+      .select("DATE(created_at) AS date, COUNT(movies.movie_id) AS movie_count")
+      .where(user_id: current_user.id)
+      .where(created_at: @start_date.beginning_of_day..@start_date.end_of_day)
+      .group("DATE(created_at)")
+      .map { |record| [record.date, record.movie_count] }
+      .to_h
+  
     render 'users/related_movies/index'
-
+  
     respond_to do |format|
       format.html 
       format.js   # 必要に応じてJSテンプレートも対応
     end
   end
-
+    
   def create
     content = shuffled_overview_params[:content]
     movie_ids = shuffled_overview_params[:movie_ids].map(&:to_i)
@@ -48,35 +52,47 @@ class RelatedMoviesController < ApplicationController
   
 
   def filter_movies_by_date
-    @start_date = params.fetch(:start_date, Date.today)
+    # 日付パラメータが存在しない場合は Date.today を使用
+    date_param = params[:date].presence || Date.today.to_s
+    
+    begin
+      date = date_param.to_date
+    rescue ArgumentError
+      date = Date.today
+    end
+  
+    @start_date = date
+  
+    # 現在のユーザーのシャッフルされたあらすじを指定された日付でフィルタリング
     @shuffled_overviews = current_user.shuffled_overviews
-
-
+    @grouped_overviews = current_user.shuffled_overviews.where(created_at: @start_date.beginning_of_day..@start_date.end_of_day)
+  
+    # MySQL クエリで日付ごとの映画カウントを取得
     @grouped_overviews_with_movie_counts = ShuffledOverview
-    .joins("CROSS JOIN JSON_TABLE(movie_ids, '$[*]' COLUMNS (movie_id BIGINT PATH '$')) AS movies")
-    .group_by_day(:created_at)
-    .count("movies.movie_id")
-
-
+      .joins("CROSS JOIN JSON_TABLE(movie_ids, '$[*]' COLUMNS (movie_id BIGINT PATH '$')) AS movies")
+      .select("DATE(created_at) AS date, COUNT(movies.movie_id) AS movie_count")
+      .group("DATE(created_at)")
+      .map { |record| [record.date, record.movie_count] }
+      .to_h
+  
     # 映画データを再取得する
     tmdb_service = TmdbService.new
     @movies_data = {}
-    @shuffled_overviews.each do |shuffled_overview|
+    
+    @grouped_overviews.each do |shuffled_overview|
       shuffled_overview.movie_ids.each do |movie_id|
         @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
       end
     end
-
+  
     puts @grouped_overviews_with_movie_counts.inspect 
-
-    
+  
     respond_to do |format|
       format.html { render 'users/related_movies/index' }
       format.js   { render :filter_movies_by_date }
     end
-    
   end
-  
+      
 
 
 

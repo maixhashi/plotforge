@@ -3,9 +3,8 @@ class ShuffledOverviewsController < ApplicationController
   before_action :set_start_date
 
   def index
-    
     @shuffled_overviews = current_user.shuffled_overviews
-  
+
     # 映画データを取得する
     tmdb_service = TmdbService.new
     @movies_data = {}
@@ -14,10 +13,16 @@ class ShuffledOverviewsController < ApplicationController
         @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
       end
     end
-  
-    @grouped_overviews = current_user.shuffled_overviews.group_by_day(:created_at).count
-    
+
+    # MySQL で日付ごとにカウントを取得
+    @grouped_overviews = current_user.shuffled_overviews
+                                     .select("DATE(created_at) AS date, COUNT(*) AS count")
+                                     .group("DATE(created_at)")
+                                     .map { |record| [record.date.to_date, record.count] }
+                                     .to_h
+
     render 'users/shuffled_overviews/index'
+
     respond_to do |format|
       format.html # index.html.erb
       format.js   # index.js.erb
@@ -49,15 +54,10 @@ class ShuffledOverviewsController < ApplicationController
     rescue ArgumentError
       date = Date.today
     end
-
+  
+    # 指定された日付範囲のデータを取得
     @shuffled_overviews = ShuffledOverview.where(created_at: date.all_day)
-
-    Rails.logger.debug "params.fetch(:start_date, Date.today): #{params.fetch(:start_date, Date.today)}"
-    Rails.logger.debug "@start_date: #{@start_date}"
-    Rails.logger.debug "@shuffled_overviews: #{@shuffled_overviews}"
-    Rails.logger.debug "params[:date]: #{params[:date]}"
-    Rails.logger.debug "date.to_date.all_day: #{date.all_day}"
-    
+  
     # 映画データを再取得する
     tmdb_service = TmdbService.new
     @movies_data = {}
@@ -67,14 +67,20 @@ class ShuffledOverviewsController < ApplicationController
       end
     end
     
-    @grouped_overviews = current_user.shuffled_overviews.group_by_day(:created_at).count
+    # MySQL で日付ごとにカウントを取得
+    @grouped_overviews = ShuffledOverview
+                          .where(created_at: date.all_day)
+                          .select("DATE(created_at) AS date, COUNT(*) AS count")
+                          .group("DATE(created_at)")
+                          .map { |record| [record.date.to_date, record.count] }
+                          .to_h
     
     respond_to do |format|
       format.html { render 'users/shuffled_overviews/index' }
       format.js   { render :filter_shuffled_overviews_by_date }
     end
   end
-
+  
   private
 
   def set_user
