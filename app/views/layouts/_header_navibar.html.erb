@@ -1,18 +1,106 @@
-<button id="hamburger-button" class="hamburger-button">
-    <i class="fas fa-bars"></i>
-</button>
-
-<nav id="hamburger-menu" class="hamburger-menu hidden">
-    <button id="close-button" class="close-button">
-    <i class="fas fa-times"></i>
+<div>
+    <button id="hamburger-button" class="hamburger-button">
+    <i class="fa fa-bars" aria-hidden="true"></i>
     </button>
 
-    <ul>
+    <nav id="hamburger-menu" class="hamburger-menu hidden">
+        <button id="close-button" class="close-button">
+        <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+
+        <ul>
         <li><%= link_to 'プロフィール', profile_path %></li>
         <li><%= link_to '設定', settings_path %></li>
         <li><%= link_to '作成したあらすじ', user_shuffled_overviews_path(current_user) %></li>
         <li><%= link_to 'お気に入り' %></li>
         <li><%= link_to 'ログアウト', logout_path, method: :delete %></li>
-    </ul>
-</nav>
+        </ul>
+    </nav>
+</div>
 
+<style>
+.close-button {
+    background-color: #e0f7fa;
+}
+
+.hamburger-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 250px;
+    height: 100%;
+    background-color: #e0f7fa;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none; /* 初期状態では非表示 */
+    transition: right 0.3s ease-in-out;
+}
+
+.hamburger-menu.show {
+    right: 0; /* showクラスが追加されたら表示位置を右に変更 */
+    display: block; /* これで表示されない場合、displayプロパティも追加 */
+}
+
+.hamburger-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.hamburger-button i {
+  font-size: 24px; /* アイコンのサイズを調整 */
+}
+
+.hamburger-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 50px 0 0; /* トップのマージンを追加してヘッダーと重ならないようにする */
+}
+
+.hamburger-menu li {
+  padding: 10px 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.hamburger-menu li a {
+  text-decoration: none;
+  color: #333;
+}
+
+.hamburger-menu li a:hover {
+  background-color: #f0f0f0;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburgerButton = document.getElementById("hamburger-button");
+    const hamburgerMenu = document.getElementById("hamburger-menu");
+    const closeButton = document.getElementById("close-button");
+
+    if (hamburgerButton && hamburgerMenu) {
+        console.log("Hamburger button and menu found."); // 確認用メッセージ
+
+        hamburgerButton.addEventListener("click", function() {
+            console.log("Hamburger button clicked!"); // 確認用メッセージ
+            hamburgerMenu.classList.toggle("show");
+            console.log(hamburgerMenu.classList.contains("show") ? "Menu is visible" : "Menu is hidden");
+            console.log(hamburgerMenu.classList); // クラスリストを確認
+        });
+    } else {
+        console.log("Hamburger button or menu not found."); // エラー時のメッセージ
+    }
+
+    if (closeButton) {
+        console.log("Close button found."); // 確認用メッセージ
+
+        closeButton.addEventListener("click", function() {
+            console.log("Close button clicked!"); // 確認用メッセージ
+            hamburgerMenu.classList.remove("show");
+        });
+    } else {
+        console.log("Close button not found."); // エラー時のメッセージ
+    }
+});   
+</script>
