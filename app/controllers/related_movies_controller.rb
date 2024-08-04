@@ -16,11 +16,11 @@ class RelatedMoviesController < ApplicationController
       end
     end
 
-
     @grouped_overviews_with_movie_counts = ShuffledOverview
     .joins("CROSS JOIN JSON_TABLE(movie_ids, '$[*]' COLUMNS (movie_id BIGINT PATH '$')) AS movies")
     .group_by_day(:created_at)
     .count("movies.movie_id")
+
 
     render 'users/related_movies/index'
 
@@ -48,18 +48,6 @@ class RelatedMoviesController < ApplicationController
   
 
   def filter_movies_by_date
-    # 日付パラメータが存在しない場合は Date.today を使用
-    date_param = params[:date].presence || Date.today.to_s
-  
-    begin
-      date = date_param.to_date
-    rescue ArgumentError
-      date = Date.today
-    end
-
-    start_time = date.beginning_of_day
-    end_time = date.end_of_day
-
     @start_date = params.fetch(:start_date, Date.today)
     @shuffled_overviews = current_user.shuffled_overviews
 
