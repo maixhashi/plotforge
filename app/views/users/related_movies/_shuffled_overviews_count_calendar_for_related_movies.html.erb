@@ -1,11 +1,11 @@
-<div class="fixed-calendar hidden" id="shuffled_overviews_count_calendar">
-  <div class="calendar-container">
+<div class="fixed-calendar hidden" id="shuffled_overviews_count_calendar_for_related_movies">
+  <div class="calendar-container-for-related-movies">
     <%= month_calendar do |date| %>
       <div class="calendar-day">
         <%= date.day %>
-         <% if @grouped_overviews[date] %>
-            <%= link_to filter_shuffled_overviews_by_date_user_shuffled_overviews_path(date: date), remote: true, class: "count" do %>
-                <div><%= @grouped_overviews[date] %></div>
+        <% if @grouped_overviews_with_movie_counts[date] %>
+            <%= link_to filter_movies_by_date_user_related_movies_path(date: date), remote: true, class: "count" do %>
+                <div><%= @grouped_overviews_with_movie_counts[date] %></div>
             <% end %>
         <% end %>
       </div>
@@ -23,7 +23,7 @@
 }
 
 
-.calendar-container {
+.calendar-container-for-related-movies {
   display: flex;
   justify-content: center;
   width: 100%;
@@ -73,7 +73,8 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const calendarContainer = document.querySelector('#shuffled_overviews_count_calendar');
+  const calendarContainer = document.querySelector('#shuffled_overviews_count_calendar_for_related_movies');
+
   
   document.addEventListener('click', function(event) {
     const target = event.target.closest('.previous, .next, .today, .start-date');
@@ -90,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(html => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
-        const newCalendar = doc.querySelector('#shuffled_overviews_count_calendar').innerHTML;
+        const newCalendar = doc.querySelector('#shuffled_overviews_count_calendar_for_related_movies').innerHTML;
         calendarContainer.innerHTML = newCalendar;
         registerNavigationEvents();  // 必要な場合にイベントハンドラを再登録
       });
@@ -113,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(html => {
           const parser = new DOMParser();
           const doc = parser.parseFromString(html, 'text/html');
-          const newCalendar = doc.querySelector('#shuffled_overviews_count_calendar').innerHTML;
+          const newCalendar = doc.querySelector('#shuffled_overviews_count_calendar_for_related_movies').innerHTML;
           calendarContainer.innerHTML = newCalendar;
           registerNavigationEvents();  // 必要な場合にイベントハンドラを再登録
         });
@@ -137,8 +138,8 @@ document.addEventListener("DOMContentLoaded", () => {
         link.addEventListener('click', event => {
           event.preventDefault();
           const baseUrl = event.target.closest('a').href;
-          // URLのパスが"/filter_shuffled_overviews_by_date" で終わる場合に追加する
-          const url = `${baseUrl.replace(/\/filter_shuffled_overviews_by_date\/.*$/, '')}/filter_shuffled_overviews_by_date/${formattedDate}`;
+          // URLのパスが"/filter_movies_by_date" で終わる場合に追加する
+          const url = `${baseUrl.replace(/\/filter_movies_by_date\/.*$/, '')}/filter_movies_by_date/${formattedDate}`;
   
           fetch(url, {
             headers: {
@@ -149,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .then(html => {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
-            const newCalendar = doc.querySelector('#shuffled_overviews_count_calendar').innerHTML;
+            const newCalendar = doc.querySelector('#shuffled_overviews_count_calendar_for_related_movies').innerHTML;
             calendarContainer.innerHTML = newCalendar;
   
             // URLを更新
@@ -157,11 +158,11 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.reload();
   
             // Debug: check if shuffled-overview-list exists
-            const shuffledOverviewList = doc.querySelector('.shuffled-overview-list');
+            const shuffledOverviewList = doc.querySelector('.related-movie-images');
             if (shuffledOverviewList) {
-              document.querySelector('.shuffled-overview-list').innerHTML = shuffledOverviewList.innerHTML;
+              document.querySelector('.related-movie-images').innerHTML = shuffledOverviewList.innerHTML;
             } else {
-              console.error('Shuffled overview list element not found.');
+              console.error('.related-movie-images element not found.');
             }
             registerNavigationEvents();
           })

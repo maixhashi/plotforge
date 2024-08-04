@@ -1,0 +1,1 @@
+document.querySelector('#shuffled_overviews_count_calendar_for_related_movies').innerHTML = "<%= j render partial: 'users/related_movies/shuffled_overviews_count_calendar_for_related_movies', locals: {start_date: @start_date, date_range: (start_date.beginning_of_month..start_date.end_of_month).to_a} %>";

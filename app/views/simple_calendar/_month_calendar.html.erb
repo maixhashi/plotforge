@@ -11,8 +11,8 @@
         <%= link_to calendar.url_for_previous_view, class:"previous", remote: true do %>
           <i class="fa fa-chevron-left" aria-hidden="true"></i>
         <% end %>
-        <%= link_to calendar.url_for_today_view, class:"today", remote: true do %>
-          <i class="fa fa-calendar-day" aria-hidden="true"></i>
+        <%= link_to calendar.url_for_today_view, class:"to-today", remote: true do %>
+          <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
         <% end %>
         <%= link_to calendar.url_for_next_view, class:"next", remote: true do %>
           <i class="fa fa-chevron-right" aria-hidden="true"></i>
@@ -64,7 +64,7 @@
     color: #2c4c64;
     text-decoration: none;
   }       
-  a.today {
+  a.to-today {
     color: #2c4c64;
     text-decoration: none;
   }       
@@ -73,6 +73,9 @@
     color: #2c4c64;
     text-decoration: none;
   }       
+  .weekday {
+    text-align: center;
+  }
   .weekday {
     text-align: center;
   }
