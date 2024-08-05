@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_02_212331) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_04_142451) do
+  create_table "bookmark_of_shuffled_overviews", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "shuffled_overview_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shuffled_overview_id"], name: "index_bookmark_of_shuffled_overviews_on_shuffled_overview_id"
+    t.index ["user_id", "shuffled_overview_id"], name: "index_bookmarks_on_user_and_overview", unique: true
+    t.index ["user_id"], name: "index_bookmark_of_shuffled_overviews_on_user_id"
+  end
+
   create_table "settings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.boolean "notification"
@@ -40,6 +50,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_02_212331) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "bookmark_of_shuffled_overviews", "shuffled_overviews"
+  add_foreign_key "bookmark_of_shuffled_overviews", "users"
   add_foreign_key "settings", "users"
   add_foreign_key "shuffled_overviews", "users"
 end

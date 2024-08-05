@@ -1,0 +1,17 @@
+<%= button_to user_shuffled_overview_bookmark_path(params[:user_id], @shuffled_overview.id), method: :delete, class: 'bookmark-remove-button', remote: true do %>
+  <i class="fa fa-2x fa-heart"></i>
+<% end %>
+
+<style>
+  form.button_to {
+    width: 30px;
+  }
+
+  .bookmark-remove-button {
+    background: none;
+    border: none;
+    padding: 0;
+    color:  #ffb5b5;
+    cursor: pointer;
+  }
+</style>

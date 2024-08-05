@@ -22,12 +22,19 @@ class ShuffledOverviewsController < ApplicationController
                                      .to_h
 
     render 'users/shuffled_overviews/index'
-
+    
     respond_to do |format|
       format.html # index.html.erb
       format.js   # index.js.erb
     end
   end
+
+  def show
+    @shuffled_overview = ShuffledOverview.find(params[:id])
+
+    render template: 'users/shuffled_overviews/show'
+  end
+  
 
   def create
     content = shuffled_overview_params[:content]
@@ -38,8 +45,8 @@ class ShuffledOverviewsController < ApplicationController
     if @shuffled_overview.save
       Rails.logger.debug "ShuffledOverview movie_ids: #{@shuffled_overview.movie_ids.inspect}"
       logger.debug("ShuffledOverview ID after save: #{@shuffled_overview.id}")
-      
-      render json: { message: 'Shuffled overview saved successfully' }, status: :ok
+  
+      render json: { message: 'Shuffled overview saved successfully', id: @shuffled_overview.id }, status: :ok
     else
       render json: { errors: @shuffled_overview.errors.full_messages }, status: :unprocessable_entity
     end
