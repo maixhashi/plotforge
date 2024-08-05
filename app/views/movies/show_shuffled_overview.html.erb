@@ -308,13 +308,15 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(data => {
       if (data.message) {
         console.log(data.message);
+        // ID を使用して `shuffled_overview#show` ページへリダイレクト
+        window.location.href = `/users/${userId}/shuffled_overviews/${data.id}`;
       } else if (data.errors) {
         console.error(data.errors);
       }
     })
     .catch(error => console.error('Error:', error));
-  }  
-
+  }
+  
   function enableLinksAndHoverEvents() {
     document.querySelectorAll('.movie-link').forEach(link => {
       link.addEventListener('mouseover', (event) => {
