@@ -27,6 +27,11 @@ Rails.application.routes.draw do
   get 'shuffled_overview', to: 'movies#show_shuffled_overview', as:'shuffled_overview'
 
   resources :users do
+    resources :shuffled_overviews, only: [:show]
+    resources :shuffled_overviews, only: [:show] do
+      post 'bookmarks', to: 'bookmark_of_shuffled_overviews#create', as: :bookmarks
+      delete 'bookmarks/:id', to: 'bookmark_of_shuffled_overviews#destroy', as: :bookmark
+    end
     resources :shuffled_overviews, only: [:index, :create] do
       collection do
         get 'filter_shuffled_overviews_by_date/:date', action: :filter_shuffled_overviews_by_date, as: :filter_shuffled_overviews_by_date
