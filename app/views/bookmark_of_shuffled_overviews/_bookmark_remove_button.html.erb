@@ -1,4 +1,4 @@
-<%= button_to user_shuffled_overview_bookmark_path(params[:user_id], @shuffled_overview.id), method: :delete, class: 'bookmark-remove-button', remote: true do %>
+<%= button_to user_shuffled_overview_bookmark_path(id: current_user.bookmarked_shuffled_overviews.last.id, user_id: params[:user_id], shuffled_overview_id: @shuffled_overview.id), method: :delete, class: 'bookmark-remove-button', remote: true do %>
   <i class="fa fa-2x fa-heart"></i>
 <% end %>
 

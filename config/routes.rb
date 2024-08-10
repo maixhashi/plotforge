@@ -30,7 +30,8 @@ Rails.application.routes.draw do
     resources :shuffled_overviews, only: [:show]
     resources :shuffled_overviews, only: [:show] do
       post 'bookmarks', to: 'bookmark_of_shuffled_overviews#create', as: :bookmarks
-      delete 'bookmarks/:id', to: 'bookmark_of_shuffled_overviews#destroy', as: :bookmark
+      # delete 'bookmarks/:id', to: 'bookmark_of_shuffled_overviews#destroy', as: :bookmark
+      delete 'bookmarks', to: 'bookmark_of_shuffled_overviews#destroy', as: :bookmark
     end
     resources :shuffled_overviews, only: [:index, :create] do
       collection do

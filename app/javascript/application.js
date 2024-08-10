@@ -1,4 +1,6 @@
-// app/javascript/application.js
+//= require rails-ujs
+//= require_tree .
+
 import "@fortawesome/fontawesome-free"
 
 document.addEventListener('DOMContentLoaded', () => {

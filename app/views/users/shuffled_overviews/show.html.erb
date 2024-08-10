@@ -5,14 +5,15 @@
       <div id="shuffled-overview"><%= @shuffled_overview.content.html_safe %></div>
     </div>
     <div id="button-container">
-    <% if user_signed_in? %>
-      <% if current_user.bookmarked_shuffled_overviews.include?(@shuffled_overview) %>
-        <%= render 'bookmark_of_shuffled_overviews/bookmark_remove_button' %>
-        <% else %>
-        <%= render 'bookmark_of_shuffled_overviews/bookmark_add_button' %>
-      <% end %>
-    <% end %>
-
+      <div class="bookmark-container">
+        <% if user_signed_in? %>
+          <% if current_user.bookmarked_shuffled_overviews.include?(@shuffled_overview) %>
+            <%= render 'bookmark_of_shuffled_overviews/bookmark_remove_button' %>
+            <% else %>
+            <%= render 'bookmark_of_shuffled_overviews/bookmark_add_button' %>
+          <% end %>
+        <% end %>
+      </div>
       <button id="read-aloud-button" class="btn btn-login">
         <i class="fas fa-volume-up"></i> 読み上げ
       </button>
