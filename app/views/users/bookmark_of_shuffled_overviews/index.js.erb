@@ -1,0 +1,1 @@
+document.querySelector('#bookmarked_shuffled_overviews_count_calendar').innerHTML = "<%= j render partial: 'users/shuffled_overviews/bookmarked_overviews_count_calendar', locals: {start_date: @start_date, date_range: (start_date.beginning_of_month..start_date.end_of_month).to_a} %>";

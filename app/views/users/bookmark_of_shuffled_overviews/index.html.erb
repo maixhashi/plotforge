@@ -1,0 +1,202 @@
+<div>
+  <%= render 'users/bookmark_of_shuffled_overviews/bookmarked_overviews_count_calendar' %>
+</div>
+
+<div>
+  <%= render partial: 'users/bookmark_of_shuffled_overviews/bookmarked_shuffled_overview_list', locals: { bookmarked_shuffled_overviews: @bookmarked_shuffled_overviews } %>
+</div>
+
+
+<div id="movie-info-popup" class="hidden">
+  <div id="popup-title"></div>
+  <img id="popup-image" src="" alt="Movie Image">
+</div>
+
+<div class="link-icon-container">
+ <div class="calendar-toggle" id="calendar-icon-for-filtering-bookmarked-shuffled-overviews">
+   <i class="fa fa-3x fa-calendar"></i>
+ </div>
+ <div>
+   <%= link_to user_related_movies_path, class:"link-to-related-movies" do %>
+     <i class="fa fa-3x fa-film"></i>
+   <% end %>
+ </div>
+</div>
+
+
+<style>
+.calendar-toggle {
+  position: fixed;
+  bottom: 140px; /* ヘッダーの高さに応じて調整 */
+  right: 30px;
+  z-index: 1000;
+  cursor: pointer;
+}
+.link-to-related-movies {
+  position: fixed;
+  bottom: 70px; /* ヘッダーの高さに応じて調整 */
+  right: 30px;
+  z-index: 1000;
+  cursor: pointer;
+  color: black;
+}
+
+.hidden {
+  display: none;
+}
+
+.shuffled-overview-list {
+  display: flex;
+  flex-flow: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  margin-top: 100px;
+  margin-bottom: 100px;
+
+  .shuffled-overview-item {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    width: 100%; /* 横幅を調整 */
+    box-sizing: border-box;
+
+    .shuffled-overview-content {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.shuffled-overview-meta {
+  font-size: 12px;
+  color: #888;
+}
+
+.movie-link {
+    text-decoration: none;
+    color: black;
+}
+
+.button-container {
+  text-align: center;
+}
+
+#movie-info-popup {
+  position: absolute;
+  display: none;
+  background-color: white;
+  border: 1px solid black;
+  padding: 10px;
+  z-index: 1000;
+  max-width: 300px;
+  max-height: 200px;
+  overflow: hidden;
+}
+
+#popup-image {
+  max-width: 100%;
+  max-height: 150px;
+  display: block;
+}
+
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const popup = document.getElementById('movie-info-popup');
+  const popupTitle = document.getElementById('popup-title');
+  const popupImage = document.getElementById('popup-image');
+  const calendarIcon = document.getElementById('calendar-icon-for-filtering-bookmarked-shuffled-overviews');
+  const calendarContainer = document.getElementById('bookmarked_shuffled_overviews_count_calendar');
+
+  calendarIcon.addEventListener('click', () => {
+     calendarContainer.classList.toggle('visible');
+     // カレンダーが表示されたら内容を調整してマージントップを変更
+   });
+
+  function enableLinksAndHoverEvents() {
+    document.querySelectorAll('.movie-link').forEach(link => {
+      link.addEventListener('mouseover', (event) => {
+        const movieInfo = event.target.dataset.movieInfo;
+        const movieImage = event.target.dataset.movieImage;
+        popupTitle.textContent = movieInfo;
+        popupImage.src = movieImage;
+
+        popup.style.display = 'block';
+
+        let top = event.clientY + window.scrollY + 10;
+        let left = event.clientX + window.scrollX + 10;
+
+        const popupWidth = popup.offsetWidth;
+        const popupHeight = popup.offsetHeight;
+
+        if (left + popupWidth > window.innerWidth + window.scrollX) {
+          left = window.innerWidth + window.scrollX - popupWidth - 10;
+        }
+
+        if (top + popupHeight > window.innerHeight + window.scrollY) {
+          top = window.innerHeight + window.scrollY - popupHeight - 10;
+        }
+
+        popup.style.top = `${top}px`;
+        popup.style.left = `${left}px`;
+      });
+
+      link.addEventListener('mouseout', () => {
+        popup.style.display = 'none';
+      });
+    });
+  }
+
+  enableLinksAndHoverEvents();
+
+  document.querySelectorAll('.read-aloud-button').forEach(button => {
+    button.addEventListener('click', (event) => {
+      const container = event.target.closest('.shuffled-overview-item').querySelector('.shuffled-overview-content');
+      readAloud(container.textContent);
+    });
+  });
+
+  document.querySelectorAll('.stop-button').forEach(button => {
+    button.addEventListener('click', stopReading);
+  });
+
+  async function getVoices() {
+    return new Promise(resolve => {
+      let synth = window.speechSynthesis;
+      let id;
+
+      id = setInterval(() => {
+        if (synth.getVoices().length !== 0) {
+          resolve(synth.getVoices());
+          clearInterval(id);
+        }
+      }, 10);
+    });
+  }
+
+  let voices = [];
+
+  async function readAloud(text) {
+    if (voices.length === 0) {
+      voices = await getVoices();
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ja-JP';
+
+    const voiceName = 'Kyoko';
+    const voice = voices.find(v => v.name.includes(voiceName)) || voices[0];
+    utterance.voice = voice;
+
+    speechSynthesis.speak(utterance);
+  }
+
+  function stopReading() {
+    speechSynthesis.cancel();
+  }
+});
+
+</script>
