@@ -21,6 +21,8 @@ class ShuffledOverviewsController < ApplicationController
                                      .map { |record| [record.date.to_date, record.count] }
                                      .to_h
 
+    @grouped_overviews.inspect
+
     render 'users/shuffled_overviews/index'
     
     respond_to do |format|
@@ -84,7 +86,7 @@ class ShuffledOverviewsController < ApplicationController
     
     respond_to do |format|
       format.html { render 'users/shuffled_overviews/index' }
-      format.js   { render :filter_shuffled_overviews_by_date }
+      format.js   { render 'users/shuffled_overviews/filter_shuffled_overviews_by_date' }
     end
   end
   
