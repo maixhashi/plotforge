@@ -1,1 +1,1 @@
-document.querySelector('.related-movie-images').innerHTML = "<%= j render partial: 'shuffled_overview_list', locals: { shuffled_movies: @shuffled_movies } %>";
+document.querySelector('.related-movie-images').innerHTML = "<%= j render partial: 'users/related_movies/related_movie_list', locals: { movies_data: @movies_data } %>";
