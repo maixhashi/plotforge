@@ -2,14 +2,20 @@
   <div class="calendar-container">
     <%= month_calendar do |date| %>
       <div class="calendar-day">
-        <%= date.day %>
-         <% if @grouped_overviews[date] %>
-            <%= link_to filter_shuffled_overviews_by_date_user_shuffled_overviews_path(date: date), remote: true, class: "count" do %>
-                <div><%= @grouped_overviews[date] %></div>
-            <% end %>
+        <div class="day-number"><%= date.day %></div>
+        <% if @grouped_overviews[date] %>
+          <%= link_to filter_shuffled_overviews_by_date_user_shuffled_overviews_path(date: date), remote: true, class: "count-wrapper" do %>
+            <i class="fas fa-book-open"></i>
+            <span class="count"><%= @grouped_overviews[date] %></span>
+          <% end %>
         <% end %>
       </div>
     <% end %>
+  </div>
+  <div class="calendar-footer">
+    <i class="fas fa-book-open" style="color: #2c4c64;"></i>
+    あなたの作成した映画のあらすじ
+    <i class="fas fa-book-open" style="color: #2c4c64;"></i>
   </div>
 </div>
 
@@ -52,22 +58,48 @@
 }
 
 .calendar-day {
-    position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 100%; /* 日付セルの高さに合わせる */
 }
 
-.count {
-  width: 40px;
-  height: 40px;
-  background-color: #007bff;
-  opacity: 70%;
-  color: white;
-  border-radius: 50%;
-  text-align:center;
-  line-height: 40px;
-  position:absolute;
-  top: 100%;
-  left: 30%;
-  text-decoration: none;
+.calendar-day .day-number {
+  position: absolute;
+  top: 5px;  /* Position the day number at the top left */
+  left: 5px; /* Position the day number at the top left */
+  font-size: 14px; /* Adjust font size as needed */
+  font-weight: bold;
+}
+
+.count-wrapper {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.count-wrapper .fa-book-open {
+  font-size: 24px; /* アイコンのサイズを適宜調整 */
+  color: #2c4c64;
+}
+
+.count-wrapper .count {
+  position: absolute;
+  top: -16px; /* 上方向の調整 */
+  right: -18px; /* 右方向の調整 */
+  background-color: red; /* カウント数の丸の背景色 */
+  color: white; /* カウント数のテキストの色 */
+  border-radius: 50%; /* 丸い形にする */
+  padding: 2px; /* テキスト周りの余白 */
+  font-size: 12px; /* テキストサイズ */
+  line-height: 1;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px; /* 丸の幅を固定 */
+  height: 24px; /* 丸の高さを固定 */
 }
 </style>
 
