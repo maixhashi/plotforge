@@ -12,7 +12,7 @@
         <li><%= link_to 'プロフィール', profile_path %></li>
         <li><%= link_to '設定', settings_path %></li>
         <li><%= link_to '作成したあらすじ', user_shuffled_overviews_path(current_user) %></li>
-        <li><%= link_to 'お気に入り' %></li>
+        <li><%= link_to 'お気に入り', user_bookmark_of_shuffled_overviews_path %></li>
         <li><%= link_to 'ログアウト', logout_path, method: :delete %></li>
         </ul>
     </nav>
