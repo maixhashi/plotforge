@@ -150,7 +150,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  enableLinksAndHoverEvents();
+  function attachEventListeners() {
+    enableLinksAndHoverEvents();
+    document.querySelectorAll('.read-aloud-button').forEach(button => {
+      button.addEventListener('click', (event) => {
+        const container = event.target.closest('.shuffled-overview-item').querySelector('.shuffled-overview-content');
+        readAloud(container.textContent);
+      });
+    });
+
+    document.querySelectorAll('.stop-button').forEach(button => {
+      button.addEventListener('click', stopReading);
+    });
+  }
+
+  attachEventListeners(); // 初期のDOMContentLoaded時のイベントリスナーの設定
 
   document.querySelectorAll('.read-aloud-button').forEach(button => {
     button.addEventListener('click', (event) => {
@@ -197,6 +211,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function stopReading() {
     speechSynthesis.cancel();
   }
+  
+  // コンテンツが動的にロードされた後にイベントリスナーを再設定
+  document.addEventListener('ajax:success', (event) => {
+    attachEventListeners();
+  });
+
 });
 
 </script>
