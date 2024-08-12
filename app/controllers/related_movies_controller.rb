@@ -18,13 +18,12 @@ class RelatedMoviesController < ApplicationController
   
     # MySQL クエリで日付ごとの映画カウントを取得
     @grouped_overviews_with_movie_counts = ShuffledOverview
-      .joins("CROSS JOIN JSON_TABLE(movie_ids, '$[*]' COLUMNS (movie_id BIGINT PATH '$')) AS movies")
-      .select("DATE(created_at) AS date, COUNT(movies.movie_id) AS movie_count")
-      .where(user_id: current_user.id)
-      .group("DATE(created_at)")
-      .map { |record| [record.date, record.movie_count] }
-      .to_h
-  
+    .joins("CROSS JOIN JSON_TABLE(movie_ids, '$[*]' COLUMNS (movie_id BIGINT PATH '$')) AS movies")
+    .select("DATE(created_at) AS date, COUNT(DISTINCT movies.movie_id) AS movie_count")
+    .group("DATE(created_at)")
+    .map { |record| [record.date, record.movie_count] }
+    .to_h
+    
     render 'users/related_movies/index'
   
     respond_to do |format|
@@ -68,12 +67,14 @@ class RelatedMoviesController < ApplicationController
   
     # MySQL クエリで日付ごとの映画カウントを取得
     @grouped_overviews_with_movie_counts = ShuffledOverview
-      .joins("CROSS JOIN JSON_TABLE(movie_ids, '$[*]' COLUMNS (movie_id BIGINT PATH '$')) AS movies")
-      .select("DATE(created_at) AS date, COUNT(movies.movie_id) AS movie_count")
-      .group("DATE(created_at)")
-      .map { |record| [record.date, record.movie_count] }
-      .to_h
+    .joins("CROSS JOIN JSON_TABLE(movie_ids, '$[*]' COLUMNS (movie_id BIGINT PATH '$')) AS movies")
+    .select("DATE(created_at) AS date, COUNT(DISTINCT movies.movie_id) AS movie_count")
+    .group("DATE(created_at)")
+    .map { |record| [record.date, record.movie_count] }
+    .to_h
   
+    @grouped_overviews_with_movie_counts.inspect
+    
     # 映画データを再取得する
     tmdb_service = TmdbService.new
     @movies_data = {}
@@ -84,7 +85,6 @@ class RelatedMoviesController < ApplicationController
       end
     end
   
-    puts @grouped_overviews_with_movie_counts.inspect 
   
     respond_to do |format|
       format.html { render 'users/related_movies/index' }
