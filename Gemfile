@@ -51,7 +51,7 @@ gem 'httparty'
 gem 'dotenv-rails', groups: [:development, :test]
 gem 'simple_calendar'
 gem 'rails-i18n'
-
+gem "hashid-rails"
 
 
 group :development, :test do
