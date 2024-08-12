@@ -33,6 +33,11 @@ Rails.application.routes.draw do
       # delete 'bookmarks/:id', to: 'bookmark_of_shuffled_overviews#destroy', as: :bookmark
       delete 'bookmarks', to: 'bookmark_of_shuffled_overviews#destroy', as: :bookmark
     end
+    resources :bookmark_of_shuffled_overviews, only: [:index] do
+      collection do
+        get 'filter_bookmarked_overviews_by_date/:date', action: :filter_bookmarked_overviews_by_date, as: :filter_bookmarked_overviews_by_date
+      end
+    end
     resources :shuffled_overviews, only: [:index, :create] do
       collection do
         get 'filter_shuffled_overviews_by_date/:date', action: :filter_shuffled_overviews_by_date, as: :filter_shuffled_overviews_by_date
