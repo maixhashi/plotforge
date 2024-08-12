@@ -88,7 +88,7 @@ class RelatedMoviesController < ApplicationController
   
     respond_to do |format|
       format.html { render 'users/related_movies/index' }
-      format.js   { render :filter_movies_by_date }
+      format.js   { render 'users/shuffled_overviews/filter_movies_by_date' }
     end
   end
       
