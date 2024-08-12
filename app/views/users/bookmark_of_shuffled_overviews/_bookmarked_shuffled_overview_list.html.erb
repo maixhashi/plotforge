@@ -1,39 +1,45 @@
 <div class="content">
-  <% if @grouped_bookmarked_shuffled_overviews.present? %>
-    <div class="bookmarked-shuffled-overview-list">
-      <% @bookmarked_shuffled_overviews.each do |bookmarked_shuffled_overview| %>
-        <div class="shuffled-overview-item">
-          <div class="movie-images-container">
-            <div class="movie-images">
-              <% bookmarked_shuffled_overview.movie_ids.each do |movie_id| %>
-                <% movie = @movies_data[movie_id] %>
-                <%= link_to movie_path(movie_id) do %>
-                  <img src="https://image.tmdb.org/t/p/w200<%= movie['poster_path'] %>" alt="Movie Poster">
+  <div class="bookmarked-shuffled-overview-list">
+    <% if @grouped_bookmarked_shuffled_overviews.present? %>
+      <% @grouped_bookmarked_shuffled_overviews.each do |date, overviews| %>
+        <% overviews.each do |bookmarked_shuffled_overview| %>
+          <div class="shuffled-overview-item">
+            <div class="movie-images-container">
+              <div class="movie-images">
+                <% bookmarked_shuffled_overview.movie_ids.each do |movie_id| %>
+                  <% movie = @movies_data[movie_id] %>
+                  <% if movie && movie['poster_path'] %>
+                    <%= link_to movie_path(movie_id) do %>
+                      <img src="https://image.tmdb.org/t/p/w200<%= movie['poster_path'] %>" alt="Movie Poster">
+                    <% end %>
+                  <% end %>
                 <% end %>
-              <% end %>
+              </div>
+            </div>
+            <div class="shuffled-overview-content">
+              <%= bookmarked_shuffled_overview.content.html_safe %>
+              <div class="shuffled-overview-meta">
+                <% bookmark = BookmarkOfShuffledOverview.where(user_id: current_user.id, shuffled_overview_id: bookmarked_shuffled_overview.id).first %>
+                <p>お気に入りに追加した日時: <%= bookmark.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
+              </div>
+              <div class="button-container">
+                <button class="read-aloud-button btn btn-login">
+                  <i class="fas fa-volume-up"></i> 読み上げ
+                </button>
+                <button class="stop-button btn btn-login">
+                  停止
+                </button>
+              </div>
             </div>
           </div>
-          <div class="shuffled-overview-content">
-            <%= bookmarked_shuffled_overview.content.html_safe %>
-            <div class="shuffled-overview-meta">
-              <p>保存日時: <%= bookmarked_shuffled_overview.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
-            </div>
-            <div class="button-container">
-              <button class="read-aloud-button btn btn-login">
-                <i class="fas fa-volume-up"></i> 読み上げ
-              </button>
-              <button class="stop-button btn btn-login">
-                停止
-              </button>
-            </div>
-          </div>
-        </div>
+        <% end %>
       <% end %>
-    </div>
-  <% else %>
+    <% else %>
+  </div>
     <p>指定された日付にはブックマークされたシャッフル概要がありません。</p>
   <% end %>
 </div>
+
 
 <style>
 .content {

@@ -3,9 +3,9 @@
     <%= month_calendar do |date| %>
       <div class="calendar-day">
         <%= date.day %>
-         <% if @grouped_bookmarked_shuffled_overviews[date] %>
+         <% if @grouped_bookmark_for_count[date] %>
             <%= link_to filter_bookmarked_overviews_by_date_user_bookmark_of_shuffled_overviews_path(date: date), remote: true, class: "count" do %>
-                <div><%= @grouped_bookmarked_shuffled_overviews.keys.count %></div>
+                <div><%= @grouped_bookmark_for_count[date] %></div>
             <% end %>
         <% end %>
       </div>
@@ -75,8 +75,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const calendarContainer = document.querySelector('#bookmarked_shuffled_overviews_count_calendar');
 
-  console.log('find #bookmarked_shuffled_overviews_count_calendar')
-  
   document.addEventListener('click', function(event) {
     const target = event.target.closest('.previous, .next, .today, .start-date');
     if (target) {
