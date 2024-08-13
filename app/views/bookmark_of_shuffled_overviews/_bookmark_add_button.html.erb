@@ -1,4 +1,9 @@
-<%= button_to user_shuffled_overview_bookmarks_path(params[:user_id], shuffled_overview_id: @shuffled_overview.id), method: :post, class: 'bookmark-add-button', remote: true do %>
+<%= link_to user_shuffled_overview_bookmarks_path(
+  user_id: current_user.id,
+  shuffled_overview_id: shuffled_overview.id),
+  method: :post,
+  id: "bookmark-add-button-#{shuffled_overview.id}",
+  class: "bookmark-add-button", remote: true do %>
   <i class="fa-regular fa-2x fa-heart"></i>  
 <% end %>
 

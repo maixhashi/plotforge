@@ -8,9 +8,9 @@
       <div class="bookmark-container">
         <% if user_signed_in? %>
           <% if current_user.bookmarked_shuffled_overviews.include?(@shuffled_overview) %>
-            <%= render 'bookmark_of_shuffled_overviews/bookmark_remove_button' %>
-            <% else %>
-            <%= render 'bookmark_of_shuffled_overviews/bookmark_add_button' %>
+              <%= render partial: 'bookmark_of_shuffled_overviews/bookmark_remove_button', locals: { shuffled_overview: @shuffled_overview } %>
+          <% else %>
+              <%= render partial: 'bookmark_of_shuffled_overviews/bookmark_add_button', locals: { shuffled_overview: @shuffled_overview } %>
           <% end %>
         <% end %>
       </div>
@@ -84,6 +84,7 @@
   text-align: center;
   margin-top: 10px;
   display: flex;
+  gap: 10px;
   align-items: center;
   align-content: center;
   justify-content: center;

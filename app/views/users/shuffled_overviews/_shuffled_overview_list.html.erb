@@ -18,6 +18,15 @@
             <p>保存日時: <%= shuffled_overview.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
           </div>
           <div class="button-container">
+            <% if user_signed_in? %>
+              <% bookmarked = current_user.bookmarked_shuffled_overviews.find_by(id: shuffled_overview.id) %>
+              <% if bookmarked %>
+                <%= render partial: 'bookmark_of_shuffled_overviews/bookmark_remove_button', locals: { shuffled_overview: shuffled_overview } %>
+              <% else %>
+                <%= render partial: 'bookmark_of_shuffled_overviews/bookmark_add_button', locals: { shuffled_overview: shuffled_overview } %>
+              <% end %>
+            <% end %>
+
             <button class="read-aloud-button btn btn-login">
               <i class="fas fa-volume-up"></i> 読み上げ
             </button>
@@ -88,5 +97,10 @@
 
 .button-container {
   text-align: center;
+  gap: 10px;
+}
+
+.bookmark-container {
+  background-color: none;
 }
 </style>

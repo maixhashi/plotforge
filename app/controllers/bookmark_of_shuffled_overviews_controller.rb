@@ -1,5 +1,6 @@
 class BookmarkOfShuffledOverviewsController < ApplicationController
   # before_action :authenticate_user!
+
   def index
     @bookmarked_shuffled_overviews = current_user.bookmarked_shuffled_overviews
 
@@ -62,23 +63,36 @@ class BookmarkOfShuffledOverviewsController < ApplicationController
   
   def create
     @shuffled_overview = ShuffledOverview.find(params[:shuffled_overview_id])
-    current_user.bookmarked_shuffled_overviews << @shuffled_overview
-    
+  
+    # 既にブックマークされているか確認
+    unless current_user.bookmarked_shuffled_overviews.exists?(@shuffled_overview.id)
+      current_user.bookmarked_shuffled_overviews << @shuffled_overview
+    end
+  
     respond_to do |format|
       format.html { render 'users/shuffled_overviews/show' }
       format.js   # create.js.erb を呼び出します
     end
   end
-  
-  
-  
-  def destroy
-    @shuffled_overview = ShuffledOverview.find(params[:id])
-    current_user.bookmarked_shuffled_overviews.destroy(@shuffled_overview)
     
-    respond_to do |format|
-      format.html { render 'users/shuffled_overviews/show' }
-      format.js   # create.js.erb を呼び出します
+  def destroy
+    # params[:id]が存在しない場合はparams[:shuffled_overview_id]を使用
+    shuffled_overview_id = params[:shuffled_overview_id]
+    @shuffled_overview = ShuffledOverview.find(shuffled_overview_id)
+
+    if @shuffled_overview
+      # 正しいカラムを使用して関連するbookmark_of_shuffled_overviewsを削除
+      current_user.bookmark_of_shuffled_overviews.where(shuffled_overview_id: @shuffled_overview.id).destroy_all
+      
+      respond_to do |format|
+        format.html { render 'users/shuffled_overviews/show' }
+        format.js   # create.js.erb を呼び出します
+      end
+    else
+      # レコードが見つからなかった場合の処理
+      respond_to do |format|
+        format.js { render js: "alert('ShuffledOverview not found');" }
+      end
     end
   end
   
@@ -139,6 +153,28 @@ class BookmarkOfShuffledOverviewsController < ApplicationController
       format.js   { render :filter_bookmarked_overviews_by_date }
     end
   end
-  
-  
 end
+
+
+
+  def destroy
+    # ユーザーのお気に入りからShuffledOverviewを削除する処理
+    bookmark = current_user.bookmarked_shuffled_overviews.find_by(shuffled_overview_id: @shuffled_overview.id)
+    
+    if bookmark
+      bookmark.destroy
+      respond_to do |format|
+        format.js { render :destroy }
+      end
+    else
+      respond_to do |format|
+        format.js { render js: "alert('Bookmark not found');" }
+      end
+    end
+  end
+
+  private
+
+  def set_shuffled_overview
+    @shuffled_overview = ShuffledOverview.find(params[:shuffled_overview_id])
+  end
