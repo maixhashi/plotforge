@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_04_142451) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_15_114208) do
   create_table "bookmark_of_shuffled_overviews", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "shuffled_overview_id", null: false
@@ -19,6 +19,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_04_142451) do
     t.index ["shuffled_overview_id"], name: "index_bookmark_of_shuffled_overviews_on_shuffled_overview_id"
     t.index ["user_id", "shuffled_overview_id"], name: "index_bookmarks_on_user_and_overview", unique: true
     t.index ["user_id"], name: "index_bookmark_of_shuffled_overviews_on_user_id"
+  end
+
+  create_table "movies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "tmdb_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tmdb_id"], name: "index_movies_on_tmdb_id"
   end
 
   create_table "settings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
