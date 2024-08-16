@@ -22,10 +22,7 @@ class ApplicationController < ActionController::Base
   
     # 現在のユーザーを取得
     def current_user
-      # 実際の実装に応じて変更してください
-      @current_user ||= User.find(session[:user_id]) if session[:user_id]
+      @current_user ||= User.find_by(id: session[:user_id]) if session[:user_id]
     end
-    
-  
   end
   
