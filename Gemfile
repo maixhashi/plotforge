@@ -52,6 +52,10 @@ gem 'dotenv-rails', groups: [:development, :test]
 gem 'simple_calendar'
 gem 'rails-i18n'
 gem "hashid-rails"
+gem "rails-erd"
+gem 'carrierwave'
+gem 'annotate'
+
 
 
 group :development, :test do
