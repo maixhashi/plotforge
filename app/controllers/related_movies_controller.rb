@@ -50,6 +50,7 @@ class RelatedMoviesController < ApplicationController
   
 
   def filter_movies_by_date
+    Time.zone = 'UTC'
     # 日付パラメータが存在しない場合は Date.today を使用
     date_param = params[:date].presence || Date.today.to_s
     
@@ -61,6 +62,7 @@ class RelatedMoviesController < ApplicationController
     end
     
     @start_date = date
+    date_range = date.beginning_of_day..date.end_of_day
     
     # 現在のユーザーのシャッフルされたあらすじを指定された日付でフィルタリング
     @shuffled_overviews = current_user.shuffled_overviews
@@ -68,6 +70,7 @@ class RelatedMoviesController < ApplicationController
   
     # MySQL クエリで日付ごとの映画カウントを取得
     @grouped_overviews_with_movie_counts = ShuffledOverview
+    .where(created_at: date_range)
     .joins("CROSS JOIN JSON_TABLE(related_movie_ids, '$[*]' COLUMNS (related_movie_id BIGINT PATH '$')) AS movies")
     .select("DATE(created_at) AS date, COUNT(DISTINCT movies.related_movie_id) AS movie_count")
     .group("DATE(created_at)")

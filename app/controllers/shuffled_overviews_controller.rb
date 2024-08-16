@@ -59,8 +59,12 @@ class ShuffledOverviewsController < ApplicationController
       render json: { errors: @shuffled_overview.errors.full_messages }, status: :unprocessable_entity
     end
   end
-  
+    
   def filter_shuffled_overviews_by_date
+    Time.zone = 'UTC'
+    date_range = date.beginning_of_day..date.end_of_day
+
+
     # 日付パラメータが存在しない場合は Date.today を使用
     date_param = params[:date].presence || Date.today.to_s
     
@@ -84,7 +88,7 @@ class ShuffledOverviewsController < ApplicationController
     
     # MySQL で日付ごとにカウントを取得
     @grouped_overviews = ShuffledOverview
-                          .where(created_at: date.all_day)
+                          .where(created_at: date_range)
                           .select("DATE(created_at) AS date, COUNT(*) AS count")
                           .group("DATE(created_at)")
                           .map { |record| [record.date.to_date, record.count] }
