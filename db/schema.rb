@@ -52,7 +52,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_15_114208) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.json "movie_ids"
+    t.json "related_movie_ids"
     t.index ["user_id"], name: "index_shuffled_overviews_on_user_id"
   end
 

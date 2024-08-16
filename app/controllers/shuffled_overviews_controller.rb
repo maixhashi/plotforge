@@ -40,11 +40,17 @@ class ShuffledOverviewsController < ApplicationController
 
   def create
     content = shuffled_overview_params[:content]
-    movie_ids = shuffled_overview_params[:movie_ids].map(&:to_i)
+    related_movie_ids = shuffled_overview_params[:related_movie_ids].map(&:to_i)
   
-    @shuffled_overview = current_user.shuffled_overviews.build(content: content, movie_ids: movie_ids)
+    @shuffled_overview = current_user.shuffled_overviews.build(shuffled_overview_params)
   
+    @shuffled_overview.related_movie_ids.each do |related_movie_id|
+      movie = Movie.find_or_create_by!(tmdb_id: related_movie_id)
+      @shuffled_overview.movies << movie
+    end
+
     if @shuffled_overview.save
+      Rails.logger.debug "ShuffledOverview related_movie_ids: #{@shuffled_overview.related_movie_ids.inspect}"
       Rails.logger.debug "ShuffledOverview movie_ids: #{@shuffled_overview.movie_ids.inspect}"
       logger.debug("ShuffledOverview ID after save: #{@shuffled_overview.id}")
   
@@ -101,7 +107,7 @@ class ShuffledOverviewsController < ApplicationController
   end
 
   def shuffled_overview_params
-    params.require(:shuffled_overview).permit(:content, movie_ids:[])
+    params.require(:shuffled_overview).permit(:content, related_movie_ids:[], movie_ids:[])
   end
 
 end
