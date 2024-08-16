@@ -31,9 +31,9 @@ class BookmarkOfShuffledOverviewsController < ApplicationController
     if params[:date]
       @grouped_bookmarked_shuffled_overviews = current_user.bookmarked_shuffled_overviews
       .where(bookmark_of_shuffled_overviews: { created_at: @date_range })
-      .select('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.movie_ids, DATE(bookmark_of_shuffled_overviews.created_at) AS date, COUNT(*) AS count')
+      .select('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.related_movie_ids, DATE(bookmark_of_shuffled_overviews.created_at) AS date, COUNT(*) AS count')
       .joins(:bookmark_of_shuffled_overviews)
-      .group('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.movie_ids, DATE(bookmark_of_shuffled_overviews.created_at)')
+      .group('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.related_movie_ids, DATE(bookmark_of_shuffled_overviews.created_at)')
       .each_with_object({}) do |overview, hash|
         date = overview.date
         hash[date] ||= []
@@ -41,9 +41,9 @@ class BookmarkOfShuffledOverviewsController < ApplicationController
       end
     else
       results = current_user.bookmarked_shuffled_overviews
-      .select('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.movie_ids, DATE(bookmark_of_shuffled_overviews.created_at) AS date, COUNT(*) AS count')
+      .select('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.related_movie_ids, DATE(bookmark_of_shuffled_overviews.created_at) AS date, COUNT(*) AS count')
       .joins(:bookmark_of_shuffled_overviews)
-      .group('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.movie_ids, DATE(bookmark_of_shuffled_overviews.created_at)')
+      .group('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.related_movie_ids, DATE(bookmark_of_shuffled_overviews.created_at)')
 
       # 結果をハッシュに変換
       @grouped_bookmarked_shuffled_overviews = results.each_with_object({}) do |overview, hash|
@@ -125,7 +125,7 @@ class BookmarkOfShuffledOverviewsController < ApplicationController
     tmdb_service = TmdbService.new
     @movies_data = {}
     @bookmarked_shuffled_overviews.each do |bookmarked_shuffled_overview|
-      bookmarked_shuffled_overview.movie_ids.each do |movie_id|
+      bookmarked_shuffled_overview.related_movie_ids.each do |movie_id|
         @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
       end
     end
@@ -137,9 +137,9 @@ class BookmarkOfShuffledOverviewsController < ApplicationController
 
     @grouped_bookmarked_shuffled_overviews = current_user.bookmarked_shuffled_overviews
     .where(bookmark_of_shuffled_overviews: { created_at: @date_range })
-    .select('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.movie_ids, DATE(bookmark_of_shuffled_overviews.created_at) AS date, COUNT(*) AS count')
+    .select('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.related_movie_ids, DATE(bookmark_of_shuffled_overviews.created_at) AS date, COUNT(*) AS count')
     .joins(:bookmark_of_shuffled_overviews)
-    .group('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.movie_ids, DATE(bookmark_of_shuffled_overviews.created_at)')
+    .group('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.related_movie_ids, DATE(bookmark_of_shuffled_overviews.created_at)')
     .each_with_object({}) do |overview, hash|
       date = overview.date
       hash[date] ||= []

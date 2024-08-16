@@ -300,7 +300,8 @@ document.addEventListener("DOMContentLoaded", () => {
       body: JSON.stringify({ 
         shuffled_overview: { 
           content: content, 
-          movie_ids: movieIds // 映画のIDを送信
+          related_movie_ids: movieIds, // 映画のIDを送信
+          tmdb_ids: movieIds // 映画のIDを送信
         } 
       })
     })

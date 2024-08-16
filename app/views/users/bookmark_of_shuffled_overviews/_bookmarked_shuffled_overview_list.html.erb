@@ -6,7 +6,7 @@
           <div class="shuffled-overview-item">
             <div class="movie-images-container">
               <div class="movie-images">
-                <% bookmarked_shuffled_overview.movie_ids.each do |movie_id| %>
+                <% bookmarked_shuffled_overview.related_movie_ids.each do |movie_id| %>
                   <% movie = @movies_data[movie_id] %>
                   <% if movie && movie['poster_path'] %>
                     <%= link_to movie_path(movie_id) do %>

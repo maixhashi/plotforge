@@ -11,15 +11,15 @@ class RelatedMoviesController < ApplicationController
     tmdb_service = TmdbService.new
     @movies_data = {}
     @shuffled_overviews.each do |shuffled_overview|
-      shuffled_overview.movie_ids.each do |movie_id|
+      shuffled_overview.related_movie_ids.each do |movie_id|
         @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
       end
     end
   
     # MySQL クエリで日付ごとの映画カウントを取得
     @grouped_overviews_with_movie_counts = ShuffledOverview
-    .joins("CROSS JOIN JSON_TABLE(movie_ids, '$[*]' COLUMNS (movie_id BIGINT PATH '$')) AS movies")
-    .select("DATE(created_at) AS date, COUNT(DISTINCT movies.movie_id) AS movie_count")
+    .joins("CROSS JOIN JSON_TABLE(related_movie_ids, '$[*]' COLUMNS (related_movie_id BIGINT PATH '$')) AS movies")
+    .select("DATE(created_at) AS date, COUNT(DISTINCT movies.related_movie_id) AS movie_count")
     .group("DATE(created_at)")
     .map { |record| [record.date, record.movie_count] }
     .to_h
@@ -34,9 +34,9 @@ class RelatedMoviesController < ApplicationController
     
   def create
     content = shuffled_overview_params[:content]
-    movie_ids = shuffled_overview_params[:movie_ids].map(&:to_i)
+    movie_ids = shuffled_overview_params[:related_movie_ids].map(&:to_i)
   
-    @shuffled_overview = current_user.shuffled_overviews.build(content: content, movie_ids: movie_ids)
+    @shuffled_overview = current_user.shuffled_overviews.build(content: content, related_movie_ids: related_movie_ids)
   
     if @shuffled_overview.save
       Rails.logger.debug "ShuffledOverview movie_ids: #{@shuffled_overview.movie_ids.inspect}"
@@ -50,25 +50,29 @@ class RelatedMoviesController < ApplicationController
   
 
   def filter_movies_by_date
+    Time.zone = 'UTC'
     # 日付パラメータが存在しない場合は Date.today を使用
     date_param = params[:date].presence || Date.today.to_s
+    
     
     begin
       date = date_param.to_date
     rescue ArgumentError
       date = Date.today
     end
-  
+    
     @start_date = date
-  
+    date_range = date.beginning_of_day..date.end_of_day
+    
     # 現在のユーザーのシャッフルされたあらすじを指定された日付でフィルタリング
     @shuffled_overviews = current_user.shuffled_overviews
     @grouped_overviews = current_user.shuffled_overviews.where(created_at: @start_date.beginning_of_day..@start_date.end_of_day)
   
     # MySQL クエリで日付ごとの映画カウントを取得
     @grouped_overviews_with_movie_counts = ShuffledOverview
-    .joins("CROSS JOIN JSON_TABLE(movie_ids, '$[*]' COLUMNS (movie_id BIGINT PATH '$')) AS movies")
-    .select("DATE(created_at) AS date, COUNT(DISTINCT movies.movie_id) AS movie_count")
+    .where(created_at: date_range)
+    .joins("CROSS JOIN JSON_TABLE(related_movie_ids, '$[*]' COLUMNS (related_movie_id BIGINT PATH '$')) AS movies")
+    .select("DATE(created_at) AS date, COUNT(DISTINCT movies.related_movie_id) AS movie_count")
     .group("DATE(created_at)")
     .map { |record| [record.date, record.movie_count] }
     .to_h
@@ -80,20 +84,16 @@ class RelatedMoviesController < ApplicationController
     @movies_data = {}
     
     @grouped_overviews.each do |shuffled_overview|
-      shuffled_overview.movie_ids.each do |movie_id|
+      shuffled_overview.related_movie_ids.each do |movie_id|
         @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
       end
     end
-  
   
     respond_to do |format|
       format.html { render 'users/related_movies/index' }
       format.js   { render 'users/shuffled_overviews/filter_movies_by_date' }
     end
   end
-      
-
-
 
   private
 
@@ -102,7 +102,7 @@ class RelatedMoviesController < ApplicationController
   end
 
   def shuffled_overview_params
-    params.require(:shuffled_overview).permit(:content, movie_ids:[])
+    params.require(:shuffled_overview).permit(:content, related_movie_ids:[])
   end
 
 end
