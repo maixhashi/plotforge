@@ -1,9 +1,66 @@
 <div class="related-movie-images">
   <% @movies_data.each do |movie_id, movie| %>
-    <div class="related-movie-image">
-        <%= link_to movie_path(movie_id) do %>
-            <img src="https://image.tmdb.org/t/p/w200<%= movie['poster_path'] %>" alt="Movie Poster">
+    <div class="related-movie-image-wrapper">
+      <%= link_to related_movie_path(movie_id) do %>
+        <img src="https://image.tmdb.org/t/p/w200<%= movie['poster_path'] %>" alt="Movie Poster" class="related-movie-image">
+      <% end %>
+      <div class="button-container">
+        <% if current_user.bookmarked_movies.exists?(tmdb_id: movie['id']) %>
+          <%= render partial: 'related_movies/bookmark_remove_button', locals: { movie_id: movie_id } %>
+        <% else %>
+          <%= render partial: 'related_movies/bookmark_add_button', locals: { movie_id: movie_id } %>
         <% end %>
+      </div>
     </div>
   <% end %>
 </div>
+
+<style>
+.related-movie-image-wrapper {
+  position: relative;
+  display: inline-block;
+  margin: 10px; /* 画像間の余白を調整 */
+}
+
+.related-movie-image {
+  display: block;
+  width: 100%; /* 必要に応じてサイズを調整 */
+  height: auto;
+}
+
+.button-container {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.bookmark-link {
+  color: white;
+  border-radius: 50%;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:  #ffb5b5;
+}
+
+form.button_to {
+  width: 30px;
+}
+
+.bookmark-add-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color:  black;
+  cursor: pointer;
+}
+
+.bookmark-remove-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color:  #ffb5b5;
+  cursor: pointer;
+}
+</style>
