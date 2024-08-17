@@ -1,0 +1,30 @@
+<h1>ランダム映画のあらすじ</h1>
+<p id="shuffled-overview"></p>
+
+<script>
+// app/javascript/packs/application.js
+
+document.addEventListener("DOMContentLoaded", () => {
+  const text = `<%= @shuffled_overview %>`; // RailsのERBを使用してRubyの変数を埋め込む
+  const container = document.getElementById('shuffled-overview');
+  const containerDiv = document.getElementById('shuffled-overview-container');
+  let index = 0;
+
+  // <h1> の高さを取得
+  const header = document.querySelector('h1');
+  const headerHeight = header ? header.offsetHeight : 0;
+
+  // コンテナの位置を調整
+  containerDiv.style.top = `${headerHeight + 20}px`; // 20px は余白の調整
+
+  function type() {
+    if (index < text.length) {
+      container.innerHTML += text[index];
+      index++;
+      setTimeout(type, 50); // タイピングの速度を調整
+    }
+  }
+
+  type(); // タイピングを開始
+});
+</script>
