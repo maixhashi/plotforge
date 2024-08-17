@@ -1,13 +1,11 @@
 module OverviewShuffler
-  # Rubyでのデバッグ
   def self.shuffle_overview(movies, view_context)
     sentences_with_movies = []
-    # color_classes = ['link-black', 'link-gray']
 
     movies.each do |movie|
       movie_id = movie['id']
       overview = movie['overview']
-      movie_url = view_context.movie_url(movie['id'])
+      related_movie_url = view_context.url_for(controller: 'related_movies', action: 'show', id: movie['id'])
       movie_info = movie['title']
       movie_image_url = "https://image.tmdb.org/t/p/w500#{movie['poster_path']}"
 
@@ -17,7 +15,7 @@ module OverviewShuffler
         sentences_with_movies << { 
           movie_id: movie_id,
           sentence: sentence, 
-          movie_url: movie_url, 
+          movie_url: related_movie_url, 
           movie_info: movie_info, 
           movie_image_url: movie_image_url
         }
@@ -26,8 +24,6 @@ module OverviewShuffler
 
     shuffled = sentences_with_movies.shuffle
     shuffled_overview = shuffled.each_with_index.map do |item, index|
-      # color_class = color_classes[index % color_classes.length]
-      # "<a href='#{item[:movie_url]}' class='#{color_class} movie-link' data-movie-info='#{item[:movie_info]}' data-movie-image='#{item[:movie_image_url]}'>#{item[:sentence]}</a>"
       "<a href='#{item[:movie_url]}' class='movie-link' data-movie-id='#{item[:movie_id]}' data-movie-info='#{item[:movie_info]}' data-movie-image='#{item[:movie_image_url]}'>#{item[:sentence]}</a>"
     end.join(' ')
 

@@ -9,7 +9,7 @@ class ShuffledOverviewsController < ApplicationController
     tmdb_service = TmdbService.new
     @movies_data = {}
     @shuffled_overviews.each do |shuffled_overview|
-      shuffled_overview.movie_ids.each do |movie_id|
+      shuffled_overview.related_movie_ids.each do |movie_id|
         @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
       end
     end
@@ -81,7 +81,7 @@ class ShuffledOverviewsController < ApplicationController
     tmdb_service = TmdbService.new
     @movies_data = {}
     @shuffled_overviews.each do |shuffled_overview|
-      shuffled_overview.movie_ids.each do |movie_id|
+      shuffled_overview.related_movie_ids.each do |movie_id|
         @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
       end
     end

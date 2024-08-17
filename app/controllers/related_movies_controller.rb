@@ -31,7 +31,28 @@ class RelatedMoviesController < ApplicationController
       format.js   # 必要に応じてJSテンプレートも対応
     end
   end
+
+  def show
+    tmdb_service = TmdbService.new
+    @related_movie = tmdb_service.fetch_movie_details(params[:id])
+    Rails.logger.debug "RelatedMovie details: #{@related_movie}"
+  end
+
+  def show_shuffled_overview
+    clear_cache
+    tmdb_service = TmdbService.new
+    @related_movies = tmdb_service.random_movies(2)
+
+    shuffled_overview = OverviewShuffler.shuffle_overview(@related_movies, view_context)
+    @shuffled_overview = shuffled_overview.html_safe
     
+    clear_cache
+  end
+
+  def clear_cache
+    Rails.cache.clear
+  end
+
   def create
     content = shuffled_overview_params[:content]
     movie_ids = shuffled_overview_params[:related_movie_ids].map(&:to_i)

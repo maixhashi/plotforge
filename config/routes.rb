@@ -20,11 +20,8 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'movies/:id', to: 'movies#show', as: 'movie'
-  get 'search', to: 'movies#search'
-  get 'random_movie', to: 'movies#show_random'
-  get 'random_multiple_movies', to: 'movies#show_multiple_random'
-  get 'shuffled_overview', to: 'movies#show_shuffled_overview', as:'shuffled_overview'
+  get 'related_movies/:id', to: 'related_movies#show', as: 'related_movie'
+  get 'shuffled_overview', to: 'related_movies#show_shuffled_overview', as:'shuffled_overview'
 
   resources :users do
     resources :shuffled_overviews, only: [:show]

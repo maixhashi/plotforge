@@ -1,0 +1,52 @@
+<div class="movie-container">
+  <div class="text-container">
+    <h1><%= @related_movie['title'] %></h1>
+    <p><%= @related_movie['overview'] %></p>
+    <p><strong>ジャンル:</strong> <%= genre_tags(@related_movie['genres']) %></p>
+  </div>
+  <div class="image-container">
+    <img src="https://image.tmdb.org/t/p/w500<%= @related_movie['poster_path'] %>" alt="<%= @related_movie['title'] %>">
+  </div>
+</div>
+
+
+<style>
+  .movie-container {
+    display: flex;
+    align-items: flex-start; /* テキストと画像を上揃え */
+    padding: 20px;
+    border: 2px solid #333;
+    border-radius: 15px;
+    background-color: #e0f7fa;
+    max-width: 900px; /* コンテナの最大幅を指定 */
+    max-height: 430px; /* コンテナの最大幅を指定 */
+    margin-top: 10px; /* 中央に配置 */
+    margin-bottom: 10px; /* 中央に配置 */
+  }
+
+  .text-container {
+    flex: 1; /* テキストコンテナをできるだけ広げる */
+    margin-right: 20px; /* 画像との間にスペースを追加 */
+  }
+
+  .text-container h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+  }
+
+  .text-container p {
+    font-size: 16px;
+    color: #666;
+  }
+
+  .image-container {
+    flex-shrink: 0; /* 画像コンテナが縮まないようにする */
+  }
+
+  .image-container img {
+    max-width: 300px; /* 画像の最大幅を指定 */
+    height: 430px;
+    border-radius: 10px;
+  }
+  </style>

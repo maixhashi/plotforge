@@ -4,9 +4,9 @@
       <div class="shuffled-overview-item">
         <div class="movie-images-container">
           <div class="movie-images">
-            <% shuffled_overview.movie_ids.each do |movie_id| %>
+            <% shuffled_overview.related_movie_ids.each do |movie_id| %>
               <% movie = @movies_data[movie_id] %>
-              <%= link_to movie_path(movie_id) do %>
+              <%= link_to related_movie_path(movie_id) do %>
                 <img src="https://image.tmdb.org/t/p/w200<%= movie['poster_path'] %>" alt="Movie Poster">
               <% end %>
             <% end %>
