@@ -52,7 +52,6 @@ class BookmarkOfShuffledOverviewsController < ApplicationController
       hash[date] << overview
       end
 
-      @grouped_bookmarked_shuffled_overviews.inspect
     end
 
 
