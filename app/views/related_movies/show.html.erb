@@ -1,11 +1,11 @@
 <div class="movie-container">
   <div class="text-container">
-    <h1><%= @movie['title'] %></h1>
-    <p><%= @movie['overview'] %></p>
-    <p><strong>ジャンル:</strong> <%= genre_tags(@movie['genres']) %></p>
+    <h1><%= @related_movie['title'] %></h1>
+    <p><%= @related_movie['overview'] %></p>
+    <p><strong>ジャンル:</strong> <%= genre_tags(@related_movie['genres']) %></p>
   </div>
   <div class="image-container">
-    <img src="https://image.tmdb.org/t/p/w500<%= @movie['poster_path'] %>" alt="<%= @movie['title'] %>">
+    <img src="https://image.tmdb.org/t/p/w500<%= @related_movie['poster_path'] %>" alt="<%= @related_movie['title'] %>">
   </div>
 </div>
 
@@ -48,5 +48,5 @@
     max-width: 300px; /* 画像の最大幅を指定 */
     height: 430px;
     border-radius: 10px;
-  }  
+  }
   </style>

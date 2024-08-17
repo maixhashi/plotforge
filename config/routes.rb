@@ -20,11 +20,8 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'movies/:id', to: 'movies#show', as: 'movie'
-  get 'search', to: 'movies#search'
-  get 'random_movie', to: 'movies#show_random'
-  get 'random_multiple_movies', to: 'movies#show_multiple_random'
-  get 'shuffled_overview', to: 'movies#show_shuffled_overview', as:'shuffled_overview'
+  get 'related_movies/:id', to: 'related_movies#show', as: 'related_movie'
+  get 'shuffled_overview', to: 'related_movies#show_shuffled_overview', as:'shuffled_overview'
 
   resources :users do
     resources :shuffled_overviews, only: [:show]
@@ -47,7 +44,18 @@ Rails.application.routes.draw do
         get 'filter_movies_by_date/:date', action: :filter_movies_by_date, as: :filter_movies_by_date
       end
     end
+    resources :related_movies do
+      member do
+        post 'bookmark', to: 'related_movies#bookmark', as: :bookmark_of_related_movie
+        delete 'unbookmark', to: 'related_movies#unbookmark', as: :unbookmark_of_related_movie
+      end
+    end
+    resources :movies, only: [:show] do
+      post 'bookmark', to: 'bookmark_of_movies#bookmark', as: :bookmark_movie
+      delete 'unbookmark', to: 'bookmark_of_movies#unbookmark', as: :unbookmark_movie
+    end
   end
+  
   
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

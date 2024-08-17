@@ -1,0 +1,32 @@
+<%= link_to bookmark_of_related_movie_user_related_movie_path(id: movie_id), 
+method: :post, 
+remote: true, 
+id: "bookmark-add-button-related-movie-#{movie_id}",
+class: "bookmark-link",
+data: { action: 'bookmark' } do %>
+  <i class="fa-regular fa-3x fa-heart"></i>
+<% end %>
+
+<style>
+.related-movie-images {
+  position: relative;
+}
+
+.related-movie-image {
+  position: relative;
+  display: inline-block;
+  width: 200px;
+  height: 300px;
+  margin: 10px;
+}
+
+.bookmark-link {
+  border: none;
+  cursor: pointer;
+  color: #fff;
+}
+
+.bookmark-link i {
+  font-size: 36px;
+}
+</style>

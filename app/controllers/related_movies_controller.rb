@@ -1,5 +1,6 @@
 class RelatedMoviesController < ApplicationController
   before_action :set_user
+  before_action :set_movie, only: [:bookmark, :unbookmark]
 
   def index
     @start_date = params.fetch(:start_date, Date.today)
@@ -31,7 +32,28 @@ class RelatedMoviesController < ApplicationController
       format.js   # 必要に応じてJSテンプレートも対応
     end
   end
+
+  def show
+    tmdb_service = TmdbService.new
+    @related_movie = tmdb_service.fetch_movie_details(params[:id])
+    Rails.logger.debug "RelatedMovie details: #{@related_movie}"
+  end
+
+  def show_shuffled_overview
+    clear_cache
+    tmdb_service = TmdbService.new
+    @related_movies = tmdb_service.random_movies(2)
+
+    shuffled_overview = OverviewShuffler.shuffle_overview(@related_movies, view_context)
+    @shuffled_overview = shuffled_overview.html_safe
     
+    clear_cache
+  end
+
+  def clear_cache
+    Rails.cache.clear
+  end
+
   def create
     content = shuffled_overview_params[:content]
     movie_ids = shuffled_overview_params[:related_movie_ids].map(&:to_i)
@@ -95,10 +117,45 @@ class RelatedMoviesController < ApplicationController
     end
   end
 
-  private
+  def bookmark
+    respond_to do |format|
+      if current_user.bookmarked_movies.exists?(tmdb_id: @movie['id'])
+        format.js { render js: "alert('Already bookmarked');" }
+      else
+        current_user.bookmarked_movies.create(tmdb_id: @movie['id'])
+        format.js
+      end
+    end
+  end
 
+  def unbookmark
+    respond_to do |format|
+      bookmark = current_user.bookmarked_movies.find_by(tmdb_id: @movie['id'])
+      movie = Movie.find_by(tmdb_id: @movie['id'])
+      if bookmark
+        # まず関連レコードを削除
+        movie.link_of_shuffled_overview_movies.destroy_all
+        
+        # その後、ブックマークを削除
+        bookmark.destroy
+        
+        format.js
+      else
+        format.js { render js: "alert('Not bookmarked');" }
+      end
+    end
+  end
+
+  
+  private
+  
   def set_user
     @user = current_user
+  end
+  
+  def set_movie
+    tmdb_service = TmdbService.new
+    @movie = tmdb_service.fetch_movie_details(params[:id])
   end
 
   def shuffled_overview_params
@@ -106,3 +163,4 @@ class RelatedMoviesController < ApplicationController
   end
 
 end
+

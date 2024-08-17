@@ -17,7 +17,7 @@ class TmdbService
       Rails.logger.debug "Movie details fetched: #{movie_details}"
       movie_details
     else
-      Rails.logger.error "Error fetching movie details: #{response.status} - #{response.body}"
+      Rails.logger.error "Error fetching movie details: #{response.code} - #{response.body}"
       {}
     end
   end

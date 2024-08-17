@@ -168,8 +168,6 @@ document.addEventListener("DOMContentLoaded", () => {
         link.addEventListener('click', event => {
           event.preventDefault();
           const baseUrl = event.target.closest('a').href;
-          # // URLのパスが"/filter_movies_by_date" で終わる場合に追加する
-          # const url = `${baseUrl.replace(/\/filter_movies_by_date\/.*$/, '')}/filter_movies_by_date/${formattedDate}`;
   
           fetch(url, {
             headers: {

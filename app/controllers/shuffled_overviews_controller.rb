@@ -9,7 +9,7 @@ class ShuffledOverviewsController < ApplicationController
     tmdb_service = TmdbService.new
     @movies_data = {}
     @shuffled_overviews.each do |shuffled_overview|
-      shuffled_overview.movie_ids.each do |movie_id|
+      shuffled_overview.related_movie_ids.each do |movie_id|
         @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
       end
     end
@@ -62,9 +62,7 @@ class ShuffledOverviewsController < ApplicationController
     
   def filter_shuffled_overviews_by_date
     Time.zone = 'UTC'
-    date_range = date.beginning_of_day..date.end_of_day
-
-
+    
     # 日付パラメータが存在しない場合は Date.today を使用
     date_param = params[:date].presence || Date.today.to_s
     
@@ -73,7 +71,8 @@ class ShuffledOverviewsController < ApplicationController
     rescue ArgumentError
       date = Date.today
     end
-  
+    date_range = date.beginning_of_day..date.end_of_day
+    
     # 指定された日付範囲のデータを取得
     @shuffled_overviews = ShuffledOverview.where(created_at: date.all_day)
   
@@ -81,7 +80,7 @@ class ShuffledOverviewsController < ApplicationController
     tmdb_service = TmdbService.new
     @movies_data = {}
     @shuffled_overviews.each do |shuffled_overview|
-      shuffled_overview.movie_ids.each do |movie_id|
+      shuffled_overview.related_movie_ids.each do |movie_id|
         @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
       end
     end

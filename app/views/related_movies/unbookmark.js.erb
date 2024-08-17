@@ -1,0 +1,2 @@
+document.querySelector(`#bookmark-remove-button-related-movie-<%= @movie['id'] %>`).innerHTML = "<%= j render 'bookmark_add_button',  movie_id: @movie['id']  %>";
+document.querySelector(`#bookmark-remove-button-related-movie-<%= @movie['id'] %>`).remove
