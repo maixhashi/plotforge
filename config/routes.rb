@@ -51,7 +51,7 @@ Rails.application.routes.draw do
       end
     end
     resources :bookmark_of_movies, only: [:index]
-    resources :bookmark_of_movies, only: [:index] do
+    resources :bookmark_of_movies, only:[] do
       collection do
         get 'filter_bookmarked_movies_by_date/:date', action: :filter_bookmarked_movies_by_date, as: :filter_bookmarked_movies_by_date
       end
