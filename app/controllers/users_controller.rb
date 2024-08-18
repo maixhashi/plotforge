@@ -28,6 +28,9 @@ class UsersController < ApplicationController
     end
   end
 
+  def profile
+  end
+      
   private
 
   def user_params

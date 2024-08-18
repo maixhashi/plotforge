@@ -7,10 +7,10 @@ Rails.application.routes.draw do
   get 'logout', to: 'sessions#destroy'  #
   delete 'logout', to: 'sessions#destroy'  #
   resources :users, only: [:new, :create, :destroy]
-  resources :settings, only: [:index, :show]
     # サインアップ関連のルーティング（仮定）
   get 'signup', to: 'users#new', as: :signup
-  get 'profile', to: 'users#show', as: :profile
+  get 'settings', to: 'users#show', as: :settings
+  get 'profile', to: 'users#profile', as: :profile
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   resource :users, only: [] do
