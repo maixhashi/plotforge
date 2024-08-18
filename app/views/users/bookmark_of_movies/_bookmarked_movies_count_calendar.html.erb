@@ -4,8 +4,9 @@
       <div class="calendar-day">
         <div class="day-number"><%= date.day %></div>
         <% if @bookmarked_movies_count_by_date[date] %>
-          <%= link_to filter_bookmarked_movies_by_date_user_bookmark_of_movies_path(date: date), remote: true, class: "count-wrapper" do %>
-            <i class="fas fa-film"></i> <!-- アイコンをfa-filmに変更 -->
+          <%= link_to filter_bookmarked_movies_by_date_user_bookmark_of_movies_path(date: date), remote: true, class: "count-wrapper-for-calendar" do %>
+            <i class="fas fa-film"></i>
+            <i class="fas fa-heart"></i>
             <span class="count"><%= @bookmarked_movies_count_by_date[date] %></span>
           <% end %>
         <% end %>
@@ -13,9 +14,17 @@
     <% end %>
   </div>
   <div class="calendar-footer">
-    <i class="fas fa-film" style="color: #2c4c64;"></i> <!-- アイコンをfa-filmに変更 -->
-    あなたの作成したあらすじの映画
-    <i class="fas fa-film" style="color: #2c4c64;"></i> <!-- アイコンをfa-filmに変更 -->
+    <div class="count-wrapper-for-calendar">
+      <i class="fas fa-film" style="color: #2c4c64;"></i>
+      <i class="fas fa-heart"></i>
+    </div>
+    <div>
+      あなたのブックマークした映画
+    </div>
+    <div class="count-wrapper-for-calendar">
+      <i class="fas fa-film" style="color: #2c4c64;"></i>
+      <i class="fas fa-heart"></i>
+    </div>
   </div>
 </div>
 
@@ -71,6 +80,11 @@
   font-weight: bold;
 }
 
+.calendar-footer {
+  display: flex;
+  gap: 10px;
+}
+
 .count-wrapper {
   position: relative;
   display: inline-flex;
@@ -98,6 +112,66 @@
   align-items: center;
   width: 24px; /* 丸の幅を固定 */
   height: 24px; /* 丸の高さを固定 */
+}
+
+.count-wrapper .fa-heart {
+  position: absolute;
+  top: 12px;
+  right: -12px;
+  color: red;
+  border-radius: 50%;
+  padding: 2px;
+  font-size: 6px;
+  line-height: 1;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+}
+.count-wrapper-for-calendar {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.count-wrapper-for-calendar .fa-film { /* アイコンのサイズと色 */
+  font-size: 24px; /* アイコンのサイズを適宜調整 */
+  color: #2c4c64;
+}
+
+.count-wrapper-for-calendar .count {
+  position: absolute;
+  top: -16px; /* 上方向の調整 */
+  right: -18px; /* 右方向の調整 */
+  background-color: red; /* カウント数の丸の背景色 */
+  color: white; /* カウント数のテキストの色 */
+  border-radius: 50%; /* 丸い形にする */
+  padding: 2px; /* テキスト周りの余白 */
+  font-size: 12px; /* テキストサイズ */
+  line-height: 1;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px; /* 丸の幅を固定 */
+  height: 24px; /* 丸の高さを固定 */
+}
+
+.count-wrapper-for-calendar .fa-heart {
+  position: absolute;
+  top: 12px;
+  right: -12px;
+  color: red;
+  border-radius: 50%;
+  padding: 2px;
+  font-size: 6px;
+  line-height: 1;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+  height: 16px;
 }
 </style>
 
