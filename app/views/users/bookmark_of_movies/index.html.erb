@@ -10,6 +10,15 @@
   <div class="calendar-toggle-for-related-movies" id="calendar-toggle-for-related-movies">
     <i class="fa fa-3x fa-calendar"></i>
   </div>
+  <div class="count-wrapper">
+    <%= link_to user_bookmark_of_shuffled_overviews_path, class:"link-to-shuffled-overviews" do %>
+      <span class="count"><%= current_user.bookmarked_shuffled_overviews.count %></span>
+      <i class="fas fa-3x fa-book-open"></i>
+      <i class="fas fa-heart"></i>
+    <% end %>
+  </div>
+</div>
+
 </div>
 
 
@@ -21,6 +30,49 @@
   z-index: 1000;
   cursor: pointer;
 }
+
+.link-to-shuffled-overviews {
+  position: fixed;
+  bottom: 70px; /* ヘッダーの高さに応じて調整 */
+  right: 30px;
+  z-index: 1000;
+  cursor: pointer;
+  color: black;
+}
+
+.count-wrapper .count {
+  position: absolute;
+  top: -9px; /* 上方向の調整 */
+  right: -18px; /* 右方向の調整 */
+  background-color: red; /* カウント数の丸の背景色 */
+  color: white; /* カウント数のテキストの色 */
+  border-radius: 50%; /* 丸い形にする */
+  padding: 2px; /* テキスト周りの余白 */
+  font-size: 12px; /* テキストサイズ */
+  line-height: 1;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px; /* 丸の幅を固定 */
+  height: 24px; /* 丸の高さを固定 */
+}
+
+.count-wrapper .fa-heart {
+  position: absolute;
+  top: 30px;
+  right: -12px;
+  color: red;
+  border-radius: 50%;
+  padding: 2px;
+  font-size: 6px;
+  line-height: 1;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 18px;
+  height: 18px;
+}
+
 
 .related-movie-images {
   margin-top: 100px;
