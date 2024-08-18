@@ -29,6 +29,19 @@ class UsersController < ApplicationController
   end
 
   def profile
+    results = current_user.bookmarked_shuffled_overviews
+      .select('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.related_movie_ids, DATE(bookmark_of_shuffled_overviews.created_at) AS date, COUNT(*) AS count')
+      .joins(:bookmark_of_shuffled_overviews)
+      .group('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.related_movie_ids, DATE(bookmark_of_shuffled_overviews.created_at)')
+      .order('date DESC')
+      .limit(4) # ここでレコードを5つに制限
+  
+    # 結果をハッシュに変換
+    @grouped_bookmarked_shuffled_overviews = results.each_with_object({}) do |overview, hash|
+      date = overview.date
+      hash[date] ||= []
+      hash[date] << overview
+    end
   end
       
   private
