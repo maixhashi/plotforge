@@ -1,4 +1,4 @@
-<div>
+<div class="profile">
   <div class="user-info-on-profile">
     <% if current_user.avatar? %>
       <%= link_to profile_path, class:"header-link-of-shuffled-overview" do %>
@@ -15,6 +15,7 @@
 
   <div>
     <%= render partial: 'users/bookmark_of_shuffled_overviews/bookmarked_shuffled_overview_list_on_profile', locals: { bookmarked_shuffled_overviews: @msy_bookmarked_shuffled_overviews } %>
+    <%= render partial: 'users/bookmark_of_movies/bookmarked_movies_list_on_profile', locals: { bookmarked_movies_by_date: @bookmarked_movies_by_date } %>
   </div>
 </div>
 
@@ -24,7 +25,14 @@
 </div>
 
 <style>
+.profile {
+  margin-top: 100px;
+}
+
 .user-info-on-profile {
+  position: fixed;
+  top: 15%;
+  left: 50%;
   display: flex;
   justify-content: center;
 }

@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   skip_before_action :require_login
+  helper_method :movie_poster_path
 
   def new
     @user = User.new
@@ -29,6 +30,7 @@ class UsersController < ApplicationController
   end
 
   def profile
+    # <%= render partial: 'users/bookmark_of_shuffled_overviews/bookmarked_shuffled_overview_list_on_profile', locals: { bookmarked_shuffled_overviews: @msy_bookmarked_shuffled_overviews } %>で渡す変数
     results = current_user.bookmarked_shuffled_overviews
       .select('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.related_movie_ids, DATE(bookmark_of_shuffled_overviews.created_at) AS date, COUNT(*) AS count')
       .joins(:bookmark_of_shuffled_overviews)
@@ -42,6 +44,29 @@ class UsersController < ApplicationController
       hash[date] ||= []
       hash[date] << overview
     end
+
+    filtered_bookmarked_movies = current_user.bookmarked_movies
+    .select('DATE(bookmark_of_movies.created_at) AS date, movies.tmdb_id')
+    .joins(:bookmark_of_movies)
+    .group('DATE(bookmark_of_movies.created_at), movies.tmdb_id')
+    .limit(4)
+
+    # 常に配列を値として持つハッシュを初期化
+    @bookmarked_movies_by_date = Hash.new { |hash, key| hash[key] = [] }
+
+    filtered_bookmarked_movies.each do |movie|
+      date = movie.date
+      tmdb_id = movie.tmdb_id
+      @bookmarked_movies_by_date[date] << tmdb_id
+    end
+
+  end
+
+  def movie_poster_path(tmdb_id)
+    # TMDB から映画の詳細を取得するメソッドがあると仮定
+    tmdb_service = TmdbService.new
+    movie = tmdb_service.fetch_movie_details(tmdb_id)
+    movie['poster_path'] if movie
   end
       
   private
