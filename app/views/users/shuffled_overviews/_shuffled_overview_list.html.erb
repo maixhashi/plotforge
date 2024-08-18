@@ -6,9 +6,18 @@
           <div class="movie-images">
             <% shuffled_overview.related_movie_ids.each do |movie_id| %>
               <% movie = @movies_data[movie_id] %>
-              <%= link_to related_movie_path(movie_id) do %>
-                <img src="https://image.tmdb.org/t/p/w200<%= movie['poster_path'] %>" alt="Movie Poster">
-              <% end %>
+              <div class="movie-image-wrapper">
+                <%= link_to related_movie_path(movie_id) do %>
+                  <img src="https://image.tmdb.org/t/p/w200<%= movie['poster_path'] %>" alt="Movie Poster">
+                <% end %>
+                <div class="button-container">
+                  <% if current_user.bookmarked_movies.exists?(tmdb_id: movie_id) %>
+                    <%= render partial: 'related_movies/bookmark_remove_button', locals: { movie_id: movie_id } %>
+                  <% else %>
+                    <%= render partial: 'related_movies/bookmark_add_button', locals: { movie_id: movie_id } %>
+                  <% end %>
+                </div>
+              </div>
             <% end %>
           </div>
         </div>
@@ -70,6 +79,7 @@
   display: flex;
   flex-direction: column; /* 画像を縦に並べる */
   margin-right: 20px; /* あらすじとの間隔を調整 */
+  position: relative; /* 相対位置に設定 */
 }
 
 .movie-images {
@@ -78,10 +88,22 @@
   gap: 10px; /* 画像間の間隔 */
 }
 
+.movie-image-wrapper {
+  position: relative; /* 子要素の絶対位置に基づく */
+}
+
 .movie-images img {
   max-width: 100px; /* 画像の幅を制限 */
   max-height: 150px; /* 画像の高さを制限 */
   object-fit: cover; /* 画像が領域に収まるように調整 */
+}
+
+.button-container {
+  position: absolute; /* 絶対位置に設定 */
+  bottom: 10px; /* 画像の下部に位置 */
+  right: 10px; /* 画像の右部に位置 */
+  display: flex;
+  gap: 10px; /* ボタン間の間隔 */
 }
 
 .shuffled-overview-content {
@@ -98,9 +120,5 @@
 .button-container {
   text-align: center;
   gap: 10px;
-}
-
-.bookmark-container {
-  background-color: none;
 }
 </style>
