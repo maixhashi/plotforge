@@ -9,9 +9,18 @@
                 <% bookmarked_shuffled_overview.related_movie_ids.each do |movie_id| %>
                   <% movie ||= TmdbService.new.fetch_movie_details(movie_id) %>
                   <% if movie && movie['poster_path'] %>
-                    <%= link_to related_movie_path(movie_id) do %>
-                      <img src="https://image.tmdb.org/t/p/w200<%= movie['poster_path'] %>" alt="Movie Poster">
-                    <% end %>
+                    <div class="movie-image-wrapper">
+                      <%= link_to related_movie_path(movie_id) do %>
+                        <img src="https://image.tmdb.org/t/p/w200<%= movie['poster_path'] %>" alt="Movie Poster">
+                      <% end %>
+                      <div class="button-container">
+                        <% if current_user.bookmarked_movies.exists?(tmdb_id: movie_id) %>
+                         <%= render partial: 'related_movies/bookmark_remove_button', locals: { movie_id: movie_id } %>
+                        <% else %>
+                          <%= render partial: 'related_movies/bookmark_add_button', locals: { movie_id: movie_id } %>
+                        <% end %>
+                      </div>
+                    </div>
                   <% end %>
                 <% end %>
               </div>
@@ -22,22 +31,30 @@
                 <% bookmark = BookmarkOfShuffledOverview.where(user_id: current_user.id, shuffled_overview_id: bookmarked_shuffled_overview.id).first %>
                 <p>お気に入りに追加した日時: <%= bookmark.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
               </div>
-              <div class="button-container">
-                <button class="read-aloud-button btn btn-login">
-                  <i class="fas fa-volume-up"></i> 読み上げ
-                </button>
-                <button class="stop-button btn btn-login">
-                  停止
-                </button>
-              </div>
+              <div class="button-container-for-shuffled-overview">
+                <% if user_signed_in? %>
+                  <% bookmarked = current_user.bookmarked_shuffled_overviews.find_by(id: bookmarked_shuffled_overview.id) %>
+                  <% if bookmarked %>
+                    <%= render partial: 'bookmark_of_shuffled_overviews/bookmark_remove_button', locals: { shuffled_overview: bookmarked_shuffled_overview } %>
+                  <% else %>
+                    <%= render partial: 'bookmark_of_shuffled_overviews/bookmark_add_button', locals: { shuffled_overview: bookmarked_shuffled_overview } %>
+                  <% end %>
+                <% end %>
+              <button class="read-aloud-button btn btn-login">
+                <i class="fas fa-volume-up"></i> 読み上げ
+              </button>
+              <button class="stop-button btn btn-login">
+                停止
+              </button>
+            </div>
             </div>
           </div>
         <% end %>
       <% end %>
     <% else %>
+      <p>指定された日付にはブックマークされたシャッフル概要がありません。</p>
+    <% end %>
   </div>
-    <p>指定された日付にはブックマークされたシャッフル概要がありません。</p>
-  <% end %>
 </div>
 
 
@@ -48,7 +65,8 @@
   align-items: center; /* 中央に配置 */
 }
 
-.shuffled-overview-list {
+.bookmarked-shuffled-overview-list {
+  margin-top: 100px;
   display: flex;
   flex-direction: column; /* 縦並びにする */
   width: 80%; /* 横幅を調整 */
@@ -96,8 +114,23 @@
   color: #888;
 }
 
+.movie-image-wrapper {
+  position: relative; /* 子要素の絶対位置に基づく */
+}
+
 .button-container {
-  text-align: center;
+  position: absolute; /* 絶対位置に設定 */
+  bottom: 10px; /* 画像の下部に位置 */
+  right: 10px; /* 画像の右部に位置 */
+  display: flex;
+  gap: 10px; /* ボタン間の間隔 */
+}
+
+.button-container-for-shuffled-overview {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
 }
 
 </style>
