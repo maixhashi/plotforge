@@ -1,0 +1,167 @@
+<div>
+  <div class="user-info-on-profile">
+    <% if current_user.avatar? %>
+      <%= link_to profile_path, class:"header-link-of-shuffled-overview" do %>
+        <%= image_tag current_user.avatar.url, class: 'user-avatar' %>
+        <div class="user-name"><%= current_user.name %></div>
+      <% end %>
+    <% else %>
+      <%= link_to profile_path, class:"header-link-of-shuffled-overview" do %>
+        <i class="fa fa-user-circle fa-2x"></i>
+        <div class="user-name"><%= current_user.name %></div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div>
+    <%= render partial: 'users/bookmark_of_shuffled_overviews/bookmarked_shuffled_overview_list_on_profile', locals: { bookmarked_shuffled_overviews: @msy_bookmarked_shuffled_overviews } %>
+  </div>
+</div>
+
+<div id="movie-info-popup" class="hidden">
+  <div id="popup-title"></div>
+  <img id="popup-image" src="" alt="Movie Image">
+</div>
+
+<style>
+.user-info-on-profile {
+  display: flex;
+  justify-content: center;
+}
+
+
+.shuffled-overview-list {
+  display: flex;
+  flex-flow: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  margin-top: 100px;
+  margin-bottom: 100px;
+
+  .shuffled-overview-item {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    width: 100%; /* 横幅を調整 */
+    box-sizing: border-box;
+
+    .shuffled-overview-content {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.shuffled-overview-meta {
+  font-size: 12px;
+  color: #888;
+}
+
+.movie-link {
+    text-decoration: none;
+    color: black;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+#movie-info-popup {
+  position: absolute;
+  display: none;
+  background-color: white;
+  border: 1px solid black;
+  padding: 10px;
+  z-index: 1000;
+  max-width: 300px;
+  max-height: 200px;
+  overflow: hidden;
+}
+
+#popup-image {
+  max-width: 100%;
+  max-height: 150px;
+  display: block;
+}
+
+form.button_to {
+  width: 30px;
+}
+
+.bookmark-add-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color:  black;
+  cursor: pointer;
+}
+
+
+.bookmark-remove-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color:  #ffb5b5;
+  cursor: pointer;
+}
+</style>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const popup = document.getElementById('movie-info-popup');
+  const popupTitle = document.getElementById('popup-title');
+  const popupImage = document.getElementById('popup-image');
+
+  function enableLinksAndHoverEvents() {
+    document.querySelectorAll('.movie-link').forEach(link => {
+      link.addEventListener('mouseover', (event) => {
+        const movieInfo = event.target.dataset.movieInfo;
+        const movieImage = event.target.dataset.movieImage;
+        popupTitle.textContent = movieInfo;
+        popupImage.src = movieImage;
+
+        popup.style.display = 'block';
+
+        let top = event.clientY + window.scrollY + 10;
+        let left = event.clientX + window.scrollX + 10;
+
+        const popupWidth = popup.offsetWidth;
+        const popupHeight = popup.offsetHeight;
+
+        if (left + popupWidth > window.innerWidth + window.scrollX) {
+          left = window.innerWidth + window.scrollX - popupWidth - 10;
+        }
+
+        if (top + popupHeight > window.innerHeight + window.scrollY) {
+          top = window.innerHeight + window.scrollY - popupHeight - 10;
+        }
+
+        popup.style.top = `${top}px`;
+        popup.style.left = `${left}px`;
+      });
+
+      link.addEventListener('mouseout', () => {
+        popup.style.display = 'none';
+      });
+    });
+  }
+
+  function attachEventListeners() {
+    enableLinksAndHoverEvents();
+  });
+
+  attachEventListeners(); // 初期のDOMContentLoaded時のイベントリスナーの設定
+
+  // コンテンツが動的にロードされた後にイベントリスナーを再設定
+  document.addEventListener('ajax:success', (event) => {
+    attachEventListeners();
+  });
+});
+
+</script>
