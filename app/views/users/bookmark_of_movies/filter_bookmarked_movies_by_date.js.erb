@@ -1,0 +1,2 @@
+console.log('app/views/users/bookmark_of_movies/filter_bookmarked_movies_by_date.js.erb')
+document.querySelector('.related-movie-images').innerHTML = "<%= j render partial: 'users/bookmark_of_movies/bookmarked_movies_list', locals: { bookmarked_movies_by_date: @bookmarked_movies_by_date } %>";
