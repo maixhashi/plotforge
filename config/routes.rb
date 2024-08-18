@@ -50,10 +50,16 @@ Rails.application.routes.draw do
         delete 'unbookmark', to: 'related_movies#unbookmark', as: :unbookmark_of_related_movie
       end
     end
+    resources :bookmark_of_movies, only: [:index]
+    resources :bookmark_of_movies, only: [:index] do
+      collection do
+        get 'filter_bookmarked_movies_by_date/:date', action: :filter_bookmarked_movies_by_date, as: :filter_bookmarked_movies_by_date
+      end
+    end
     resources :movies, only: [:show] do
       post 'bookmark', to: 'bookmark_of_movies#bookmark', as: :bookmark_movie
       delete 'unbookmark', to: 'bookmark_of_movies#unbookmark', as: :unbookmark_movie
-    end
+     end
   end
   
   
