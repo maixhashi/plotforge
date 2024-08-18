@@ -4,19 +4,27 @@
       <div class="calendar-day">
         <div class="day-number"><%= date.day %></div>
         <% if @grouped_bookmark_for_count[date] %>
-          <%= link_to  filter_bookmarked_overviews_by_date_user_bookmark_of_shuffled_overviews_path(date: date), remote: true, class: "count-wrapper" do %>
-            <i class="fas fa-book-open"></i> <!-- アイコンをfa-filmに変更 -->
+          <%= link_to  filter_bookmarked_overviews_by_date_user_bookmark_of_shuffled_overviews_path(date: date), remote: true, class: "count-wrapper-for-calendar" do %>
+            <i class="fas fa-book-open"></i>
             <span class="count"><%= @grouped_bookmark_for_count[date] %></span>
-            <i class="fas fa-heart"></i> <!-- アイコンをfa-filmに変更 -->
-            <% end %>
+            <i class="fas fa-heart"></i>
+          <% end %>
         <% end %>
       </div>
     <% end %>
   </div>
   <div class="calendar-footer">
-    <i class="fas fa-film" style="color: #2c4c64;"></i> <!-- アイコンをfa-filmに変更 -->
-    あなたのブックマークしたあらすじ
-    <i class="fas fa-film" style="color: #2c4c64;"></i> <!-- アイコンをfa-filmに変更 -->
+    <div class="count-wrapper-for-calendar">
+      <i class="fas fa-book-open" style="color: #2c4c64;"></i>
+      <i class="fas fa-heart"></i>
+    </div>
+    <div>
+      あなたのブックマークしたあらすじ
+    </div>
+    <div class="count-wrapper-for-calendar">
+      <i class="fas fa-book-open" style="color: #2c4c64;"></i>
+     <i class="fas fa-heart"></i>
+    </div>
   </div>
 </div>
 
@@ -73,19 +81,24 @@
   font-weight: bold;
 }
 
-.count-wrapper {
+.calendar-footer {
+  display: flex;
+  gap: 10px;
+}
+
+.count-wrapper-for-calendar {
   position: relative;
   display: inline-flex;
   justify-content: center;
   align-items: center;
 }
 
-.count-wrapper .fa-book-open { /* アイコンのサイズと色 */
+.count-wrapper-for-calendar .fa-book-open { /* アイコンのサイズと色 */
   font-size: 24px; /* アイコンのサイズを適宜調整 */
   color: #2c4c64;
 }
 
-.count-wrapper .count {
+.count-wrapper-for-calendar .count {
   position: absolute;
   top: -16px; /* 上方向の調整 */
   right: -18px; /* 右方向の調整 */
@@ -102,7 +115,7 @@
   height: 24px; /* 丸の高さを固定 */
 }
 
-.count-wrapper .fa-heart {
+.count-wrapper-for-calendar .fa-heart {
   position: absolute;
   top: 12px;
   right: -12px;
@@ -115,7 +128,8 @@
   justify-content: center;
   align-items: center;
   width: 16px;
-  height: 16px;}
+  height: 16px;
+}
 </style>
 
 <script>
