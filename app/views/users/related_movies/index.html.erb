@@ -10,7 +10,14 @@
   <div class="calendar-toggle-for-related-movies" id="calendar-toggle-for-related-movies">
     <i class="fa fa-3x fa-calendar"></i>
   </div>
+  <div class="">
+    <%= link_to user_shuffled_overviews_path, class:"link-to-shuffled-overviews" do %>
+      <i class="fas fa-3x fa-book-open"></i>
+    <% end %>
+  </div>
 </div>
+
+
 
 
 <style>
@@ -20,6 +27,15 @@
   right: 30px;
   z-index: 1000;
   cursor: pointer;
+}
+
+.link-to-shuffled-overviews {
+  position: fixed;
+  bottom: 70px; /* ヘッダーの高さに応じて調整 */
+  right: 30px;
+  z-index: 1000;
+  cursor: pointer;
+  color: black;
 }
 
 .related-movie-images {
