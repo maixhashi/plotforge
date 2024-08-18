@@ -1,0 +1,188 @@
+<div class="bookmarked-movies-list-title">
+  <div class="title-wrapper">
+    <i class="fas fa-2x fa-film" style="color: #2c4c64;"></i>
+    <i class="fas fa-heart"></i>
+  </div>
+  <div>
+    <%= link_to user_bookmark_of_movies_path(current_user), class:"title-wrapper" do %>
+    ブックマークした映画
+    <% end %>
+  </div>
+  <div class="title-wrapper">
+    <i class="fas fa-2x fa-film" style="color: #2c4c64;"></i>
+    <i class="fas fa-heart"></i>
+  </div>
+</div>
+<div class="related-movie-images">
+  <% @bookmarked_movies_by_date.each do |date, tmdb_ids| %>
+    <% tmdb_ids.each do |tmdb_id| %>
+      <div class="related-movie-image-wrapper">
+        <%= link_to related_movie_path(tmdb_id) do %>
+          <img src="https://image.tmdb.org/t/p/w200<%= movie_poster_path(tmdb_id) %>" alt="映画ポスター" class="related-movie-image">
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<style>
+.bookmarked-movies-list-title {
+  position: fixed;
+  top: 25%;
+  left: 60%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.related-movie-images {
+  position: fixed;
+  top: 30%;
+  left: 52%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.related-movie-image-wrapper {
+  position: relative;
+  display: inline-block;
+  margin: 10px; /* 画像間の余白を調整 */
+}
+
+.related-movie-image {
+  display: block;
+  width: 100%; /* 必要に応じてサイズを調整 */
+  height: 150px;
+}
+
+.button-container {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.bookmark-link {
+  color: white;
+  border-radius: 50%;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:  #ffb5b5;
+}
+
+form.button_to {
+  width: 30px;
+}
+
+.bookmark-add-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color:  black;
+  cursor: pointer;
+}
+
+.bookmark-remove-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color:  #ffb5b5;
+  cursor: pointer;
+}
+
+.button-container {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.bookmark-link {
+  color: white;
+  border-radius: 50%;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:  #ffb5b5;
+}
+
+form.button_to {
+  width: 30px;
+}
+
+.bookmark-add-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color:  black;
+  cursor: pointer;
+}
+
+.bookmark-remove-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color:  #ffb5b5;
+  cursor: pointer;
+}
+
+.bookmarked-shuffled-overview-list-title {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.title-wrapper {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.title-wrapper .fa-book-open { /* アイコンのサイズと色 */
+  font-size: 24px; /* アイコンのサイズを適宜調整 */
+  color: #2c4c64;
+}
+
+.title-wrapper .count {
+  position: absolute;
+  top: -16px; /* 上方向の調整 */
+  right: -18px; /* 右方向の調整 */
+  background-color: red; /* カウント数の丸の背景色 */
+  color: white; /* カウント数のテキストの色 */
+  border-radius: 50%; /* 丸い形にする */
+  padding: 2px; /* テキスト周りの余白 */
+  font-size: 12px; /* テキストサイズ */
+  line-height: 1;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px; /* 丸の幅を固定 */
+  height: 24px; /* 丸の高さを固定 */
+}
+
+.title-wrapper .fa-heart {
+  position: absolute;
+  top: 12px;
+  right: -12px;
+  color: red;
+  border-radius: 50%;
+  padding: 2px;
+  font-size: 6px;
+  line-height: 1;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+}
+
+</style>
