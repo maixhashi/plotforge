@@ -6,6 +6,10 @@
     </div>
     <div id="button-container">
       <div class="bookmark-container">
+        <%= form_with(model: @shuffled_overview, url: user_shuffled_overview_path(@shuffled_overview), method: :patch, remote: true, id: 'update-form') do |form| %>
+          <%= form.hidden_field :content, value: @shuffled_overview.content %>
+          <%= form.submit 'Update Shuffled Overview', class: 'btn btn-primary' %>
+        <% end %>
         <% if user_signed_in? %>
           <% if current_user.bookmarked_shuffled_overviews.include?(@shuffled_overview) %>
               <%= render partial: 'bookmark_of_shuffled_overviews/bookmark_remove_button', locals: { shuffled_overview: @shuffled_overview } %>
