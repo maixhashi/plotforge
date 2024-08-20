@@ -55,7 +55,7 @@ gem "hashid-rails"
 gem "rails-erd"
 gem 'carrierwave'
 gem 'annotate'
-
+gem "natto"
 
 
 group :development, :test do
