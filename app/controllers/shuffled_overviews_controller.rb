@@ -59,7 +59,20 @@ class ShuffledOverviewsController < ApplicationController
       render json: { errors: @shuffled_overview.errors.full_messages }, status: :unprocessable_entity
     end
   end
-    
+
+  def update
+    @shuffled_overview = ShuffledOverview.find(params[:id])
+    if @shuffled_overview.update(shuffled_overview_params)
+      extract_characters(@shuffled_overview.content) if @shuffled_overview.content.present?
+      respond_to do |format|
+        format.html { redirect_to @shuffled_overview, notice: 'Shuffled overview was successfully updated.' }
+        format.js   # For AJAX requests
+      end
+    else
+      render :edit
+    end
+  end
+
   def filter_shuffled_overviews_by_date
     Time.zone = 'UTC'
     
@@ -98,8 +111,19 @@ class ShuffledOverviewsController < ApplicationController
       format.js   { render 'users/shuffled_overviews/filter_shuffled_overviews_by_date' }
     end
   end
-  
+
+
   private
+
+  def extract_characters(content)
+    characters = CharacterExtractorService.extract_and_assign_characters(content)
+    characters.each do |character|
+      AppearanceOfCharacter.find_or_create_by(
+        shuffled_overview: @shuffled_overview,
+        character: character
+      )
+    end
+  end
 
   def set_user
     @user = current_user
@@ -110,7 +134,12 @@ class ShuffledOverviewsController < ApplicationController
   end
 
   def shuffled_overview_params
-    params.require(:shuffled_overview).permit(:content, related_movie_ids:[], movie_ids:[])
+    params.require(:shuffled_overview).permit(
+      :content,
+      related_movie_ids: [],
+      movie_ids: [],
+      characters_attributes: [:id, :name, :_destroy]  # Character モデルの属性を追加
+    )
   end
-
 end
+  
