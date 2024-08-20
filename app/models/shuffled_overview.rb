@@ -6,5 +6,8 @@ class ShuffledOverview < ApplicationRecord
   has_many :link_of_shuffled_overview_movies, dependent: :destroy
   has_many :movies, through: :link_of_shuffled_overview_movies
   accepts_nested_attributes_for :link_of_shuffled_overview_movies
+  has_many :appearance_of_character, dependent: :destroy
+  has_many :characters, through: :appearance_of_character
+  accepts_nested_attributes_for :characters
 end
 

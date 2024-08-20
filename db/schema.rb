@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_16_134809) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_19_195521) do
+  create_table "appearance_of_characters", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "character_id", null: false
+    t.bigint "shuffled_overview_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_id"], name: "index_appearance_of_characters_on_character_id"
+    t.index ["shuffled_overview_id"], name: "index_appearance_of_characters_on_shuffled_overview_id"
+  end
+
   create_table "bookmark_of_movies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "movie_id", null: false
@@ -28,6 +37,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_16_134809) do
     t.index ["shuffled_overview_id"], name: "index_bookmark_of_shuffled_overviews_on_shuffled_overview_id"
     t.index ["user_id", "shuffled_overview_id"], name: "index_bookmarks_on_user_and_overview", unique: true
     t.index ["user_id"], name: "index_bookmark_of_shuffled_overviews_on_user_id"
+  end
+
+  create_table "characters", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_characters_on_name"
   end
 
   create_table "link_of_shuffled_overview_movies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -76,6 +92,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_16_134809) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "appearance_of_characters", "characters"
+  add_foreign_key "appearance_of_characters", "shuffled_overviews"
   add_foreign_key "bookmark_of_movies", "movies"
   add_foreign_key "bookmark_of_movies", "users"
   add_foreign_key "bookmark_of_shuffled_overviews", "shuffled_overviews"

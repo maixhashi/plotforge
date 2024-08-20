@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   get 'shuffled_overview', to: 'related_movies#show_shuffled_overview', as:'shuffled_overview'
 
   resources :users do
-    resources :shuffled_overviews, only: [:show]
+    resources :shuffled_overviews, only: [:show, :update]
     resources :shuffled_overviews, only: [:show] do
       post 'bookmarks', to: 'bookmark_of_shuffled_overviews#create', as: :bookmarks
       delete 'bookmarks', to: 'bookmark_of_shuffled_overviews#destroy', as: :bookmark
