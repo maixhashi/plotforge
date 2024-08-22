@@ -62,10 +62,11 @@ class ShuffledOverviewsController < ApplicationController
 
   def update
     @shuffled_overview = ShuffledOverview.find(params[:id])
+    
     if @shuffled_overview.update(shuffled_overview_params)
-      extract_characters(@shuffled_overview.content) if @shuffled_overview.content.present?
+      extract_characters
       respond_to do |format|
-        format.html { redirect_to @shuffled_overview, notice: 'Shuffled overview was successfully updated.' }
+        format.html { redirect_to user_shuffled_overview_path(@shuffled_overview), notice: 'Shuffled overview was successfully updated.' }
         format.js   # For AJAX requests
       end
     else
@@ -115,16 +116,19 @@ class ShuffledOverviewsController < ApplicationController
 
   private
 
-  def extract_characters(content)
-    characters = CharacterExtractorService.extract_and_assign_characters(content)
-    characters.each do |character|
+  def extract_characters
+    content = @shuffled_overview.content
+    character_names = CharacterExtractorService.extract_and_assign_characters(content)
+
+    character_names.each do |character_name|
+      character = Character.find_or_create_by(name: character_name)  # 名前からCharacterオブジェクトを検索または作成
       AppearanceOfCharacter.find_or_create_by(
         shuffled_overview: @shuffled_overview,
         character: character
       )
     end
   end
-
+  
   def set_user
     @user = current_user
   end
