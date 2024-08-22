@@ -1,41 +1,65 @@
-require 'natto'
-
 class CharacterExtractorService
-  def initialize(text)
-    @text = text
-  end
-
   def self.extract_and_assign_characters(content)
     raise ArgumentError, "Text to parse cannot be nil" if content.nil?
 
     characters = []
     natto = Natto::MeCab.new
-    last_surface = ""
+    current_name_parts = []
+    full_name_set = Set.new  # 完成した名前を保存するためのセット
 
+    # MeCabによる解析
     natto.parse(content) do |n|
-      if n.feature.include?("固有名詞")
-        if last_surface.present?
-          # 直前の名前と結合して一つのキャラクター名にする
-          character_name = last_surface + n.surface
-          last_surface = ""
-        else
-          character_name = n.surface
-        end
+      feature = n.feature
+      surface = n.surface
 
-        # 次回のループ用に現在の名前を保持
-        last_surface = character_name if last_surface.present?
+      # デバッグ出力
+      puts "Surface: #{surface}"
+      puts "Feature: #{feature}"
 
-        # キャラクターが存在するかを確認し、存在しない場合は新しく作成
-        character = Character.find_or_create_by(name: character_name)
-        characters << character
+      if feature.include?("地名") || feature.include?("国")
+        # 地名や国名として分類されたものは保存しない
+        current_name_parts.clear
+        next
+      end
+
+      if feature.include?("固有名詞") || feature.include?("人名")
+        # 名前のパーツを追加
+        current_name_parts << surface
+        puts "Adding part: #{surface}"
       else
-        # 固有名詞でない場合は直前の名前をリセット
-        last_surface = ""
+        # 名前の終了または中断
+        if current_name_parts.any?
+          full_name = current_name_parts.join(" ")
+          puts "Generated name: #{full_name}"
+
+          # 完成した名前がすでに存在するかチェック
+          unless full_name_set.include?(full_name)
+            characters << full_name
+            full_name_set.add(full_name)
+            puts "Added to characters: #{full_name}"
+          else
+            puts "Duplicate found, not adding: #{full_name}"
+          end
+
+          # 名前パーツをクリア
+          current_name_parts.clear
+        end
       end
     end
 
     # ループの終わりに残っている名前を追加
-    characters << Character.find_or_create_by(name: last_surface) if last_surface.present?
+    if current_name_parts.any?
+      full_name = current_name_parts.join(" ")
+      puts "Final name: #{full_name}"
+
+      unless full_name_set.include?(full_name)
+        characters << full_name
+        full_name_set.add(full_name)
+        puts "Added to characters: #{full_name}"
+      else
+        puts "Duplicate found, not adding: #{full_name}"
+      end
+    end
 
     characters
   end
