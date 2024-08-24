@@ -1,4 +1,4 @@
-<div>
+<div class="shuffled-overview-page">
   <div class="shuffled-overview-container">
     <div id="shuffled-overview-generating-container">
       <div id="shuffled-overview-title">あらすじ</div>
@@ -53,11 +53,16 @@
 </div>
   
 <style>
+.shuffled-overview-page {
+  overflow-y: auto; /* 縦スクロールを許可 */
+}
+
 /* コンテナ全体のスタイリング */
 .shuffled-overview-container {
   position: relative;
   width: 1200px; /* 固定幅 */
   margin: 0 auto; /* コンテナを中央に配置 */
+  margin-top: 15px;
   background: #e0f7fa; /* 薄い明るい青 */
   border-radius: 240px 15px 100px 15px / 15px 200px 15px 185px;
   border: 3px solid #333;
@@ -347,5 +352,4 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-
 </script>
