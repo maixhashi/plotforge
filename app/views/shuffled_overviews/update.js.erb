@@ -1,5 +1,0 @@
-<% if @characters.present? %>
-  <% @characters.each do |character| %>
-    $("#characters-list").append("<%= j render partial: 'character', locals: { character: character } %>");
-  <% end %>
-<% end %>

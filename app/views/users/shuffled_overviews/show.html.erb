@@ -6,10 +6,6 @@
     </div>
     <div id="button-container">
       <div class="bookmark-container">
-        <%= form_with(model: @shuffled_overview, url: user_shuffled_overview_path(@shuffled_overview), method: :patch, remote: true, id: 'update-form') do |form| %>
-          <%= form.hidden_field :content, value: @shuffled_overview.content %>
-          <%= form.submit 'Update Shuffled Overview', class: 'btn btn-primary' %>
-        <% end %>
         <% if user_signed_in? %>
           <% if current_user.bookmarked_shuffled_overviews.include?(@shuffled_overview) %>
               <%= render partial: 'bookmark_of_shuffled_overviews/bookmark_remove_button', locals: { shuffled_overview: @shuffled_overview } %>
@@ -26,7 +22,31 @@
       </button>
     </div>
   </div>
+  <div class="extracted-components-lists">
+    <div class="character-list">
+      <div id="character-tags-list-title">
+        登場人物
+      </div>
+      <ul id="character-tags-list">
+        <% @shuffled_overview.characters.each do |character| %>
+          <%= render partial: 'characters/character', locals: { character: character } %>
+        <% end %>
+      </ul>
+    </div>
+    <div class="keyword-list">
+      <div id="keyword-tags-list-title">
+        キーワード
+      </div>
+      <ul id="keyword-tags-list">
+        <% @shuffled_overview.keywords.each do |keyword| %>
+          <%= render partial: 'keywords/keyword', locals: { keyword: keyword } %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
 </div>
+
+
 <div id="movie-info-popup">
   <div id="popup-title"></div>
   <img id="popup-image" src="" alt="Movie Image">
@@ -34,21 +54,35 @@
   
 <style>
 /* コンテナ全体のスタイリング */
-#shuffled-overview-generating-container {
-  top: -25px;
-  overflow-y: auto;
-  padding: 20px;
+.shuffled-overview-container {
   position: relative;
-  height: 300px;
   width: 1200px; /* 固定幅 */
   margin: 0 auto; /* コンテナを中央に配置 */
   background: #e0f7fa; /* 薄い明るい青 */
-  box-sizing: border-box; /* パディングとボーダーを含めて幅を計算 */
   border-radius: 240px 15px 100px 15px / 15px 200px 15px 185px;
   border: 3px solid #333;
+  padding: 20px;
+  box-sizing: border-box; /* パディングとボーダーを含めて幅を計算 */
 }
 
-/* タイピングエフェクト部分のスタイリング */
+/* あらすじタイトルのスタイリング */
+#shuffled-overview-title {
+  font-size: 16pt;
+  font-weight: bold;
+  text-align: center;
+  color: #333; /* タイトルの色 */
+  animation: bounce 0.5s ease-in-out 3; /* アニメーションの設定（3回だけ繰り返す） */
+  font-family: 'Gloock', serif; /* 古代風フォントの適用 */
+}
+
+/* あらすじ内容のスタイリング */
+#shuffled-overview {
+  position: relative;
+  white-space: pre-wrap; /* テキストをそのまま改行 */
+  font-family: 'Gloock', serif; /* 古代風フォントの適用 */
+  margin-bottom: 40px; /* ボタンとの余白を追加 */
+}
+
 /* タイピングエフェクトのスタイル */
 .typing-effect {
   white-space: nowrap;
@@ -67,34 +101,24 @@
   50% { border-color: black; }
 }
 
-#shuffled-overview-title {
-  font-size: 16pt;
-  font-weight: bold;
-  text-align: center;
-  color: #333; /* タイトルの色 */
-  animation: bounce 0.5s ease-in-out 3; /* アニメーションの設定（3回だけ繰り返す） */
-  font-family: 'Gloock', serif; /* 古代風フォントの適用 */
-}
-
-/* タイピングエフェクト部分のスタイリング */
-#shuffled-overview {
-  position: relative;
-  white-space: pre-wrap; /* テキストをそのまま改行 */
-  font-family: 'Gloock', serif; /* 古代風フォントの適用 */
-}
-
 /* ボタンコンテナのスタイリング */
 #button-container {
-  text-align: center;
-  margin-top: 10px;
+  position: absolute;
+  bottom: 10px;
+  left: 20px;
   display: flex;
+  justify-content: space-between;
+  width: 96%;
+  align-items: flex-end;
   gap: 10px;
-  align-items: center;
-  align-content: center;
-  justify-content: center;
 }
 
-#read-aloud-button {
+.bookmark-container {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+#read-aloud-button, #stop-button {
   background: #b2ebf2;
   color: #00796b;
   padding: 0.5rem 1rem;
@@ -107,23 +131,56 @@
 #stop-button {
   background: #ffccbc;
   color: #d32f2f;
-  padding: 0.5rem 1rem;
-  text-decoration: none;
+}
+
+#read-aloud-button:hover, #stop-button:hover {
+  opacity: 0.8;
+}
+
+/* キャラクターやキーワードリストのスタイリング */
+.extracted-components-lists {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 40px;
+}
+
+.character-list, .keyword-list {
+  width: 45%;
+}
+
+#character-tags-list-title, #keyword-tags-list-title {
+  font-size: 14pt;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+#character-tags-list, #keyword-tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  list-style-type: none;
+  gap: 10px;
+  padding-left: 0;
+}
+
+#character-tags-list li, #keyword-tags-list li {
+  background-color: #f0f0f0;
   border-radius: 4px;
-  font-size: 1rem;
-  transition: background 0.3s;
+  padding: 5px 10px;
+  font-size: 12pt;
+  color: #333;
 }
 
 /* プログレスバーのスタイリング */
 #progress-container {
   position: relative;
   height: 20px;
-  width: 1200px; /* プログレスバーの幅をコンテナに合わせる */
+  width: 100%;
   margin: 0 auto; /* 中央に配置 */
   background-color: #e0f7fa; /* プログレスバーの背景色 */
   border-radius: 10px;
   border: 1px solid #333;
-  margin-bottom: 50px; /* プログレスバーとコンテナの間に余白を追加 */
+  margin-bottom: 20px;
 }
 
 #progress-bar {
@@ -181,7 +238,6 @@
   max-height: 200px;
   overflow: hidden;
 }
-
 
 /* ポップアップ内の画像のスタイリング */
 #popup-image {
