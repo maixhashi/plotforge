@@ -1,0 +1,25 @@
+<li id="keyword-<%= keyword.id %>" class="keyword-tag btn btn-warning">
+  <div class="keyword-icon">
+    <i class="fa-solid fa-1x fa-hashtag"></i>
+  </div>
+  <div class="keyword-content"><%= keyword.content %></div>
+</li>
+
+<style>
+.keyword-tag {
+  display: flex;
+  font-size: small;
+
+  .keyword-icon {
+    position: relative;
+    top: 6px;
+  }
+
+  .keyword-content {
+    position: relative;
+    left: 5px;
+    top: 3px;
+  }
+
+}
+</style>

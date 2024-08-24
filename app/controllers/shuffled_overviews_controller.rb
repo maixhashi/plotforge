@@ -38,33 +38,38 @@ class ShuffledOverviewsController < ApplicationController
   end
   
 
-  def create
-    content = shuffled_overview_params[:content]
-    related_movie_ids = shuffled_overview_params[:related_movie_ids].map(&:to_i)
-  
-    @shuffled_overview = current_user.shuffled_overviews.build(shuffled_overview_params)
-  
-    @shuffled_overview.related_movie_ids.each do |related_movie_id|
-      movie = Movie.find_or_create_by!(tmdb_id: related_movie_id)
-      @shuffled_overview.movies << movie
-    end
+def create
+  content = shuffled_overview_params[:content]
+  related_movie_ids = shuffled_overview_params[:related_movie_ids].map(&:to_i)
 
-    if @shuffled_overview.save
-      Rails.logger.debug "ShuffledOverview related_movie_ids: #{@shuffled_overview.related_movie_ids.inspect}"
-      Rails.logger.debug "ShuffledOverview movie_ids: #{@shuffled_overview.movie_ids.inspect}"
-      logger.debug("ShuffledOverview ID after save: #{@shuffled_overview.id}")
-  
-      render json: { message: 'Shuffled overview saved successfully', id: @shuffled_overview.id }, status: :ok
-    else
-      render json: { errors: @shuffled_overview.errors.full_messages }, status: :unprocessable_entity
-    end
+  @shuffled_overview = current_user.shuffled_overviews.build(shuffled_overview_params)
+
+  @shuffled_overview.related_movie_ids.each do |related_movie_id|
+    movie = Movie.find_or_create_by!(tmdb_id: related_movie_id)
+    @shuffled_overview.movies << movie
   end
+
+  if @shuffled_overview.save
+    # ここで `update` アクションのロジックを実行
+    extract_characters
+    extract_keywords
+
+    Rails.logger.debug "ShuffledOverview related_movie_ids: #{@shuffled_overview.related_movie_ids.inspect}"
+    Rails.logger.debug "ShuffledOverview movie_ids: #{@shuffled_overview.movie_ids.inspect}"
+    logger.debug("ShuffledOverview ID after save: #{@shuffled_overview.id}")
+
+    render json: { message: 'Shuffled overview saved successfully', id: @shuffled_overview.id }, status: :ok
+  else
+    render json: { errors: @shuffled_overview.errors.full_messages }, status: :unprocessable_entity
+  end
+end
 
   def update
     @shuffled_overview = ShuffledOverview.find(params[:id])
     
     if @shuffled_overview.update(shuffled_overview_params)
       extract_characters
+      extract_keywords
       respond_to do |format|
         format.html { redirect_to user_shuffled_overview_path(@shuffled_overview), notice: 'Shuffled overview was successfully updated.' }
         format.js   # For AJAX requests
@@ -115,6 +120,20 @@ class ShuffledOverviewsController < ApplicationController
 
 
   private
+
+  
+  def extract_keywords
+    content = @shuffled_overview.content
+    extracted_keywords = KeywordExtractorService.extract_and_assign_keywords(@shuffled_overview.content, @shuffled_overview)
+
+    extracted_keywords.each do |extracted_keyword|
+      keyword = Keyword.find_or_create_by(content: extracted_keyword)  # 名前からKeywordオブジェクトを検索または作成
+      ShuffledOverviewKeyword.find_or_create_by(
+        shuffled_overview: @shuffled_overview,
+        keyword: keyword
+      )
+    end
+  end
 
   def extract_characters
     content = @shuffled_overview.content

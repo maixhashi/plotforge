@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_19_195521) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_22_193546) do
   create_table "appearance_of_characters", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "character_id", null: false
     t.bigint "shuffled_overview_id", null: false
@@ -46,6 +46,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_19_195521) do
     t.index ["name"], name: "index_characters_on_name"
   end
 
+  create_table "keywords", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "link_of_shuffled_overview_movies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "shuffled_overview_id", null: false
     t.bigint "movie_id", null: false
@@ -70,6 +76,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_19_195521) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_settings_on_user_id"
+  end
+
+  create_table "shuffled_overview_keywords", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "shuffled_overview_id", null: false
+    t.bigint "keyword_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["keyword_id"], name: "index_shuffled_overview_keywords_on_keyword_id"
+    t.index ["shuffled_overview_id"], name: "index_shuffled_overview_keywords_on_shuffled_overview_id"
   end
 
   create_table "shuffled_overviews", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -101,5 +116,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_19_195521) do
   add_foreign_key "link_of_shuffled_overview_movies", "movies"
   add_foreign_key "link_of_shuffled_overview_movies", "shuffled_overviews"
   add_foreign_key "settings", "users"
+  add_foreign_key "shuffled_overview_keywords", "keywords"
+  add_foreign_key "shuffled_overview_keywords", "shuffled_overviews"
   add_foreign_key "shuffled_overviews", "users"
 end
