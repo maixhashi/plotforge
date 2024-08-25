@@ -13,4 +13,24 @@ class User < ApplicationRecord
   has_many :bookmarked_shuffled_overviews, through: :bookmark_of_shuffled_overviews, source: :shuffled_overview
   has_many :bookmark_of_movies, dependent: :destroy
   has_many :bookmarked_movies, through: :bookmark_of_movies, source: :movie
+  
+  has_many :active_relationships, class_name: "Follow", foreign_key: "follower_id", dependent: :destroy
+  has_many :following, through: :active_relationships, source: :followed
+  
+  has_many :passive_relationships, class_name: "Follow", foreign_key: "followed_id", dependent: :destroy
+  has_many :followers, through: :passive_relationships, source: :follower
+
+  def follow(other_user)
+    active_relationships.create(followed_id: other_user.id)
+  end
+  
+  def unfollow(other_user)
+    active_relationships.find_by(followed_id: other_user.id).destroy
+  end
+  
+  def following?(other_user)
+    following.include?(other_user)
+  end
 end
+
+
