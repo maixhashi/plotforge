@@ -1,0 +1,2 @@
+// フォローボタンを更新する
+document.getElementById('<%= @user.id %>-follow-button-container').innerHTML = '<%= j(render partial: "follows/follow_button", locals: { user: @user }) %>';

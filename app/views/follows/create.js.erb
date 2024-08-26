@@ -1,0 +1,2 @@
+// 非同期リクエストでフォローボタンを更新する
+document.getElementById('<%= params[:followed_id] %>-follow-button-container').innerHTML = '<%= j(render partial: "follows/unfollow_button", locals: { user: @user }) %>';
