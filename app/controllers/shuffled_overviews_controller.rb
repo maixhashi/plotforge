@@ -3,6 +3,40 @@ class ShuffledOverviewsController < ApplicationController
   before_action :set_start_date
 
   def index
+    own_shuffled_overviews = @user.shuffled_overviews
+
+    # フォローしているユーザーのシャッフルオーバービュー
+    followed_user_ids = @user.following.pluck(:id)
+    followed_users_shuffled_overviews = ShuffledOverview.where(user_id: followed_user_ids)
+
+    # 自分とフォローしているユーザーのシャッフルオーバービューを結合
+    @shuffled_overviews = own_shuffled_overviews.or(followed_users_shuffled_overviews)
+
+    # 映画データを取得する
+    tmdb_service = TmdbService.new
+    @movies_data = {}
+    @shuffled_overviews.each do |shuffled_overview|
+      shuffled_overview.related_movie_ids.each do |movie_id|
+        @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
+      end
+    end
+
+    # MySQL で日付ごとにカウントを取得
+    @grouped_overviews = @shuffled_overviews
+                         .select("DATE(created_at) AS date, COUNT(*) AS count")
+                         .group("DATE(created_at)")
+                         .map { |record| [record.date.to_date, record.count] }
+                         .to_h
+
+    render 'shuffled_overviews/index'
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.js   # index.js.erb
+    end
+  end
+
+  def my_shuffled_overviews
     @shuffled_overviews = current_user.shuffled_overviews
 
     # 映画データを取得する
@@ -23,7 +57,7 @@ class ShuffledOverviewsController < ApplicationController
 
     @grouped_overviews.inspect
 
-    render 'users/shuffled_overviews/index'
+    render 'users/shuffled_overviews/my_shuffled_overviews'
     
     respond_to do |format|
       format.html # index.html.erb
@@ -113,7 +147,7 @@ end
                           .to_h
     
     respond_to do |format|
-      format.html { render 'users/shuffled_overviews/index' }
+      format.html { render 'users/shuffled_overviews/my_shuffled_overviews' }
       format.js   { render 'users/shuffled_overviews/filter_shuffled_overviews_by_date' }
     end
   end
