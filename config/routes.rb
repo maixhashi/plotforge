@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get 'profile', to: 'users#profile', as: :profile
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
+  resources :follows, only: [:create, :destroy]
   resource :users, only: [] do
     member do
       get 'edit_password', to: 'users#edit_password'
@@ -22,8 +23,11 @@ Rails.application.routes.draw do
 
   get 'related_movies/:id', to: 'related_movies#show', as: 'related_movie'
   get 'shuffled_overview', to: 'related_movies#show_shuffled_overview', as:'shuffled_overview'
-
+  
+  resources :shuffled_overviews, only: [:index], defaults: { format: 'html' }
+  
   resources :users do
+    get 'my_shuffled_overviews', to: 'shuffled_overviews#my_shuffled_overviews', on: :member
     resources :shuffled_overviews, only: [:show, :update]
     resources :shuffled_overviews, only: [:show] do
       post 'bookmarks', to: 'bookmark_of_shuffled_overviews#create', as: :bookmarks

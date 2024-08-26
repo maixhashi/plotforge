@@ -46,12 +46,10 @@ class BookmarkOfMoviesController < ApplicationController
   
   def bookmark
     current_user.bookmarked_movies << @movie unless current_user.bookmarked_movies.exists?(@movie.id)
-    # 通常のレスポンスを返す
   end
 
   def unbookmark
     current_user.bookmarked_movies.delete(@movie) if current_user.bookmarked_movies.exists?(@movie.id)
-    # 通常のレスポンスを返す
   end
   
   def movie_poster_path(tmdb_id)

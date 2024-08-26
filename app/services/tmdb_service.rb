@@ -59,8 +59,6 @@ class TmdbService
     end
   end
 
-  private
-
   def fetch_movies(pages)
     all_movies = []
   

@@ -1,0 +1,13 @@
+<%= link_to follows_path(followed_id: user.id), method: :post, remote: true, class: 'follow-button' do %>
+  <i class="fa-regular fa-2x fa-square-plus"></i>
+<% end %>
+
+<style>
+.follow-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color:  black;
+  cursor: pointer;
+}
+</style>

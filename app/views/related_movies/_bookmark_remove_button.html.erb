@@ -1,4 +1,4 @@
-<%= link_to unbookmark_of_related_movie_user_related_movie_path(id: movie_id), 
+<%= link_to unbookmark_of_related_movie_user_related_movie_path(id: movie_id, user_id: @user.id), 
 method: :delete, 
 remote: true, 
 id: "bookmark-remove-button-related-movie-#{movie_id}",

@@ -4,7 +4,7 @@
       <div class="calendar-day">
         <div class="day-number"><%= date.day %></div>
         <% if @grouped_overviews[date] %>
-          <%= link_to filter_shuffled_overviews_by_date_user_shuffled_overviews_path(date: date), remote: true, class: "count-wrapper" do %>
+          <%= link_to filter_shuffled_overviews_by_date_user_shuffled_overviews_path(date: date, user_id: @user.id), remote: true, class: "count-wrapper" do %>
             <i class="fas fa-book-open"></i>
             <span class="count"><%= @grouped_overviews[date] %></span>
           <% end %>
