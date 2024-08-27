@@ -58,6 +58,12 @@ class UsersController < ApplicationController
       hash[date] << overview
     end
 
+    @grouped_bookmarked_movies = current_user.bookmarked_movies
+    .select('DATE(bookmark_of_movies.created_at) AS date, movies.tmdb_id, COUNT(*) AS count')
+    .joins(:bookmark_of_movies)
+    .group('DATE(bookmark_of_movies.created_at), movies.tmdb_id')
+
+
     filtered_bookmarked_movies = current_user.bookmarked_movies
     .select('DATE(bookmark_of_movies.created_at) AS date, movies.tmdb_id')
     .joins(:bookmark_of_movies)

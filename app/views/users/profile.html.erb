@@ -82,7 +82,23 @@
         </div>
       </li>
       <li>
+        <div class="bookmarked-shuffled-overview-list">
+          <div class="bookmarked-shuffled-overview-list-title-on-profile">
+            <div class="header-selection-wrapper">
+              <i class="fas fa-2x fa-film" style="color: #2c4c64;"></i>
+              <i class="fas fa-heart"></i>
+            </div>
+            <div>
+              <%= link_to '#bookmarked_my_movies', class: "header-selection-wrapper tab-link", data: { target: "#bookmarked-my-movies-content" }, onclick: "event.preventDefault(); window.location.href='/profile#bookmarked_my_movies';" do %>
                 いいね<p style="font-size:12px;">(映画)</p>
+              <% end %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-2x fa-film" style="color: #2c4c64;"></i>
+              <i class="fas fa-heart"></i>
+            </div>
+          </div>
+        </div>
       </li>
       <li>
                実績
@@ -98,6 +114,9 @@
     </div>
     <div id="my-movies-content" class="tab-content">
       <%= render partial: 'users/related_movies/related_movie_list', locals: { movies_data: @movies_data } %>
+    </div>
+    <div id="bookmarked-my-movies-content" class="tab-content">
+      <%= render partial: 'users/bookmark_of_movies/bookmarked_movies_list', locals: { bookmarked_movies_by_date: @bookmarked_movies_by_date } %>
     </div>
   </div>
 </div>
