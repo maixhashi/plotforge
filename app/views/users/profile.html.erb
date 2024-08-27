@@ -29,7 +29,21 @@
   <div class="profile-header">
     <ul>
       <li>
+        <div class="bookmarked-shuffled-overview-list">
+          <div class="bookmarked-shuffled-overview-list-title-on-profile">
+            <div class="header-selection-wrapper">
+              <i class="fas fa-book-open" style="color: #2c4c64;"></i>
+            </div>
+            <div>
+              <%= link_to '#my_shuffled_overviews', class: "header-selection-wrapper tab-link active", data: { target: "#my-shuffled-overviews-content" }, onclick: "event.preventDefault(); window.location.href='/profile#my_shuffled_overviews';" do %>
                 あらすじ一覧
+              <% end %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-book-open" style="color: #2c4c64;"></i>
+            </div>
+          </div>
+        </div>
       </li>
       <li>
                 いいね<p style="font-size:12px;">(あらすじ)</p>
@@ -46,6 +60,9 @@
     </ul>
   </div>
   <div class="profile-body">
+    <div id="my-shuffled-overviews-content" class="tab-content active">
+      <%= render partial: 'users/shuffled_overviews/shuffled_overview_list', locals: { shuffled_overviews: @shuffled_overviews } %>
+    </div>
   </div>
 </div>
 

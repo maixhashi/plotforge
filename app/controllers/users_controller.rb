@@ -30,6 +30,7 @@ class UsersController < ApplicationController
   end
 
   def profile
+    @shuffled_overviews = current_user.shuffled_overviews
     # <%= render partial: 'users/bookmark_of_shuffled_overviews/bookmarked_shuffled_overview_list_on_profile', locals: { bookmarked_shuffled_overviews: @msy_bookmarked_shuffled_overviews } %>で渡す変数
     results = current_user.bookmarked_shuffled_overviews
       .select('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.related_movie_ids, DATE(bookmark_of_shuffled_overviews.created_at) AS date, COUNT(*) AS count')
