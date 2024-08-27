@@ -11,12 +11,19 @@
 #   password_confirmation: "password",
 # )
 
-user1 = User.find_by(
-  email: "user1@example.com",
+user3 = User.create!(
+  name: "user3",
+  email: "user3@example.com",
+  password: "password",
+  password_confirmation: "password",
 )
-user2 = User.find_by(
-  email: "user2@example.com",
-)
+
+# user1 = User.find_by(
+#   email: "user1@example.com",
+# )
+# user2 = User.find_by(
+#   email: "user2@example.com",
+# )
   
   # # 関連映画のIDリスト（シードデータとして使用するTMDbの映画ID）
 # related_movie_ids_user1 = [299536, 597] # サンプルのTMDb映画ID
@@ -61,5 +68,5 @@ user2 = User.find_by(
 
 # # Followモデルがある場合、手動でレコードを作成する必要があるかもしれません
 # # その場合、次のように手動でフォローレコードを作成します。
-Follow.create!(follower: user1, followed: user2)
-Follow.create!(follower: user2, followed: user1)
+# Follow.create!(follower: user1, followed: user2)
+# Follow.create!(follower: user2, followed: user1)
