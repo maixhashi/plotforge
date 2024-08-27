@@ -30,6 +30,8 @@ class UsersController < ApplicationController
   end
 
   def profile
+    @bookmarked_shuffled_overviews = current_user.bookmarked_shuffled_overviews
+
     @shuffled_overviews = current_user.shuffled_overviews
     # <%= render partial: 'users/bookmark_of_shuffled_overviews/bookmarked_shuffled_overview_list_on_profile', locals: { bookmarked_shuffled_overviews: @msy_bookmarked_shuffled_overviews } %>で渡す変数
     results = current_user.bookmarked_shuffled_overviews

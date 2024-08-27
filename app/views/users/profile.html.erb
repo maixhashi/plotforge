@@ -46,7 +46,23 @@
         </div>
       </li>
       <li>
+        <div class="bookmarked-shuffled-overview-list">
+          <div class="bookmarked-shuffled-overview-list-title-on-profile">
+            <div class="header-selection-wrapper">
+              <i class="fas fa-book-open" style="color: #2c4c64;"></i>
+              <i class="fas fa-heart"></i>
+            </div>
+            <div>
+              <%= link_to '#bookmarked_my_shuffled_overviews', class: "header-selection-wrapper tab-link", data: { target: "#bookmarked-my-shuffled-overviews-content" }, onclick: "event.preventDefault(); window.location.href='/profile#bookmarked_my_shuffled_overviews';" do %>
                 いいね<p style="font-size:12px;">(あらすじ)</p>
+              <% end %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-book-open" style="color: #2c4c64;"></i>
+              <i class="fas fa-heart"></i>
+            </div>
+          </div>
+        </div>
       </li>
       <li>
                 映画一覧
@@ -62,6 +78,9 @@
   <div class="profile-body">
     <div id="my-shuffled-overviews-content" class="tab-content active">
       <%= render partial: 'users/shuffled_overviews/shuffled_overview_list', locals: { shuffled_overviews: @shuffled_overviews } %>
+    </div>
+    <div id="bookmarked-my-shuffled-overviews-content" class="tab-content">
+      <%= render partial: 'users/bookmark_of_shuffled_overviews/bookmarked_shuffled_overview_list', locals: { bookmarked_shuffled_overviews: @bookmarked_shuffled_overviews } %>
     </div>
   </div>
 </div>
