@@ -1,21 +1,5 @@
 <div class="content">
   <div class="bookmarked-shuffled-overview-list">
-    <div class="bookmarked-shuffled-overview-list-title-on-profile">
-      <div class="title-wrapper">
-        <i class="fas fa-book-open" style="color: #2c4c64;"></i>
-        <i class="fas fa-heart"></i>
-      </div>
-      <div>
-        <%= link_to user_bookmark_of_shuffled_overviews_path(current_user), class:"title-wrapper" do %>
-        ブックマークしたあらすじ
-        <% end %>
-      </div>
-      <div class="title-wrapper">
-        <i class="fas fa-book-open" style="color: #2c4c64;"></i>
-        <i class="fas fa-heart"></i>
-      </div>
-    </div>
-  </div>
     <% if @grouped_bookmarked_shuffled_overviews.present? %>
       <% @grouped_bookmarked_shuffled_overviews.each do |date, overviews| %>
         <% overviews.each do |bookmarked_shuffled_overview| %>
@@ -70,9 +54,6 @@
   flex-direction: row;
   max-width: 60%;
   margin-left: 10px;
-  position: fixed;
-  top: 30%;
-  left: 1%;
 }
 
 .bookmarked-shuffled-overview-list {
@@ -84,10 +65,7 @@
 }
 
 .bookmarked-shuffled-overview-list-title-on-profile {
-  position: fixed;
   display: inline-flex;
-  top: 25%;
-  left: 15%;
   justify-content: center;
   align-items: center;
   gap: 10px;
