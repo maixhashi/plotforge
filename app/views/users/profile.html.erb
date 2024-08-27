@@ -101,7 +101,21 @@
         </div>
       </li>
       <li>
+        <div class="bookmarked-shuffled-overview-list">
+          <div class="bookmarked-shuffled-overview-list-title-on-profile">
+            <div class="header-selection-wrapper">
+              <i class="fas fa-2x fa-calendar" style="color: #2c4c64;"></i>
+            </div>
+            <div>
+              <%= link_to user_bookmark_of_shuffled_overviews_path(current_user), class:"header-selection-wrapper" do %>
                実績
+              <% end %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-2x fa-calendar" style="color: #2c4c64;"></i>
+            </div>
+          </div>
+        </div>
       </li>
     </ul>
   </div>
