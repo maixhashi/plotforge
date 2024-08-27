@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   skip_before_action :require_login
   helper_method :movie_poster_path
+  before_action :set_user
 
   def new
     @user = User.new
@@ -30,6 +31,18 @@ class UsersController < ApplicationController
   end
 
   def profile
+    @bookmarked_shuffled_overviews = current_user.bookmarked_shuffled_overviews
+
+    @shuffled_overviews = current_user.shuffled_overviews
+
+    tmdb_service = TmdbService.new
+    @movies_data = {}
+    @shuffled_overviews.each do |shuffled_overview|
+      shuffled_overview.related_movie_ids.each do |movie_id|
+        @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
+      end
+    end
+
     # <%= render partial: 'users/bookmark_of_shuffled_overviews/bookmarked_shuffled_overview_list_on_profile', locals: { bookmarked_shuffled_overviews: @msy_bookmarked_shuffled_overviews } %>で渡す変数
     results = current_user.bookmarked_shuffled_overviews
       .select('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.related_movie_ids, DATE(bookmark_of_shuffled_overviews.created_at) AS date, COUNT(*) AS count')
@@ -44,6 +57,12 @@ class UsersController < ApplicationController
       hash[date] ||= []
       hash[date] << overview
     end
+
+    @grouped_bookmarked_movies = current_user.bookmarked_movies
+    .select('DATE(bookmark_of_movies.created_at) AS date, movies.tmdb_id, COUNT(*) AS count')
+    .joins(:bookmark_of_movies)
+    .group('DATE(bookmark_of_movies.created_at), movies.tmdb_id')
+
 
     filtered_bookmarked_movies = current_user.bookmarked_movies
     .select('DATE(bookmark_of_movies.created_at) AS date, movies.tmdb_id')
@@ -70,6 +89,10 @@ class UsersController < ApplicationController
   end
       
   private
+
+  def set_user
+    @user = current_user
+  end
 
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
