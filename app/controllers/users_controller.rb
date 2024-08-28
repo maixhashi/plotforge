@@ -79,6 +79,13 @@ class UsersController < ApplicationController
       @bookmarked_movies_by_date[date] << tmdb_id
     end
 
+    @bookmarked_movies_data = {}
+
+    current_user.bookmarked_movies.each do |movie|
+      tmdb_id = movie.tmdb_id
+      @bookmarked_movies_data[tmdb_id] ||= tmdb_service.fetch_movie_details(tmdb_id)
+    end
+
   end
 
   def movie_poster_path(tmdb_id)

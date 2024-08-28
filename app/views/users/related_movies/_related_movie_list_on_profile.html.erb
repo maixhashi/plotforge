@@ -1,5 +1,5 @@
 <div class="related-movie-images">
-  <% @bookmarked_movies_data.each do |movie_id, movie| %>
+  <% @movies_data.each do |movie_id, movie| %>
     <div class="related-movie-image-wrapper">
       <%= link_to related_movie_path(movie_id) do %>
         <img src="https://image.tmdb.org/t/p/w92<%= movie['poster_path'] %>" alt="Movie Poster" class="related-movie-image">
