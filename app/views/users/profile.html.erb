@@ -324,31 +324,12 @@
   display: block;
 }
 
-form.button_to {
-  width: 30px;
-}
-
-.bookmark-add-button {
-  background: none;
-  border: none;
-  padding: 0;
-  color:  black;
-  cursor: pointer;
-}
-
-
-.bookmark-remove-button {
-  background: none;
-  border: none;
-  padding: 0;
-  color:  #ffb5b5;
-  cursor: pointer;
-}
 </style>
 
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+  // Movie info popup
   const popup = document.getElementById('movie-info-popup');
   const popupTitle = document.getElementById('popup-title');
   const popupImage = document.getElementById('popup-image');
@@ -389,14 +370,91 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function attachEventListeners() {
     enableLinksAndHoverEvents();
-  });
+    document.querySelectorAll('.read-aloud-button').forEach(button => {
+      button.addEventListener('click', (event) => {
+        const container = event.target.closest('.shuffled-overview-item').querySelector('.shuffled-overview-content');
+        readAloud(container.textContent);
+      });
+    });
+
+    document.querySelectorAll('.stop-button').forEach(button => {
+      button.addEventListener('click', stopReading);
+    });
+  }
 
   attachEventListeners(); // 初期のDOMContentLoaded時のイベントリスナーの設定
+
+  async function getVoices() {
+    return new Promise(resolve => {
+      let synth = window.speechSynthesis;
+      let id;
+
+      id = setInterval(() => {
+        if (synth.getVoices().length !== 0) {
+          resolve(synth.getVoices());
+          clearInterval(id);
+        }
+      }, 10);
+    });
+  }
+
+  let voices = [];
+
+  async function readAloud(text) {
+    if (voices.length === 0) {
+      voices = await getVoices();
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ja-JP';
+
+    const voiceName = 'Kyoko';
+    const voice = voices.find(v => v.name.includes(voiceName)) || voices[0];
+    utterance.voice = voice;
+
+    speechSynthesis.speak(utterance);
+  }
+
+  function stopReading() {
+    speechSynthesis.cancel();
+  }
 
   // コンテンツが動的にロードされた後にイベントリスナーを再設定
   document.addEventListener('ajax:success', (event) => {
     attachEventListeners();
   });
-});
 
+  // タブ切り替え用のスクリプト
+  const tabLinks = document.querySelectorAll('.tab-link');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabLinks.forEach(link => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+
+      // すべてのタブリンクとタブコンテンツを非アクティブに
+      tabLinks.forEach(link => link.classList.remove('active'));
+      tabContents.forEach(content => content.classList.remove('active'));
+
+      // クリックされたタブリンクをアクティブに
+      link.classList.add('active');
+
+      // 対応するタブコンテンツをアクティブに
+      const target = link.dataset.target;
+      const targetContent = document.querySelector(target);
+      if (targetContent) {
+        targetContent.classList.add('active');
+      }
+    });
+  });
+
+  // タブの状態をURLのハッシュに基づいて設定
+  const hash = window.location.hash;
+  if (hash) {
+    const activeTabLink = document.querySelector(`.tab-link[data-target="${hash}-content"]`);
+    if (activeTabLink) {
+      activeTabLink.click();
+    }
+  }
+});
 </script>
