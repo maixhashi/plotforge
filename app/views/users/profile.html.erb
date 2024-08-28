@@ -127,10 +127,10 @@
       <%= render partial: 'users/bookmark_of_shuffled_overviews/bookmarked_shuffled_overview_list', locals: { bookmarked_shuffled_overviews: @bookmarked_shuffled_overviews } %>
     </div>
     <div id="my-movies-content" class="tab-content">
-      <%= render partial: 'users/related_movies/related_movie_list', locals: { movies_data: @movies_data } %>
+      <%= render partial: 'users/related_movies/related_movie_list_on_profile', locals: { movies_data: @movies_data } %>
     </div>
     <div id="bookmarked-my-movies-content" class="tab-content">
-      <%= render partial: 'users/bookmark_of_movies/bookmarked_movies_list', locals: { bookmarked_movies_by_date: @bookmarked_movies_by_date } %>
+      <%= render partial: 'users/bookmark_of_movies/bookmarked_movies_list_on_profile', locals: { bookmarked_movies_data: @bookmarked_movies_data } %>
     </div>
   </div>
 </div>
