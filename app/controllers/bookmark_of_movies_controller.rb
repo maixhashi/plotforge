@@ -1,6 +1,8 @@
 class BookmarkOfMoviesController < ApplicationController
   before_action :set_movie, only: [:bookmark, :unbookmark]
   helper_method :movie_poster_path
+  before_action :set_user
+
 
   def index
     Time.zone = 'UTC'
@@ -128,6 +130,10 @@ class BookmarkOfMoviesController < ApplicationController
 
   def set_movie
     @movie = Movie.find_or_create_by(tmdb_id: params[:id])
+  end
+
+  def set_user
+    @user = current_user
   end
 
   

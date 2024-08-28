@@ -1,5 +1,6 @@
 class BookmarkOfShuffledOverviewsController < ApplicationController
   # before_action :authenticate_user!
+  before_action :set_user
 
   def index
     @bookmarked_shuffled_overviews = current_user.bookmarked_shuffled_overviews
@@ -176,4 +177,8 @@ end
 
   def set_shuffled_overview
     @shuffled_overview = ShuffledOverview.find(params[:shuffled_overview_id])
+  end
+
+  def set_user
+    @user = current_user
   end
