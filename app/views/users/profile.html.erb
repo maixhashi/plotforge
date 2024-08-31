@@ -120,9 +120,9 @@
     </ul>
   </div>
   <div class="tab-content active" id="my-shuffled-overviews-content">
-    <div class="pagination-on-profile">
+    <div class="pagination-on-profile active">
       <div>
-        <%= paginate @shuffled_overviews_on_profile %>
+        <%= paginate @shuffled_overviews_on_profile, param_name: :shuffled_overviews_page %>
       </div>
     </div>
     <div class="scroll-indicator">
@@ -134,20 +134,26 @@
       </div>
     </div>
     <div class="profile-body">
-      <div>
-        <%= render partial: 'users/shuffled_overviews/shuffled_overview_list_on_profile', locals: { shuffled_overviews: @shuffled_overviews } %>
-      </div>
+        <%= render partial: 'users/shuffled_overviews/shuffled_overview_list_on_profile', locals: { shuffled_overviews_on_profile: @shuffled_overviews_on_profile } %>
     </div>
   </div>
-  <div>
-    <div id="bookmarked-my-shuffled-overviews-content" class="tab-content">
-      <%= render partial: 'users/bookmark_of_shuffled_overviews/bookmarked_shuffled_overview_list', locals: { bookmarked_shuffled_overviews: @bookmarked_shuffled_overviews } %>
+  <div class="tab-content" id="bookmarked-my-shuffled-overviews-content">
+    <div class="pagination-on-profile">
+      <div>
+        <%= paginate @bookmarked_shuffled_overviews_on_profile %>
+        <%= paginate @bookmarked_shuffled_overviews_on_profile, param_name: :bookmarked_shuffled_overviews_page %>
+      </div>
     </div>
-    <div id="my-movies-content" class="tab-content">
-      <%= render partial: 'users/related_movies/related_movie_list_on_profile', locals: { movies_data: @movies_data } %>
+    <div class="scroll-indicator">
+      <div class="scroll-downforward-indicator">
+        <i class="fas fa-chevron-down scroll-indicator-icon"></i>
+      </div>
+      <div class="scroll-upforward-indicator">
+        <i class="fas fa-chevron-up scroll-indicator-icon"></i>
+      </div>
     </div>
-    <div id="bookmarked-my-movies-content" class="tab-content">
-      <%= render partial: 'users/bookmark_of_movies/bookmarked_movies_list_on_profile', locals: { bookmarked_movies_data: @bookmarked_movies_data } %>
+    <div class="profile-body">
+        <%= render partial: 'users/bookmark_of_shuffled_overviews/bookmarked_shuffled_overview_list_on_profile', locals: { bookmarked_shuffled_overviews_on_profile: @bookmarked_shuffled_overviews_on_profile } %>
     </div>
   </div>
 </div>
@@ -405,6 +411,7 @@
   cursor: pointer; /* Pointer cursor on hover */
   top: 140px; /* Position from the top edge */
   right: 100px; /* Position from the right edge */
+  z-index: 5;
 }
 
 .scroll-upforward-indicator {
@@ -420,6 +427,7 @@
   cursor: pointer; /* Pointer cursor on hover */
   top: 140px; /* Position from the top edge */
   right: 50px; /* Position from the right edge */
+  z-index: 5;
 }
 
 .scroll-indicator-icon {
@@ -452,6 +460,135 @@
 </style>
 
 <script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Movie info popup
+  const popup = document.getElementById('movie-info-popup');
+  const popupTitle = document.getElementById('popup-title');
+  const popupImage = document.getElementById('popup-image');
+
+  function enableLinksAndHoverEvents() {
+    document.querySelectorAll('.movie-link').forEach(link => {
+      link.addEventListener('mouseover', (event) => {
+        const movieInfo = event.target.dataset.movieInfo;
+        const movieImage = event.target.dataset.movieImage;
+        popupTitle.textContent = movieInfo;
+        popupImage.src = movieImage;
+
+        popup.style.display = 'block';
+
+        let top = event.clientY + window.scrollY + 10;
+        let left = event.clientX + window.scrollX + 10;
+
+        const popupWidth = popup.offsetWidth;
+        const popupHeight = popup.offsetHeight;
+
+        if (left + popupWidth > window.innerWidth + window.scrollX) {
+          left = window.innerWidth + window.scrollX - popupWidth - 10;
+        }
+
+        if (top + popupHeight > window.innerHeight + window.scrollY) {
+          top = window.innerHeight + window.scrollY - popupHeight - 10;
+        }
+
+        popup.style.top = `${top}px`;
+        popup.style.left = `${left}px`;
+      });
+
+      link.addEventListener('mouseout', () => {
+        popup.style.display = 'none';
+      });
+    });
+  }
+
+  function attachEventListeners() {
+    enableLinksAndHoverEvents();
+    document.querySelectorAll('.read-aloud-button').forEach(button => {
+      button.addEventListener('click', (event) => {
+        const container = event.target.closest('.shuffled-overview-item').querySelector('.shuffled-overview-content');
+        readAloud(container.textContent);
+      });
+    });
+
+    document.querySelectorAll('.stop-button').forEach(button => {
+      button.addEventListener('click', stopReading);
+    });
+  }
+
+  attachEventListeners(); // 初期のDOMContentLoaded時のイベントリスナーの設定
+
+  async function getVoices() {
+    return new Promise(resolve => {
+      let synth = window.speechSynthesis;
+      let id;
+
+      id = setInterval(() => {
+        if (synth.getVoices().length !== 0) {
+          resolve(synth.getVoices());
+          clearInterval(id);
+        }
+      }, 10);
+    });
+  }
+
+  let voices = [];
+
+  async function readAloud(text) {
+    if (voices.length === 0) {
+      voices = await getVoices();
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ja-JP';
+
+    const voiceName = 'Kyoko';
+    const voice = voices.find(v => v.name.includes(voiceName)) || voices[0];
+    utterance.voice = voice;
+
+    speechSynthesis.speak(utterance);
+  }
+
+  function stopReading() {
+    speechSynthesis.cancel();
+  }
+
+  // コンテンツが動的にロードされた後にイベントリスナーを再設定
+  document.addEventListener('ajax:success', (event) => {
+    attachEventListeners();
+  });
+
+  // タブ切り替え用のスクリプト
+  const tabLinks = document.querySelectorAll('.tab-link');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabLinks.forEach(link => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+
+      // すべてのタブリンクとタブコンテンツを非アクティブに
+      tabLinks.forEach(link => link.classList.remove('active'));
+      tabContents.forEach(content => content.classList.remove('active'));
+
+      // クリックされたタブリンクをアクティブに
+      link.classList.add('active');
+
+      // 対応するタブコンテンツをアクティブに
+      const target = link.dataset.target;
+      const targetContent = document.querySelector(target);
+      if (targetContent) {
+        targetContent.classList.add('active');
+      }
+    });
+  });
+
+  // タブの状態をURLのハッシュに基づいて設定
+  const hash = window.location.hash;
+  if (hash) {
+    const activeTabLink = document.querySelector(`.tab-link[data-target="${hash}-content"]`);
+    if (activeTabLink) {
+      activeTabLink.click();
+    }
+  }
+
 const profileBody = document.querySelector('.profile-body');
 const scrollDownforwardIndicator = document.querySelector('.scroll-downforward-indicator');
 const scrollUpforwardIndicator = document.querySelector('.scroll-upforward-indicator');
@@ -476,6 +613,6 @@ scrollDownforwardIndicator.addEventListener('click', function () {
 
 scrollUpforwardIndicator.addEventListener('click', function () {
   scrollProfileBody('up');
+});  
 });
-
 </script>
