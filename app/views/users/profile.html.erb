@@ -120,7 +120,7 @@
     </ul>
   </div>
   <div class="tab-content active" id="my-shuffled-overviews-content">
-    <div class="pagination-on-profile">
+    <div class="pagination-on-profile active">
       <div>
         <%= paginate @shuffled_overviews_on_profile %>
       </div>
@@ -134,20 +134,25 @@
       </div>
     </div>
     <div class="profile-body">
-      <div>
-        <%= render partial: 'users/shuffled_overviews/shuffled_overview_list_on_profile', locals: { shuffled_overviews: @shuffled_overviews } %>
-      </div>
+        <%= render partial: 'users/shuffled_overviews/shuffled_overview_list_on_profile', locals: { shuffled_overviews_on_profile: @shuffled_overviews_on_profile } %>
     </div>
   </div>
-  <div>
-    <div id="bookmarked-my-shuffled-overviews-content" class="tab-content">
-      <%= render partial: 'users/bookmark_of_shuffled_overviews/bookmarked_shuffled_overview_list', locals: { bookmarked_shuffled_overviews: @bookmarked_shuffled_overviews } %>
+  <div class="tab-content" id="bookmarked-my-shuffled-overviews-content">
+    <div class="pagination-on-profile">
+      <div>
+        <%= paginate @bookmarked_shuffled_overviews_on_profile %>
+      </div>
     </div>
-    <div id="my-movies-content" class="tab-content">
-      <%= render partial: 'users/related_movies/related_movie_list_on_profile', locals: { movies_data: @movies_data } %>
+    <div class="scroll-indicator">
+      <div class="scroll-downforward-indicator">
+        <i class="fas fa-chevron-down scroll-indicator-icon"></i>
+      </div>
+      <div class="scroll-upforward-indicator">
+        <i class="fas fa-chevron-up scroll-indicator-icon"></i>
+      </div>
     </div>
-    <div id="bookmarked-my-movies-content" class="tab-content">
-      <%= render partial: 'users/bookmark_of_movies/bookmarked_movies_list_on_profile', locals: { bookmarked_movies_data: @bookmarked_movies_data } %>
+    <div class="profile-body">
+        <%= render partial: 'users/bookmark_of_shuffled_overviews/bookmarked_shuffled_overview_list_on_profile', locals: { bookmarked_shuffled_overviews_on_profile: @bookmarked_shuffled_overviews_on_profile } %>
     </div>
   </div>
 </div>

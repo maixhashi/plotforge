@@ -1,240 +1,211 @@
 <div class="content">
-  <div class="bookmarked-shuffled-overview-list">
-    <% if @grouped_bookmarked_shuffled_overviews.present? %>
-      <% @grouped_bookmarked_shuffled_overviews.each do |date, overviews| %>
-        <% overviews.each do |bookmarked_shuffled_overview| %>
-          <div class="shuffled-overview-item">
-            <div class="movie-images-container">
-              <div class="movie-images">
-                <% bookmarked_shuffled_overview.related_movie_ids.each do |movie_id| %>
-                  <% movie ||= TmdbService.new.fetch_movie_details(movie_id) %>
-                  <% if movie && movie['poster_path'] %>
-                    <div class="movie-image-wrapper">
-                      <%= link_to related_movie_path(movie_id) do %>
-                        <img src="https://image.tmdb.org/t/p/w200<%= movie['poster_path'] %>" alt="Movie Poster">
+  <div class="shuffled-overview-list">
+    <% @bookmarked_shuffled_overviews_on_profile.each do |shuffled_overview| %>
+      <div class="shuffled-overview-item">
+        <div class="shuffled-overview-header">
+            <div class="author-info">
+            <% if shuffled_overview.user.avatar? %>
+              <%= link_to profile_path(shuffled_overview.user), class: "header-link-of-shuffled-overview" do %>
+                <div class="user-avatar-wrapper">
+                  <%= image_tag shuffled_overview.user.avatar.url, class: 'user-avatar' %>
+                  <% if shuffled_overview.user != current_user %>
+                    <div id="<%= shuffled_overview.user.id %>-follow-button-container" class="follow-button-container">
+                      <% if current_user.following?(shuffled_overview.user) %>
+                        <%= render partial: 'follows/unfollow_button', locals: { user: shuffled_overview.user } %>
+                      <% else %>
+                        <%= render partial: 'follows/follow_button', locals: { user: shuffled_overview.user } %>
                       <% end %>
                     </div>
                   <% end %>
-                <% end %>
-              </div>
-            </div>
-            <div class="shuffled-overview-content">
-              <%= truncate(strip_tags(bookmarked_shuffled_overview.content), length: 50, omission: '...') %>
-              <%= link_to user_shuffled_overview_path(user_id: current_user.id, id: bookmarked_shuffled_overview.id), class: "link-to-more-shuffled-overview" do %>
-                <i class="fa-solid fa-1x fa-magnifying-glass-plus"></i>
+                </div>
               <% end %>
-            </div>
-            <div class="button-container">
-            </div>
+            <% else %>
+              <%= link_to profile_path(shuffled_overview.user), class: "header-link-of-shuffled-overview" do %>
+                <div class="user-avatar-wrapper">
+                  <i class="fa fa-user-circle fa-4x"></i>
+                  <% if shuffled_overview.user != current_user %>
+                    <div id="<%= shuffled_overview.user.id %>-follow-button-container" class="follow-button-container">
+                      <% if current_user.following?(shuffled_overview.user) %>
+                        <%= render partial: 'follows/unfollow_button', locals: { user: shuffled_overview.user } %>
+                      <% else %>
+                        <%= render partial: 'follows/follow_button', locals: { user: shuffled_overview.user } %>
+                      <% end %>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            <% end %>
           </div>
-        <% end %>
-      <% end %>
-    <% else %>
-      <p>指定された日付にはブックマークされたシャッフル概要がありません。</p>
+        </div>
+
+        <div class="movie-images-container">
+          <div class="movie-images-on-profile">
+            <% shuffled_overview.related_movie_ids.each do |movie_id| %>
+              <% movie = @movies_data[movie_id] %>
+              <% if movie %>
+                <div class="movie-image-wrapper">
+                  <%= link_to related_movie_path(movie_id) do %>
+                    <img src="https://image.tmdb.org/t/p/w92<%= movie['poster_path'] %>" alt="Movie Poster">
+                  <% end %>
+                  <div class="movie-bookmark-button-container">
+                    <% if current_user.bookmarked_movies.exists?(tmdb_id: movie_id) %>
+                      <%= render partial: 'related_movies/bookmark_remove_button', locals: { movie_id: movie_id } %>
+                    <% else %>
+                      <%= render partial: 'related_movies/bookmark_add_button', locals: { movie_id: movie_id } %>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="shuffled-overview-content" id="shuffled-overview-content-<%= shuffled_overview.id %>">
+          <%= truncate_without_html_tags(shuffled_overview.content, 50) %>
+          <% if ActionView::Base.full_sanitizer.sanitize(shuffled_overview.content).length > 50 %>
+            <%= link_to 'Read More', '#', class: 'read-more-link', data: { id: shuffled_overview.id } %>
+          <% end %>
+
+          <div class="shuffled-overview-meta">
+            <p>保存日時: <%= shuffled_overview.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
+          </div>
+        </div>
+      </div>
     <% end %>
   </div>
 </div>
-
+      
 <style>
-.btn {
-  background: #b2ebf2;
-  color: #00796b;
-  padding: 0.5rem 1rem;
-  text-decoration: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  transition: background 0.3s;
-  height: 50px;
+.user-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.user-avatar {
+  display: block;
+  max-width: 100px; /* アイコンの最大幅 */
+  border-radius: 50%; /* アイコンを丸くする */
+}
+
+.follow-button-container {
+  position: absolute;
+  bottom: -15px; /* アイコンの下部からの距離 */
+  right: -5px; /* アイコンの右部からの距離 */
+  z-index: 10; /* アイコンの上に表示するため */
+}
+
+
+.author-info {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #555;
+  margin-right: 10px;
+}
+
+.author-avatar {
+  max-width: 50px;
+  border-radius: 50%;
 }
 
 .content {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  flex-wrap: wrap;
-  flex-direction: row;
-  max-width: 60%;
-  margin-left: 10px;
+  height: 100vh; /* ビューポートの高さに合わせる */
 }
 
-.bookmarked-shuffled-overview-list {
-  margin-top: 10px;
+.shuffled-overview-list {
   display: flex;
-  flex-direction: column; /* 縦並びにする */
-  width: 80%; /* 横幅を調整 */
+  flex-direction: column;
+  width: 95%;
+  height: 100%;
   box-sizing: border-box;
 }
-
-.bookmarked-shuffled-overview-list-title-on-profile {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.title-wrapper {
-  position: relative;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  color: black;
-}
-
-.title-wrapper .fa-book-open { /* アイコンのサイズと色 */
-  font-size: 24px; /* アイコンのサイズを適宜調整 */
-  color: #2c4c64;
-}
-
-.title-wrapper .count {
-  position: absolute;
-  top: -16px; /* 上方向の調整 */
-  right: -18px; /* 右方向の調整 */
-  background-color: red; /* カウント数の丸の背景色 */
-  color: white; /* カウント数のテキストの色 */
-  border-radius: 50%; /* 丸い形にする */
-  padding: 2px; /* テキスト周りの余白 */
-  font-size: 12px; /* テキストサイズ */
-  line-height: 1;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 24px; /* 丸の幅を固定 */
-  height: 24px; /* 丸の高さを固定 */
-}
-
-.title-wrapper .fa-heart {
-  position: absolute;
-  top: 12px;
-  right: -12px;
-  color: red;
-  border-radius: 50%;
-  padding: 2px;
-  font-size: 6px;
-  line-height: 1;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 16px;
-  height: 16px;
-}
-
 
 
 .shuffled-overview-item {
   display: flex; /* 横並びにする */
   align-items: flex-start; /* 上揃え */
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: #f9f9f9;
-  width: 40%; /* 横幅を100%にして、親コンテナ内での幅を調整 */
+  width: 100%; /* 横幅を100%にして、親コンテナ内での幅を調整 */
   box-sizing: border-box;
-  margin-right: 10px;
 }
 
 .movie-images-container {
   display: flex;
   flex-direction: column; /* 画像を縦に並べる */
   margin-right: 20px; /* あらすじとの間隔を調整 */
+  position: relative; /* 相対位置に設定 */
 }
 
-.movie-images {
+.movie-images-on-profile {
   display: flex; /* 画像を横並びにする */
-  flex-direction: row; /* 横並びに設定 */
+  flex-direction: row; /* 画像を縦に並べる */
   gap: 10px; /* 画像間の間隔 */
-}
-
-.movie-images img {
-  max-width: 75px; /* 画像の幅を制限 */
-  max-height: 150px; /* 画像の高さを制限 */
-  object-fit: cover; /* 画像が領域に収まるように調整 */
-}
-
-.shuffled-overview-content {
-  font-size: 16px;
-  margin-bottom: 10px;
-  flex: 1; /* コンテンツが残りのスペースを占めるようにする */
-}
-
-.shuffled-overview-meta {
-  display: flex;
-  font-size: 12px;
-  color: #888;
-  gap: 10px;
 }
 
 .movie-image-wrapper {
   position: relative; /* 子要素の絶対位置に基づく */
 }
 
-.button-container {
+.movie-images img {
+  max-width: 100px; /* 画像の幅を制限 */
+  max-height: 150px; /* 画像の高さを制限 */
+  object-fit: cover; /* 画像が領域に収まるように調整 */
+}
+
+.movie-bookmark-button-container {
+  position: absolute; /* 絶対位置に設定 */
+  bottom: 10px; /* 画像の下部に位置 */
+  right: 10px; /* 画像の右部に位置 */
   display: flex;
   gap: 10px; /* ボタン間の間隔 */
 }
 
-.button-container-for-shuffled-overview {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  align-items: center;
+.shuffled-overview-content {
+  font-size: 12px;
+  margin-bottom: 10px;
+  flex: 1; /* コンテンツが残りのスペースを占めるようにする */
 }
 
-.link-to-more-shuffled-overview {
-  color: black;
+.shuffled-overview-meta {
+  font-size: 12px;
+  color: #888;
+}
+
+.button-container {
+  text-align: center;
+  gap: 10px;
 }
 
 .movie-link {
-  color: black;
   text-decoration: none;
+  color: black;
+}
+
+.pagination-on-profile {
 }
 </style>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const popup = document.getElementById('movie-info-popup');
-  const popupTitle = document.getElementById('popup-title');
-  const popupImage = document.getElementById('popup-image');
+document.addEventListener('DOMContentLoaded', function() {
+  const readMoreLinks = document.querySelectorAll('.read-more-link');
 
-  function enableLinksAndHoverEvents() {
-    document.querySelectorAll('.movie-link').forEach(link => {
-      link.addEventListener('mouseover', (event) => {
-        const movieInfo = event.target.dataset.movieInfo;
-        const movieImage = event.target.dataset.movieImage;
-        popupTitle.textContent = movieInfo;
-        popupImage.src = movieImage;
+  readMoreLinks.forEach(function(link) {
+    link.addEventListener('click', function(event) {
+      event.preventDefault();
 
-        popup.style.display = 'block';
+      const overviewId = event.target.dataset.id;
+      const contentElement = document.getElementById(`shuffled-overview-content-${overviewId}`);
+      const fullContent = event.target.dataset.fullContent;
 
-        let top = event.clientY + window.scrollY + 10;
-        let left = event.clientX + window.scrollX + 10;
-
-        const popupWidth = popup.offsetWidth;
-        const popupHeight = popup.offsetHeight;
-
-        if (left + popupWidth > window.innerWidth + window.scrollX) {
-          left = window.innerWidth + window.scrollX - popupWidth - 10;
-        }
-
-        if (top + popupHeight > window.innerHeight + window.scrollY) {
-          top = window.innerHeight + window.scrollY - popupHeight - 10;
-        }
-
-        popup.style.top = `${top}px`;
-        popup.style.left = `${left}px`;
-      });
-
-      link.addEventListener('mouseout', () => {
-        popup.style.display = 'none';
-      });
+      // 切り詰められたコンテンツを完全なコンテンツに置き換える
+      contentElement.innerHTML = fullContent;
     });
-  }
-
-  function attachEventListeners() {
-    enableLinksAndHoverEvents();
-  }
-
-  attachEventListeners(); // 初期のDOMContentLoaded時のイベントリスナーの設定
+  });
 });
 </script>

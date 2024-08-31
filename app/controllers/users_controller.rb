@@ -35,9 +35,20 @@ class UsersController < ApplicationController
 
     @shuffled_overviews_on_profile = current_user.shuffled_overviews.page(params[:page]).per(5)
 
+    # Bookmarked ShuffledOverviewsのIDを取得
+    bookmarked_shuffled_overview_ids = current_user.bookmarked_shuffled_overviews.pluck(:shuffled_overview_id)
+
+    # そのIDに基づいてShuffledOverviewを取得し、ページネーションを適用
+    @bookmarked_shuffled_overviews_on_profile = ShuffledOverview.where(id: bookmarked_shuffled_overview_ids).page(params[:page]).per(5)
+
     tmdb_service = TmdbService.new
     @movies_data = {}
     @shuffled_overviews_on_profile.each do |shuffled_overview|
+      shuffled_overview.related_movie_ids.each do |movie_id|
+        @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
+      end
+    end
+    @bookmarked_shuffled_overviews_on_profile.each do |shuffled_overview|
       shuffled_overview.related_movie_ids.each do |movie_id|
         @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
       end
