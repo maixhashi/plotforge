@@ -2,7 +2,7 @@
   <% @movies_data.each do |movie_id, movie| %>
     <div class="related-movie-image-wrapper">
       <%= link_to related_movie_path(movie_id) do %>
-        <img src="https://image.tmdb.org/t/p/w92<%= movie['poster_path'] %>" alt="Movie Poster" class="related-movie-image">
+        <img src="https://image.tmdb.org/t/p/w185<%= movie['poster_path'] %>" alt="Movie Poster" class="related-movie-image">
       <% end %>
       <div class="button-container">
         <% if current_user.bookmarked_movies.exists?(tmdb_id: movie['id']) %>

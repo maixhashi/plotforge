@@ -33,28 +33,41 @@ class UsersController < ApplicationController
   def profile
     @bookmarked_shuffled_overviews = current_user.bookmarked_shuffled_overviews
 
-    @shuffled_overviews_on_profile = current_user.shuffled_overviews.page(params[:page]).per(5)
+    @shuffled_overviews = current_user.shuffled_overviews
     @shuffled_overviews_on_profile = current_user.shuffled_overviews.page(params[:shuffled_overviews_page]).per(5)
 
     # Bookmarked ShuffledOverviewsのIDを取得
     bookmarked_shuffled_overview_ids = current_user.bookmarked_shuffled_overviews.pluck(:shuffled_overview_id)
 
     # そのIDに基づいてShuffledOverviewを取得し、ページネーションを適用
-    @bookmarked_shuffled_overviews_on_profile = ShuffledOverview.where(id: bookmarked_shuffled_overview_ids).page(params[:page]).per(5)
     @bookmarked_shuffled_overviews_on_profile = ShuffledOverview.where(id: bookmarked_shuffled_overview_ids).page(params[:bookmarked_shuffled_overviews_page]).per(5)
 
     tmdb_service = TmdbService.new
     @movies_data = {}
-    @shuffled_overviews_on_profile.each do |shuffled_overview|
-      shuffled_overview.related_movie_ids.each do |movie_id|
-        @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
-      end
+    @movies_data_related_of_bookmarked_overviews = {}
+    # @shuffled_overviews.each do |shuffled_overview|
+    #   shuffled_overview.related_movie_ids.each do |movie_id|
+    #     @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
+    #   end
+    # end
+
+    # ユニークな movie_id を取得する
+    unique_movie_ids = @shuffled_overviews.flat_map(&:related_movie_ids).uniq
+
+    # ユニークな movie_id を使って映画の詳細をフェッチ
+    unique_movie_ids.each do |movie_id|
+      @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
     end
+    @movies_array = @movies_data.values
+    @paginated_movies = Kaminari.paginate_array(@movies_array).page(params[:movies_page]).per(12)
+
+
     @bookmarked_shuffled_overviews_on_profile.each do |shuffled_overview|
       shuffled_overview.related_movie_ids.each do |movie_id|
-        @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
+        @movies_data_related_of_bookmarked_overviews[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
       end
     end
+
 
     # <%= render partial: 'users/bookmark_of_shuffled_overviews/bookmarked_shuffled_overview_list_on_profile', locals: { bookmarked_shuffled_overviews: @msy_bookmarked_shuffled_overviews } %>で渡す変数
     results = current_user.bookmarked_shuffled_overviews
