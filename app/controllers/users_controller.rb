@@ -33,11 +33,11 @@ class UsersController < ApplicationController
   def profile
     @bookmarked_shuffled_overviews = current_user.bookmarked_shuffled_overviews
 
-    @shuffled_overviews = current_user.shuffled_overviews
+    @shuffled_overviews_on_profile = current_user.shuffled_overviews.page(params[:page]).per(5)
 
     tmdb_service = TmdbService.new
     @movies_data = {}
-    @shuffled_overviews.each do |shuffled_overview|
+    @shuffled_overviews_on_profile.each do |shuffled_overview|
       shuffled_overview.related_movie_ids.each do |movie_id|
         @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
       end
