@@ -55,7 +55,12 @@ gem "hashid-rails"
 gem "rails-erd"
 gem 'carrierwave'
 gem 'annotate'
+
+## Morphological analysis (形態素分析)
 gem "natto"
+
+## pagination
+gem 'kaminari'
 
 
 group :development, :test do

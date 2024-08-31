@@ -1,6 +1,6 @@
 <div class="content">
   <div class="shuffled-overview-list">
-    <% @shuffled_overviews.each do |shuffled_overview| %>
+    <% @shuffled_overviews_on_profile.each do |shuffled_overview| %>
       <div class="shuffled-overview-item">
         <div class="shuffled-overview-header">
             <div class="author-info">
@@ -39,12 +39,12 @@
         </div>
 
         <div class="movie-images-container">
-          <div class="movie-images">
+          <div class="movie-images-on-profile">
             <% shuffled_overview.related_movie_ids.each do |movie_id| %>
               <% movie = @movies_data[movie_id] %>
               <div class="movie-image-wrapper">
                 <%= link_to related_movie_path(movie_id) do %>
-                  <img src="https://image.tmdb.org/t/p/w200<%= movie['poster_path'] %>" alt="Movie Poster">
+                  <img src="https://image.tmdb.org/t/p/w92<%= movie['poster_path'] %>" alt="Movie Poster">
                 <% end %>
                 <div class="movie-bookmark-button-container">
                   <% if current_user.bookmarked_movies.exists?(tmdb_id: movie_id) %>
@@ -58,34 +58,21 @@
           </div>
         </div>
 
-        <div class="shuffled-overview-content">
-          <%= raw shuffled_overview.content %>
+        <div class="shuffled-overview-content" id="shuffled-overview-content-<%= shuffled_overview.id %>">
+          <%= truncate_without_html_tags(shuffled_overview.content, 50) %>
+          <% if ActionView::Base.full_sanitizer.sanitize(shuffled_overview.content).length > 50 %>
+            <%= link_to 'Read More', '#', class: 'read-more-link', data: { id: shuffled_overview.id } %>
+          <% end %>
+
           <div class="shuffled-overview-meta">
             <p>保存日時: <%= shuffled_overview.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
           </div>
-
-          <div class="button-container">
-            <% bookmarked = current_user.bookmarked_shuffled_overviews.find_by(id: shuffled_overview.id) %>
-            <% if bookmarked %>
-              <%= render partial: 'bookmark_of_shuffled_overviews/bookmark_remove_button', locals: { shuffled_overview: shuffled_overview } %>
-            <% else %>
-              <%= render partial: 'bookmark_of_shuffled_overviews/bookmark_add_button', locals: { shuffled_overview: shuffled_overview } %>
-            <% end %>
-
-            <button class="read-aloud-button btn btn-login">
-              <i class="fas fa-volume-up"></i> 読み上げ
-            </button>
-            <button class="stop-button btn btn-login">
-              停止
-            </button>
-          </div>
         </div>
       </div>
-      <% end %>
+    <% end %>
   </div>
 </div>
-
-
+      
 <style>
 .user-avatar-wrapper {
   position: relative;
@@ -111,7 +98,6 @@
   font-size: 14px;
   color: #555;
   margin-right: 10px;
-  margin-right: 10px;
 }
 
 .author-avatar {
@@ -122,15 +108,18 @@
 .content {
   display: flex;
   flex-direction: column;
-  align-items: center; /* 中央に配置 */
+  align-items: center;
+  height: 100vh; /* ビューポートの高さに合わせる */
 }
 
 .shuffled-overview-list {
   display: flex;
-  flex-direction: column; /* 縦並びにする */
-  width: 80%; /* 横幅を調整 */
+  flex-direction: column;
+  width: 95%;
+  height: 100%;
   box-sizing: border-box;
 }
+
 
 .shuffled-overview-item {
   display: flex; /* 横並びにする */
@@ -151,9 +140,9 @@
   position: relative; /* 相対位置に設定 */
 }
 
-.movie-images {
+.movie-images-on-profile {
   display: flex; /* 画像を横並びにする */
-  flex-direction: column; /* 画像を縦に並べる */
+  flex-direction: row; /* 画像を縦に並べる */
   gap: 10px; /* 画像間の間隔 */
 }
 
@@ -176,7 +165,7 @@
 }
 
 .shuffled-overview-content {
-  font-size: 16px;
+  font-size: 12px;
   margin-bottom: 10px;
   flex: 1; /* コンテンツが残りのスペースを占めるようにする */
 }
@@ -195,4 +184,26 @@
   text-decoration: none;
   color: black;
 }
+
+.pagination-on-profile {
+}
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const readMoreLinks = document.querySelectorAll('.read-more-link');
+
+  readMoreLinks.forEach(function(link) {
+    link.addEventListener('click', function(event) {
+      event.preventDefault();
+
+      const overviewId = event.target.dataset.id;
+      const contentElement = document.getElementById(`shuffled-overview-content-${overviewId}`);
+      const fullContent = event.target.dataset.fullContent;
+
+      // 切り詰められたコンテンツを完全なコンテンツに置き換える
+      contentElement.innerHTML = fullContent;
+    });
+  });
+});
+</script>
