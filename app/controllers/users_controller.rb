@@ -60,15 +60,15 @@ class UsersController < ApplicationController
     end
     @movies_array = @movies_data.values
     @paginated_movies = Kaminari.paginate_array(@movies_array).page(params[:movies_page]).per(12)
-
-
+    
+    
     @bookmarked_shuffled_overviews_on_profile.each do |shuffled_overview|
       shuffled_overview.related_movie_ids.each do |movie_id|
         @movies_data_related_of_bookmarked_overviews[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
       end
     end
-
-
+    
+    
     # <%= render partial: 'users/bookmark_of_shuffled_overviews/bookmarked_shuffled_overview_list_on_profile', locals: { bookmarked_shuffled_overviews: @msy_bookmarked_shuffled_overviews } %>で渡す変数
     results = current_user.bookmarked_shuffled_overviews
       .select('shuffled_overviews.id, shuffled_overviews.content, shuffled_overviews.related_movie_ids, DATE(bookmark_of_shuffled_overviews.created_at) AS date, COUNT(*) AS count')
