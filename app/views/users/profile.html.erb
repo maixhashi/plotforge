@@ -140,7 +140,6 @@
   <div class="tab-content" id="bookmarked-my-shuffled-overviews-content">
     <div class="pagination-on-profile">
       <div>
-        <%= paginate @bookmarked_shuffled_overviews_on_profile %>
         <%= paginate @bookmarked_shuffled_overviews_on_profile, param_name: :bookmarked_shuffled_overviews_page %>
       </div>
     </div>
@@ -156,8 +155,16 @@
         <%= render partial: 'users/bookmark_of_shuffled_overviews/bookmarked_shuffled_overview_list_on_profile', locals: { bookmarked_shuffled_overviews_on_profile: @bookmarked_shuffled_overviews_on_profile } %>
     </div>
   </div>
+  <div class="tab-content" id="my-movies-content">
+    <div class="pagination-on-profile">
+    </div>
+    <div class="scroll-indicator">
+    </div>
+    <div class="profile-body">
+        <%= render partial: 'users/related_movies/related_movie_list_on_profile', locals: { movies_data: @movies_data } %>
+    </div>
+  </div>
 </div>
-
 
 <div id="movie-info-popup" class="hidden">
   <div id="popup-title"></div>
