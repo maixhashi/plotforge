@@ -122,7 +122,7 @@
   <div class="tab-content active" id="my-shuffled-overviews-content">
     <div class="pagination-on-profile active">
       <div>
-        <%= paginate @shuffled_overviews_on_profile %>
+        <%= paginate @shuffled_overviews_on_profile, param_name: :shuffled_overviews_page %>
       </div>
     </div>
     <div class="scroll-indicator">
@@ -141,6 +141,7 @@
     <div class="pagination-on-profile">
       <div>
         <%= paginate @bookmarked_shuffled_overviews_on_profile %>
+        <%= paginate @bookmarked_shuffled_overviews_on_profile, param_name: :bookmarked_shuffled_overviews_page %>
       </div>
     </div>
     <div class="scroll-indicator">
