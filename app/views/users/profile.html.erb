@@ -631,4 +631,101 @@ scrollUpforwardIndicator.addEventListener('click', function () {
   scrollProfileBody('up');
 });  
 });
+
+function anchorKeeper() {
+  let lastActiveTab = '';
+
+  function setActiveTab() {
+    // URLのクエリパラメータを取得
+    const urlParams = new URLSearchParams(window.location.search);
+    const shuffledOverviewsPage = urlParams.get('shuffled_overviews_page');
+    const bookmarkedShuffledOverviewsPage = urlParams.get('bookmarked_shuffled_overviews_page');
+
+    console.log('shuffledOverviewsPage:', shuffledOverviewsPage);
+    console.log('bookmarkedShuffledOverviewsPage:', bookmarkedShuffledOverviewsPage);
+
+    // デフォルトのタブコンテンツ
+    let hash = '#my-shuffled-overviews-content'; // デフォルト値を設定
+
+    // ページネーションの最後にクリックされたものに基づいてタブを設定
+    if (shuffledOverviewsPage) {
+      hash = '#my-shuffled-overviews-content';
+      lastActiveTab = 'shuffled';
+    } else if (bookmarkedShuffledOverviewsPage) {
+      hash = '#bookmarked-my-shuffled-overviews-content';
+      lastActiveTab = 'bookmarked';
+    } else if (lastActiveTab === 'shuffled') {
+      hash = '#my-shuffled-overviews-content';
+    } else if (lastActiveTab === 'bookmarked') {
+      hash = '#bookmarked-my-shuffled-overviews-content';
+    }
+
+    console.log('Determined Hash:', hash); // ハッシュ値をログに出力
+
+    // タブリンクとタブコンテンツを取得
+    const tabLinks = document.querySelectorAll('.tab-link');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    // すべてのタブとコンテンツを非アクティブにする
+    tabLinks.forEach(link => link.classList.remove('active'));
+    tabContents.forEach(content => content.classList.remove('active'));
+
+    // ハッシュに一致するタブをアクティブにする
+    const activeTabLink = Array.from(tabLinks).find(link => link.dataset.target === hash);
+    if (activeTabLink) {
+      activeTabLink.classList.add('active');
+      const targetContent = document.querySelector(hash);
+      if (targetContent) {
+        targetContent.classList.add('active');
+      }
+    } else {
+      console.log('No matching tab link found for:', hash);
+    }
+  }
+
+  // 初期ロード時にタブを設定
+  setActiveTab();
+
+  // タブリンクのクリック時にハッシュを設定し、タブをアクティブにする
+  document.querySelectorAll('.tab-link').forEach(link => {
+    link.addEventListener('click', function(event) {
+      event.preventDefault();
+      const target = link.dataset.target;
+      window.location.hash = link.getAttribute('href');
+      console.log('Clicked Link:', link.getAttribute('href'));
+
+      // タブの状態を更新
+      document.querySelectorAll('.tab-link').forEach(link => link.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+      link.classList.add('active');
+      document.querySelector(target).classList.add('active');
+
+      // 最後にクリックされたタブを記録
+      lastActiveTab = target.includes('my-shuffled-overviews-content') ? 'shuffled' : 'bookmarked';
+      console.log('Updated lastActiveTab:', lastActiveTab);
+    });
+  });
+
+  // ページネーションのクリック時にタブの状態を維持
+  document.querySelectorAll('.pagination-on-profile a').forEach(paginationLink => {
+    paginationLink.addEventListener('click', function() {
+      // クリックされたリンクのデータ属性を取得
+      const paginationLinkTarget = paginationLink.dataset.target;
+
+      // ページネーションのクリック後にタブを設定
+      setTimeout(() => {
+        if (paginationLinkTarget.includes('bookmarked')) {
+          lastActiveTab = 'bookmarked';
+        } else {
+          lastActiveTab = 'shuffled';
+        }
+        setActiveTab();
+      }, 100); // 遅延を追加してタブの内容が反映されるのを待つ
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", anchorKeeper);
+
 </script>
