@@ -1,0 +1,671 @@
+<div class="profile">
+  <div class="profile-header">
+    <ul>
+      <li>
+        <div class="bookmarked-shuffled-overview-list">
+          <div class="bookmarked-shuffled-overview-list-title-on-profile">
+            <div class="header-selection-wrapper">
+              <i class="fas fa-book-open" style="color: #2c4c64;"></i>
+            </div>
+            <div>
+              <%= link_to '#timeline_shuffled_overviews', class: "header-selection-wrapper tab-link active", data: { target: "#timeline-shuffled-overviews-content" }, onclick: "event.preventDefault(); window.location.href='/timeline#timeline_shuffled_overviews';" do %>
+                あらすじ
+              <% end %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-book-open" style="color: #2c4c64;"></i>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="bookmarked-shuffled-overview-list">
+          <div class="bookmarked-shuffled-overview-list-title-on-profile">
+            <div class="header-selection-wrapper">
+              <i class="fas fa-2x fa-film" style="color: #2c4c64;"></i>
+            </div>
+            <div>
+              <%= link_to '#timeline_movies', class: "header-selection-wrapper tab-link", data: { target: "#timeline-movies-content" }, onclick: "event.preventDefault(); window.location.href='/timeline#timeline_movies';" do %>
+                映画
+              <% end %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-2x fa-film" style="color: #2c4c64;"></i>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="tab-content active" id="timeline-shuffled-overviews-content">
+    <div class="pagination-on-profile active">
+      <div>
+        <%= paginate @shuffled_overviews_on_timeline, param_name: :shuffled_overviews_page %>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <div class="scroll-downforward-indicator">
+        <i class="fas fa-chevron-down scroll-indicator-icon"></i>
+      </div>
+      <div class="scroll-upforward-indicator">
+        <i class="fas fa-chevron-up scroll-indicator-icon"></i>
+      </div>
+    </div>
+    <div class="timeline-body">
+        <%= render partial: 'users/shuffled_overviews/shuffled_overview_list_on_timeline', locals: { shuffled_overviews_on_timeline: @shuffled_overviews_on_timeline } %>
+    </div>
+    <div id="no-records-message" class="no-records-message" style="display: none;">
+      レコードがありません
+    </div>
+  </div>
+  <div class="tab-content" id="timeline-movies-content">
+    <div class="pagination-on-profile">
+    </div>
+    <div class="scroll-indicator">
+    </div>
+    <div class="timeline-body">
+        <%= render partial: 'users/related_movies/related_movie_list_on_profile', locals: { movies_data: @movies_data } %>
+    </div>
+  </div>
+</div>
+
+<div id="movie-info-popup" class="hidden">
+  <div id="popup-title"></div>
+  <img id="popup-image" src="" alt="Movie Image">
+</div>
+
+<style>
+/* Kaminari カスタムスタイル */
+
+/* 全体のスタイル */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  list-style: none;
+  padding: 0;
+  text-decoration: none;
+}
+
+.pagination a {
+  display: flex;
+  text-decoration: none;
+  justify-content: center;
+  color: black;
+}
+
+/* ページリンクのスタイル */
+.pagination .page {
+  margin: 0 5px;
+  padding: 10px 15px;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  color: #333;
+  background-color: #f9f9f9;
+}
+
+/* 現在のページのスタイル */
+.pagination .current {
+  background-color: #007bff;
+  color: #fff;
+  border: 1px solid #007bff;
+  font-weight: bold;
+}
+
+/* 無効なリンクのスタイル */
+.pagination .disabled {
+  color: #aaa;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+/* その他のリンクのスタイル */
+.pagination .first,
+.pagination .last,
+.pagination .prev,
+.pagination .next {
+  background-color: #f1f1f1;
+  width: 40px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination .first:hover,
+.pagination .last:hover,
+.pagination .prev:hover,
+.pagination .next:hover {
+  background-color: #e1e1e1;
+}
+
+.tab-link.active {
+  position: relative; /* 擬似要素のために必要 */
+  color: black; /* リンクの色 */
+}
+
+.tab-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0; /* リンクの下部に配置 */
+  left: 0;
+  width: 100%;
+  height: 2px; /* ボーダーの高さ */
+  background-color: blue; /* 青線の色 */
+  border-radius: 0; /* ボーダーの丸みをなくす */
+  z-index: 1; /* ボーダーがリンクの下に表示されないように */
+}
+
+/* 既存のスタイルはそのまま */
+.tab-content {
+  display: none; /* 初期状態では非表示 */
+  min-height: 550px;
+}
+
+.tab-content.active {
+  display: block; /* アクティブなコンテンツを表示 */
+}
+
+/* 他のスタイル */
+.bookmarked-shuffled-overview-list {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column; /* 縦並びにする */
+  width: 100%; /* 横幅を調整 */
+  box-sizing: border-box;
+}
+
+.bookmarked-shuffled-overview-list-title-on-profile {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.header-selection-wrapper {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+
+  .fa-heart {
+    color: red; /* アイコンの色を赤に変更（任意） */
+    font-size: 14px; /* アイコンのサイズを調整（任意） */
+    vertical-align: middle; /* テキストとアイコンを垂直方向に中央揃え */
+  }
+}
+
+.profile {
+  position: relative; /* 絶対配置から相対配置に変更 */
+  top: 20px;
+  left: 10px;
+  width: calc(100%); /* 画面幅いっぱいに広げる（左マージンの10px分を考慮） */
+//  overflow-y: auto;
+  padding-bottom: 100px;
+}
+
+.user-info-on-profile {
+  z-index: ;
+  display: flex;
+  justify-content: space-between; /* アバターとフォロー情報を左右に配置 */
+  align-items: center;
+}
+
+.follow-info {
+  display: flex;
+  flex-direction: row;
+  text-align: right;
+  position: absolute;
+  top: 0;
+  right: 30px;
+  gap: 30px;
+}
+
+.user-avatar-on-profile {
+  display: flex;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.user-avatar-wrapper {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.user-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.user-name {
+  font-size: 1.5rem;
+}
+
+.profile-contents {
+  margin-top: 20px;
+}
+
+.profile-header {
+  position: relative;
+  width: 100%;
+  background-color: #f8f8f8;
+  box-sizing: border-box;
+  top: -20px;
+}
+
+.profile-header ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: flex-start;
+  gap: 75px;
+  margin-left: 50px;
+  align-items: center;
+}
+
+.profile-header li {
+  font-size: 1.2rem;
+}
+
+.profile-header a {
+  text-decoration: none;
+  color: black;
+  border-radius: 20px; /* 丸みを帯びたボタン風 */
+  position: relative; /* 擬似要素の位置を調整するために必要 */
+  transition: background-color 0.3s ease;
+}
+
+.profile-header a.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px; /* ボーダーをリンクの下に配置 */
+  left: 0;
+  width: 100%;
+  height: 6px; /* ボーダーの高さ */
+  background: rgba(0, 0, 255, 0.5); /* グレーの蛍光ペン風の色 */
+  box-shadow: 0 0 4px rgba(0, 0, 255, 0.2); /* 蛍光ペン風の影 */
+  border-radius: 0; /* 丸みをなくす */
+}
+
+.profile-header a:hover {
+  background-color: #f0f0f0; /* ホバー時の背景色変更 */
+}
+
+.timeline-body {
+  position: relative; /* Ensure the timeline-body is the reference point for absolute positioning */
+  border: 1px solid #ccc; /* Example border for visual reference */
+  /* Other styles */
+  overflow: auto; /* または scroll */
+  height: 100%; /* 定義された高さが必要です */
+}
+
+.scroll-downforward-indicator {
+  position: absolute;
+  width: 40px; /* Width and height for the circular indicators */
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(128, 128, 128, 0.4); /* Semi-transparent background */
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 50%; /* Round shape */
+  cursor: pointer; /* Pointer cursor on hover */
+  top: 140px; /* Position from the top edge */
+  right: 100px; /* Position from the right edge */
+  z-index: 5;
+}
+
+.scroll-upforward-indicator {
+  position: absolute;
+  width: 40px; /* Width and height for the circular indicators */
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(128, 128, 128, 0.4); /* Semi-transparent background */
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 50%; /* Round shape */
+  cursor: pointer; /* Pointer cursor on hover */
+  top: 140px; /* Position from the top edge */
+  right: 50px; /* Position from the right edge */
+  z-index: 5;
+}
+
+.scroll-indicator-icon {
+  font-size: 20px; /* Adjust icon size */
+}
+
+.hidden {
+  display: none; /* Hide the indicator initially */
+}
+
+
+#movie-info-popup {
+  position: absolute;
+  display: none;
+  background-color: white;
+  border: 1px solid black;
+  padding: 10px;
+  z-index: 1000;
+  max-width: 300px;
+  max-height: 200px;
+  overflow: hidden;
+}
+
+#popup-image {
+  max-width: 100%;
+  max-height: 150px;
+  display: block;
+}
+
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Movie info popup
+  const popup = document.getElementById('movie-info-popup');
+  const popupTitle = document.getElementById('popup-title');
+  const popupImage = document.getElementById('popup-image');
+
+  function enableLinksAndHoverEvents() {
+    document.querySelectorAll('.movie-link').forEach(link => {
+      link.addEventListener('mouseover', (event) => {
+        const movieInfo = event.target.dataset.movieInfo;
+        const movieImage = event.target.dataset.movieImage;
+        popupTitle.textContent = movieInfo;
+        popupImage.src = movieImage;
+
+        popup.style.display = 'block';
+
+        let top = event.clientY + window.scrollY + 10;
+        let left = event.clientX + window.scrollX + 10;
+
+        const popupWidth = popup.offsetWidth;
+        const popupHeight = popup.offsetHeight;
+
+        if (left + popupWidth > window.innerWidth + window.scrollX) {
+          left = window.innerWidth + window.scrollX - popupWidth - 10;
+        }
+
+        if (top + popupHeight > window.innerHeight + window.scrollY) {
+          top = window.innerHeight + window.scrollY - popupHeight - 10;
+        }
+
+        popup.style.top = `${top}px`;
+        popup.style.left = `${left}px`;
+      });
+
+      link.addEventListener('mouseout', () => {
+        popup.style.display = 'none';
+      });
+    });
+  }
+
+  function attachEventListeners() {
+    enableLinksAndHoverEvents();
+    document.querySelectorAll('.read-aloud-button').forEach(button => {
+      button.addEventListener('click', (event) => {
+        const container = event.target.closest('.shuffled-overview-item').querySelector('.shuffled-overview-content');
+        readAloud(container.textContent);
+      });
+    });
+
+    document.querySelectorAll('.stop-button').forEach(button => {
+      button.addEventListener('click', stopReading);
+    });
+  }
+
+  attachEventListeners(); // 初期のDOMContentLoaded時のイベントリスナーの設定
+
+  async function getVoices() {
+    return new Promise(resolve => {
+      let synth = window.speechSynthesis;
+      let id;
+
+      id = setInterval(() => {
+        if (synth.getVoices().length !== 0) {
+          resolve(synth.getVoices());
+          clearInterval(id);
+        }
+      }, 10);
+    });
+  }
+
+  let voices = [];
+
+  async function readAloud(text) {
+    if (voices.length === 0) {
+      voices = await getVoices();
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ja-JP';
+
+    const voiceName = 'Kyoko';
+    const voice = voices.find(v => v.name.includes(voiceName)) || voices[0];
+    utterance.voice = voice;
+
+    speechSynthesis.speak(utterance);
+  }
+
+  function stopReading() {
+    speechSynthesis.cancel();
+  }
+
+  // コンテンツが動的にロードされた後にイベントリスナーを再設定
+  document.addEventListener('ajax:success', (event) => {
+    attachEventListeners();
+  });
+
+  // タブ切り替え用のスクリプト
+  const tabLinks = document.querySelectorAll('.tab-link');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabLinks.forEach(link => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+
+      // すべてのタブリンクとタブコンテンツを非アクティブに
+      tabLinks.forEach(link => link.classList.remove('active'));
+      tabContents.forEach(content => content.classList.remove('active'));
+
+      // クリックされたタブリンクをアクティブに
+      link.classList.add('active');
+
+      // 対応するタブコンテンツをアクティブに
+      const target = link.dataset.target;
+      const targetContent = document.querySelector(target);
+      if (targetContent) {
+        targetContent.classList.add('active');
+      }
+    });
+  });
+
+  // タブの状態をURLのハッシュに基づいて設定
+  const hash = window.location.hash;
+  if (hash) {
+    const activeTabLink = document.querySelector(`.tab-link[data-target="${hash}-content"]`);
+    if (activeTabLink) {
+      activeTabLink.click();
+    }
+  }
+
+const profileBody = document.querySelector('.timeline-body');
+const scrollDownforwardIndicator = document.querySelector('.scroll-downforward-indicator');
+const scrollUpforwardIndicator = document.querySelector('.scroll-upforward-indicator');
+
+function scrollProfileBody(direction) {
+  if (direction === 'down') {
+    profileBody.scrollBy({
+      top: profileBody.clientHeight, // ビューポートの高さ分スクロール
+      behavior: 'smooth'
+    });
+  } else if (direction === 'up') {
+    profileBody.scrollBy({
+      top: -profileBody.clientHeight, // ビューポートの高さ分スクロールアップ
+      behavior: 'smooth'
+    });
+  }
+}
+
+scrollDownforwardIndicator.addEventListener('click', function () {
+  scrollProfileBody('down');
+});
+
+scrollUpforwardIndicator.addEventListener('click', function () {
+  scrollProfileBody('up');
+});  
+});
+
+function anchorKeeper() {
+  let lastActiveTab = '';
+
+  function setActiveTab() {
+    // URLのクエリパラメータを取得
+    const urlParams = new URLSearchParams(window.location.search);
+    const shuffledOverviewsPage = urlParams.get('shuffled_overviews_page');
+    const bookmarkedShuffledOverviewsPage = urlParams.get('bookmarked_shuffled_overviews_page');
+
+    console.log('shuffledOverviewsPage:', shuffledOverviewsPage);
+    console.log('bookmarkedShuffledOverviewsPage:', bookmarkedShuffledOverviewsPage);
+
+    // デフォルトのタブコンテンツ
+    let hash = '#timeline-shuffled-overviews-content'; // デフォルト値を設定
+
+    // ページネーションの最後にクリックされたものに基づいてタブを設定
+    if (shuffledOverviewsPage) {
+      hash = '#timeline-shuffled-overviews-content';
+      lastActiveTab = 'shuffled';
+    } else if (bookmarkedShuffledOverviewsPage) {
+      hash = '#bookmarked-timeline-shuffled-overviews-content';
+      lastActiveTab = 'bookmarked';
+    } else if (lastActiveTab === 'shuffled') {
+      hash = '#timeline-shuffled-overviews-content';
+    } else if (lastActiveTab === 'bookmarked') {
+      hash = '#bookmarked-timeline-shuffled-overviews-content';
+    }
+
+    console.log('Determined Hash:', hash); // ハッシュ値をログに出力
+
+    // タブリンクとタブコンテンツを取得
+    const tabLinks = document.querySelectorAll('.tab-link');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    // すべてのタブとコンテンツを非アクティブにする
+    tabLinks.forEach(link => link.classList.remove('active'));
+    tabContents.forEach(content => content.classList.remove('active'));
+
+    // ハッシュに一致するタブをアクティブにする
+    const activeTabLink = Array.from(tabLinks).find(link => link.dataset.target === hash);
+    if (activeTabLink) {
+      activeTabLink.classList.add('active');
+      const targetContent = document.querySelector(hash);
+      if (targetContent) {
+        targetContent.classList.add('active');
+      }
+    } else {
+      console.log('No matching tab link found for:', hash);
+    }
+  }
+
+  // 初期ロード時にタブを設定
+  setActiveTab();
+
+  // タブリンクのクリック時にハッシュを設定し、タブをアクティブにする
+  document.querySelectorAll('.tab-link').forEach(link => {
+    link.addEventListener('click', function(event) {
+      event.preventDefault();
+      const target = link.dataset.target;
+      window.location.hash = link.getAttribute('href');
+      console.log('Clicked Link:', link.getAttribute('href'));
+
+      // タブの状態を更新
+      document.querySelectorAll('.tab-link').forEach(link => link.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+      link.classList.add('active');
+      document.querySelector(target).classList.add('active');
+
+      // 最後にクリックされたタブを記録
+      lastActiveTab = target.includes('timeline-shuffled-overviews-content') ? 'shuffled' : 'bookmarked';
+      console.log('Updated lastActiveTab:', lastActiveTab);
+    });
+  });
+
+  // ページネーションのクリック時にタブの状態を維持
+  document.querySelectorAll('.pagination-on-profile a').forEach(paginationLink => {
+    paginationLink.addEventListener('click', function() {
+      // クリックされたリンクのデータ属性を取得
+      const paginationLinkTarget = paginationLink.dataset.target;
+
+      // ページネーションのクリック後にタブを設定
+      setTimeout(() => {
+        if (paginationLinkTarget.includes('bookmarked')) {
+          lastActiveTab = 'bookmarked';
+        } else {
+          lastActiveTab = 'shuffled';
+        }
+        setActiveTab();
+      }, 100); // 遅延を追加してタブの内容が反映されるのを待つ
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", anchorKeeper);
+</script>
+
+<style>
+.timeline {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.shuffled-overview-item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.shuffled-overview-header h2 {
+  font-size: 1.2em;
+  margin: 0;
+}
+
+.shuffled-overview-header p {
+  font-size: 0.8em;
+  color: #888;
+}
+
+.shuffled-overview-content {
+  margin-top: 10px;
+}
+
+.related-movies {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.related-movies .movie {
+  text-align: center;
+  max-width: 100px;
+}
+
+.related-movies .movie img {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.related-movies .movie p {
+  font-size: 0.8em;
+  margin-top: 5px;
+}
+
+</style>

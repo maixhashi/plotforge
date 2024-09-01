@@ -1,0 +1,223 @@
+<div class="content">
+  <div class="shuffled-overview-list">
+    <% @shuffled_overviews_on_timeline.each do |shuffled_overview| %>
+      <div class="shuffled-overview-item">
+        <div class="shuffled-overview-header">
+            <div class="author-info">
+            <% if shuffled_overview.user.avatar? %>
+              <%= link_to mypage_path(shuffled_overview.user), class: "header-link-of-shuffled-overview" do %>
+                <div class="user-avatar-wrapper">
+                  <%= image_tag shuffled_overview.user.avatar.url, class: 'user-avatar' %>
+                  <% if shuffled_overview.user != current_user %>
+                    <div id="<%= shuffled_overview.user.id %>-follow-button-container" class="follow-button-container">
+                      <% if current_user.following?(shuffled_overview.user) %>
+                        <%= render partial: 'follows/unfollow_button', locals: { user: shuffled_overview.user } %>
+                      <% else %>
+                        <%= render partial: 'follows/follow_button', locals: { user: shuffled_overview.user } %>
+                      <% end %>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            <% else %>
+              <%= link_to mypage_path(shuffled_overview.user), class: "header-link-of-shuffled-overview" do %>
+                <div class="user-avatar-wrapper">
+                  <i class="fa fa-user-circle fa-4x"></i>
+                  <% if shuffled_overview.user != current_user %>
+                    <div id="<%= shuffled_overview.user.id %>-follow-button-container" class="follow-button-container">
+                      <% if current_user.following?(shuffled_overview.user) %>
+                        <%= render partial: 'follows/unfollow_button', locals: { user: shuffled_overview.user } %>
+                      <% else %>
+                        <%= render partial: 'follows/follow_button', locals: { user: shuffled_overview.user } %>
+                      <% end %>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="movie-images-container">
+          <div class="movie-images-on-profile">
+            <% shuffled_overview.related_movie_ids.each do |movie_id| %>
+              <% movie = @movies_data[movie_id] %>
+              <div class="movie-image-wrapper">
+                <%= link_to related_movie_path(movie_id) do %>
+                  <img src="https://image.tmdb.org/t/p/w92<%= movie['poster_path'] %>" alt="Movie Poster">
+                <% end %>
+                <div class="movie-bookmark-button-container">
+                  <% if current_user.bookmarked_movies.exists?(tmdb_id: movie_id) %>
+                    <%= render partial: 'related_movies/bookmark_remove_button', locals: { movie_id: movie_id } %>
+                  <% else %>
+                    <%= render partial: 'related_movies/bookmark_add_button', locals: { movie_id: movie_id } %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="shuffled-overview-content" id="shuffled-overview-content-<%= shuffled_overview.id %>">
+          <% sanitized_content = strip_tags(shuffled_overview.content) %>
+          <%= truncate(sanitized_content, length: 200, omission: '...') %>
+          <% if sanitized_content.length > 200 %>
+            <div class="read-more-button" data-id="<%= shuffled_overview.id %>">
+              <i class="fa-solid fa-2x fa-magnifying-glass-plus"></i>
+            </div>
+          <% end %>
+          <div class="shuffled-overview-content-full" id="full-content-<%= shuffled_overview.id %>" style="display: none;">
+            <%= raw shuffled_overview.content %>
+          </div>
+          <div class="shuffled-overview-meta">
+            <p>保存日時: <%= shuffled_overview.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+      
+<style>
+.user-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.user-avatar {
+  display: block;
+  max-width: 100px; /* アイコンの最大幅 */
+  border-radius: 50%; /* アイコンを丸くする */
+}
+
+.follow-button-container {
+  position: absolute;
+  bottom: -15px; /* アイコンの下部からの距離 */
+  right: -5px; /* アイコンの右部からの距離 */
+  z-index: 10; /* アイコンの上に表示するため */
+}
+
+
+.author-info {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #555;
+  margin-right: 10px;
+}
+
+.author-avatar {
+  max-width: 50px;
+  border-radius: 50%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh; /* ビューポートの高さに合わせる */
+}
+
+.shuffled-overview-list {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+
+.shuffled-overview-item {
+  display: flex; /* 横並びにする */
+  align-items: flex-start; /* 上揃え */
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  width: 100%; /* 横幅を100%にして、親コンテナ内での幅を調整 */
+  box-sizing: border-box;
+}
+
+.movie-images-container {
+  display: flex;
+  flex-direction: column; /* 画像を縦に並べる */
+  margin-right: 20px; /* あらすじとの間隔を調整 */
+  position: relative; /* 相対位置に設定 */
+}
+
+.movie-images-on-profile {
+  display: flex; /* 画像を横並びにする */
+  flex-direction: row; /* 画像を縦に並べる */
+  gap: 10px; /* 画像間の間隔 */
+}
+
+.movie-image-wrapper {
+  position: relative; /* 子要素の絶対位置に基づく */
+}
+
+.movie-images img {
+  max-width: 100px; /* 画像の幅を制限 */
+  max-height: 150px; /* 画像の高さを制限 */
+  object-fit: cover; /* 画像が領域に収まるように調整 */
+}
+
+.movie-bookmark-button-container {
+  position: absolute; /* 絶対位置に設定 */
+  bottom: 10px; /* 画像の下部に位置 */
+  right: 10px; /* 画像の右部に位置 */
+  display: flex;
+  gap: 10px; /* ボタン間の間隔 */
+}
+
+.shuffled-overview-content {
+  font-size: 12px;
+  margin-bottom: 10px;
+  flex: 1; /* コンテンツが残りのスペースを占めるようにする */
+}
+
+.shuffled-overview-meta {
+  font-size: 12px;
+  color: #888;
+}
+
+.button-container {
+  text-align: center;
+  gap: 10px;
+}
+
+.movie-link {
+  text-decoration: none;
+  color: black;
+}
+
+.pagination-on-profile {
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const readMoreLinks = document.querySelectorAll('.read-more-button');
+
+  readMoreLinks.forEach(function(link) {
+    link.addEventListener('click', function(event) {
+      event.preventDefault();
+
+      const overviewId = event.currentTarget.dataset.id;
+      const contentElement = document.getElementById(`shuffled-overview-content-${overviewId}`);
+      const fullContentElement = document.getElementById(`full-content-${overviewId}`);
+
+      if (contentElement && fullContentElement) {
+        const fullContent = fullContentElement.innerHTML;
+
+        // 切り詰められたコンテンツを完全なコンテンツに置き換える
+        contentElement.innerHTML = fullContent;
+
+        // 必要に応じて、「もっと見る」ボタンを削除または非表示にする
+        event.currentTarget.style.display = 'none';
+      } else {
+        console.error('Content element or full content element not found');
+      }
+    });
+  });
+});
+
+</script>

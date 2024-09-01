@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'shuffled_overviews/create'
+  get 'timeline/index'
   root 'welcome#index'
 
   get 'login', to: 'sessions#new'  # 追記
