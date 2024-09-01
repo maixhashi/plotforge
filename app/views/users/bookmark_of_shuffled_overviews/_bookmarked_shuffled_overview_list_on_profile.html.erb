@@ -60,16 +60,22 @@
           </div>
         </div>
 
-        <div class="shuffled-overview-content" id="shuffled-overview-content-<%= shuffled_overview.id %>">
-          <%= truncate_without_html_tags(shuffled_overview.content, 50) %>
-          <% if ActionView::Base.full_sanitizer.sanitize(shuffled_overview.content).length > 50 %>
-            <%= link_to 'Read More', '#', class: 'read-more-link', data: { id: shuffled_overview.id } %>
+        <div class="shuffled-overview-content" id="bookmarked-shuffled-overview-content-<%= shuffled_overview.id %>">
+          <% sanitized_content = strip_tags(shuffled_overview.content) %>
+          <%= truncate(sanitized_content, length: 200, omission: '...') %>
+          <% if sanitized_content.length > 200 %>
+            <div class="read-more-button" data-id="<%= shuffled_overview.id %>">
+              <i class="fa-solid fa-2x fa-magnifying-glass-plus"></i>
+            </div>
           <% end %>
-
+          <div class="shuffled-overview-content-full" id="bookmarked-full-content-<%= shuffled_overview.id %>" style="display: none;">
+            <%= raw shuffled_overview.content %>
+          </div>
           <div class="shuffled-overview-meta">
             <p>保存日時: <%= shuffled_overview.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
           </div>
         </div>
+
       </div>
     <% end %>
   </div>
@@ -193,19 +199,29 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const readMoreLinks = document.querySelectorAll('.read-more-link');
+  const readMoreLinks = document.querySelectorAll('.read-more-button');
 
   readMoreLinks.forEach(function(link) {
     link.addEventListener('click', function(event) {
       event.preventDefault();
 
-      const overviewId = event.target.dataset.id;
-      const contentElement = document.getElementById(`shuffled-overview-content-${overviewId}`);
-      const fullContent = event.target.dataset.fullContent;
+      const overviewId = event.currentTarget.dataset.id;
+      const contentElement = document.getElementById(`bookmarked-shuffled-overview-content-${overviewId}`);
+      const fullContentElement = document.getElementById(`bookmarked-full-content-${overviewId}`);
 
-      // 切り詰められたコンテンツを完全なコンテンツに置き換える
-      contentElement.innerHTML = fullContent;
+      if (contentElement && fullContentElement) {
+        const fullContent = fullContentElement.innerHTML;
+
+        // 切り詰められたコンテンツを完全なコンテンツに置き換える
+        contentElement.innerHTML = fullContent;
+
+        // 必要に応じて、「もっと見る」ボタンを削除または非表示にする
+        event.currentTarget.style.display = 'none';
+      } else {
+        console.error('Content element or full content element not found');
+      }
     });
   });
 });
+
 </script>
