@@ -10,7 +10,7 @@ class AvatarsController < ApplicationController
     @user = current_user
 
     if @user.update(user_params)
-      redirect_to profile_path, notice: 'アバターが更新されました。'
+      redirect_to mypage_path, notice: 'アバターが更新されました。'
     else
       render :edit
     end

@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     # サインアップ関連のルーティング（仮定）
   get 'signup', to: 'users#new', as: :signup
   get 'settings', to: 'users#show', as: :settings
-  get 'profile', to: 'users#profile', as: :profile
+  get 'mypage', to: 'users#mypage', as: :mypage
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   resource :avatar, only: [:edit, :update]
