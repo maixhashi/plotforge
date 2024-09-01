@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   skip_before_action :require_login
   helper_method :movie_poster_path
   before_action :set_user
-
+  
   def new
     @user = User.new
   end

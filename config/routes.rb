@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   get 'profile', to: 'users#profile', as: :profile
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
+  resource :avatar, only: [:edit, :update]
+
   resources :follows, only: [:create, :destroy]
   resource :users, only: [] do
     member do
