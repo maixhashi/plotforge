@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
-  get 'timeline/index'
   root 'welcome#index'
+  get 'shuffled_overviews/create'
+  get 'timeline', to: 'timeline#index'
+  resources :timeline, only: [] do
+    get 'update_overviews', on: :collection
+  end
 
   get 'login', to: 'sessions#new'  # 追記
   post 'login', to: 'sessions#create'  # 追記

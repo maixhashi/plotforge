@@ -39,6 +39,17 @@
   </div>
   <div class="tab-content active" id="timeline-shuffled-overviews-content">
     <div class="pagination-on-profile active">
+      <div class="link-icon-container">
+        <div class="search-range-form">
+          <label for="search-range-select" class="search-range-label">検索範囲:</label>
+          <select id="search-range-select" class="search-range-select">
+            <option value="both-overviews">あなたとフォローしたユーザーが作成したあらすじ</option>
+            <option value="my-overviews">あなたが作成したあらすじ</option>
+            <option value="following-user-overviews">フォローしたユーザーが作成したあらすじ</option>
+          </select>
+        </div>
+      </div>
+  
       <div>
         <%= paginate @shuffled_overviews_on_timeline, param_name: :shuffled_overviews_page %>
       </div>
@@ -75,6 +86,27 @@
 </div>
 
 <style>
+.link-icon-container {
+  display: flex;
+  align-items: center;
+}
+
+.search-range-form {
+  display: flex;
+  align-items: center;
+}
+
+.search-range-label {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.search-range-select {
+  padding: 5px;
+  font-size: 16px;
+}
+
+
 /* Kaminari カスタムスタイル */
 
 /* 全体のスタイル */
@@ -620,9 +652,84 @@ function anchorKeeper() {
 }
 
 document.addEventListener("DOMContentLoaded", anchorKeeper);
+
+document.getElementById('search-range-select').addEventListener('change', function() {
+  const selectedValue = this.value;
+
+  fetch(`/timeline/update_overviews?filter=${selectedValue}`, {
+    method: 'GET',
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  })
+  .then(response => response.text())
+  .then(html => {
+    updateTimelineBody(html);
+  })
+  .catch(error => {
+    console.error('エラーが発生しました:', error);
+    showNoRecordsMessage();
+  });
+});
+
+function updateTimelineBody(html) {
+  const timelineBody = document.getElementById('timeline-body');
+  const shuffledOverviewItems = document.querySelectorAll('.shuffled-overview-item');
+
+  // すべての .shuffled-overview-item を非表示にする
+  shuffledOverviewItems.forEach(item => {
+    item.style.display = 'none';
+  });
+
+  if (timelineBody) {
+    timelineBody.innerHTML = html;
+    const newShuffledOverviewItems = document.querySelectorAll('.shuffled-overview-item');
+
+    if (newShuffledOverviewItems.length === 0) {
+      showNoRecordsMessage();
+    } else {
+      hideNoRecordsMessage();
+    }
+  } else {
+    // .timeline-body が存在しない場合に要素を作成
+    const newTimelineBody = document.createElement('div');
+    newTimelineBody.id = 'timeline-body';
+    newTimelineBody.innerHTML = html;
+    document.querySelector('.content').appendChild(newTimelineBody);
+    hideNoRecordsMessage();
+  }
+}
+
+function showNoRecordsMessage() {
+  let noRecordsMessage = document.getElementById('no-records-message');
+
+  if (!noRecordsMessage) {
+    noRecordsMessage = document.createElement('div');
+    noRecordsMessage.id = 'no-records-message';
+    noRecordsMessage.className = 'no-records-message';
+    noRecordsMessage.innerText = 'レコードがありません';
+    document.querySelector('.content').appendChild(noRecordsMessage);
+  } else {
+    noRecordsMessage.style.display = 'block';
+  }
+}
+
+function hideNoRecordsMessage() {
+  const noRecordsMessage = document.getElementById('no-records-message');
+  if (noRecordsMessage) {
+    noRecordsMessage.style.display = 'none';
+  }
+}
 </script>
 
+
 <style>
+.no-records-message {
+  position: absolute;
+  top: 0px;
+}
+
+
 .timeline {
   width: 80%;
   margin: 0 auto;
