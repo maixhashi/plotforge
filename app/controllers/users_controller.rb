@@ -30,7 +30,7 @@ class UsersController < ApplicationController
     end
   end
 
-  def profile
+  def mypage
     @bookmarked_shuffled_overviews = current_user.bookmarked_shuffled_overviews
 
     @shuffled_overviews = current_user.shuffled_overviews

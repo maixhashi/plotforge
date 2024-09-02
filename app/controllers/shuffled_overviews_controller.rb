@@ -145,6 +145,10 @@ end
                           .group("DATE(created_at)")
                           .map { |record| [record.date.to_date, record.count] }
                           .to_h
+
+    @shuffled_overviews_on_timeline = @shuffled_overviews.page(params[:shuffled_overviews_page]).per(5)
+
+
     
     respond_to do |format|
       format.html { render 'users/shuffled_overviews/my_shuffled_overviews' }

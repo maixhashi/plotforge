@@ -11,12 +11,12 @@
     </div>
     <div class="user-info">
       <% if current_user.avatar? %>
-        <%= link_to profile_path, class:"header-link-of-shuffled-overview" do %>
+        <%= link_to mypage_path, class:"header-link-of-shuffled-overview" do %>
           <%= image_tag current_user.avatar.url, class: 'user-avatar' %>
-          <div class="user-name"><%= current_user.name %></div>
+          <div class="user-name-on-header"><%= current_user.name %></div>
         <% end %>
       <% else %>
-        <%= link_to profile_path, class:"header-link-of-shuffled-overview" do %>
+        <%= link_to mypage_path, class:"header-link-of-shuffled-overview" do %>
           <i class="fa fa-user-circle fa-2x"></i>
           <div class="user-name-on-header"><%= current_user.name %></div>
         <% end %>
@@ -39,5 +39,8 @@
     text-align: center;
     text-decoration: none; /* リンクの下線を削除 */
     color: inherit; /* テキストの色を継承 */
+}
+.user-name-on-header {
+  font-size: 18px;
 }
 </style>
