@@ -48,8 +48,18 @@
             <option value="following-user-overviews">フォローしたユーザーが作成したあらすじ</option>
           </select>
         </div>
+        <div class="search-genre-form">
+          <%= form_with url: timeline_path, method: :get, local: true, id: "search-genre-form" do %>
+            <label for="search-genre-select" class="search-genre-label">ジャンル:</label>
+            <select id="search-genre-select" name="genre_id" class="search-genre-select">
+              <% @genres_data.each do |genre_id, genre_name| %>
+                <option value="<%= genre_id %>" <%= 'selected' if params[:genre_id].to_i == genre_id %>><%= genre_name %></option>
+              <% end %>
+            </select>
+          <% end %>
+        </div>
       </div>
-  
+        
       <div>
         <%= paginate @shuffled_overviews_on_timeline, param_name: :shuffled_overviews_page %>
       </div>
@@ -86,9 +96,21 @@
 </div>
 
 <style>
+form#search-genre-form {
+  margin-left: 20px;
+}
+
+select#search-range-select {
+  font-size: 16px;
+}
+select#search-genre-select {
+  font-size: 16px;
+}
+
 .link-icon-container {
   display: flex;
   align-items: center;
+  margin-bottom: 20px;
 }
 
 .search-range-form {
@@ -101,11 +123,10 @@
   margin-left: 10px;
 }
 
-.search-range-select {
+.search-range-select .search-genre-select {
   padding: 5px;
   font-size: 16px;
 }
-
 
 /* Kaminari カスタムスタイル */
 
@@ -401,6 +422,13 @@
 </style>
 
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("search-genre-select").addEventListener("change", function() {
+    document.getElementById("search-genre-form").submit();
+  });
+});
+
+
 document.addEventListener("DOMContentLoaded", () => {
   // Movie info popup
   const popup = document.getElementById('movie-info-popup');
@@ -736,7 +764,6 @@ function hideNoRecordsMessage() {
 }
 
 .shuffled-overview-item {
-  padding: 10px;
   border-bottom: 1px solid #ddd;
 }
 
