@@ -60,6 +60,9 @@
         <div class="shuffled-overview-content" id="shuffled-overview-content-<%= shuffled_overview.id %>">
           <% sanitized_content = strip_tags(shuffled_overview.content) %>
           <%= truncate(sanitized_content, length: 200, omission: '...') %>
+          <div class="shuffled-overview-meta">
+            <p>保存日時: <%= shuffled_overview.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
+          </div>
           <% if sanitized_content.length > 200 %>
             <div class="read-more-button" data-id="<%= shuffled_overview.id %>">
               <i class="fa-solid fa-2x fa-magnifying-glass-plus"></i>
@@ -67,9 +70,14 @@
           <% end %>
           <div class="shuffled-overview-content-full" id="full-content-<%= shuffled_overview.id %>" style="display: none;">
             <%= raw shuffled_overview.content %>
+            <div class="shuffled-overview-meta">
+              <p>保存日時: <%= shuffled_overview.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
+            </div>
           </div>
-          <div class="shuffled-overview-meta">
-            <p>保存日時: <%= shuffled_overview.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
+          <div class="link-icon-to-shuffled-overview-show">
+            <%= link_to user_shuffled_overview_path(current_user, shuffled_overview) do%>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            <% end %>
           </div>
         </div>
       </div>
@@ -122,19 +130,34 @@
   width: 95%;
   height: 100%;
   box-sizing: border-box;
+  margin-top: 10px;
 }
 
 
 .shuffled-overview-item {
+  position: relative; 
   display: flex; /* 横並びにする */
   align-items: flex-start; /* 上揃え */
   margin-bottom: 20px;
-  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: #f9f9f9;
+  padding: 20px;
   width: 100%; /* 横幅を100%にして、親コンテナ内での幅を調整 */
   box-sizing: border-box;
+}
+
+.link-icon-to-shuffled-overview-show {
+  position: absolute;
+  top: 10px; /* Adjust as needed to place the icon slightly away from the top */
+  right: 10px; /* Adjust as needed to place the icon slightly away from the right */
+  font-size: 18px; /* Adjust the size of the icon as needed */
+  cursor: pointer;
+}
+
+.link-icon-to-shuffled-overview-show i {
+  display: block;
+  color: #333; /* Change the color to match your design */
 }
 
 .movie-images-container {

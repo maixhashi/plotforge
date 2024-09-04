@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_25_095114) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_02_214630) do
   create_table "appearance_of_characters", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "character_id", null: false
     t.bigint "shuffled_overview_id", null: false
@@ -102,6 +102,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_25_095114) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.json "related_movie_ids"
+    t.json "related_movie_genres"
     t.index ["user_id"], name: "index_shuffled_overviews_on_user_id"
   end
 
