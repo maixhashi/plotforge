@@ -3,7 +3,7 @@
     <% @shuffled_overviews_on_timeline.each do |shuffled_overview| %>
       <div class="shuffled-overview-item">
         <div class="shuffled-overview-header">
-            <div class="author-info">
+          <div class="author-info">
             <% if shuffled_overview.user.avatar? %>
               <%= link_to mypage_path(shuffled_overview.user), class: "header-link-of-shuffled-overview" do %>
                 <div class="user-avatar-wrapper">
@@ -41,7 +41,7 @@
         <div class="movie-images-container">
           <div class="movie-images-on-profile">
             <% shuffled_overview.related_movie_ids.each do |movie_id| %>
-              <% movie = @movies_data[movie_id] %>
+              <% movie = @movies_data[movie_id][:movie] %>
               <div class="movie-image-wrapper">
                 <%= link_to related_movie_path(movie_id) do %>
                   <img src="https://image.tmdb.org/t/p/w92<%= movie['poster_path'] %>" alt="Movie Poster">
@@ -84,6 +84,7 @@
     <% end %>
   </div>
 </div>
+
       
 <style>
 .user-avatar-wrapper {

@@ -19,12 +19,15 @@ class TimelineController < ApplicationController
       end
     end
 
-    # TMDBから映画の詳細情報を取得
+    # TMDBから映画の詳細情報を取得し、ユーザー情報を追加
     tmdb_service = TmdbService.new
     @movies_data = {}
     @shuffled_overviews.each do |shuffled_overview|
       shuffled_overview.related_movie_ids.each do |movie_id|
-        @movies_data[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
+        @movies_data[movie_id] ||= {
+          movie: tmdb_service.fetch_movie_details(movie_id),
+          user: shuffled_overview.user
+        }
       end
     end
 
