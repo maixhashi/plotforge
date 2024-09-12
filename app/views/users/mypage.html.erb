@@ -108,7 +108,7 @@
               <i class="fas fa-2x fa-calendar" style="color: #2c4c64;"></i>
             </div>
             <div>
-              <%= link_to user_bookmark_of_shuffled_overviews_path(current_user), class:"header-selection-wrapper" do %>
+              <%= link_to '#my_contributions', class:"header-selection-wrapper tab-link", data: { target: "#my-contributions-content" }, onclick: "event.preventDefault(); window.location.href='/mypage#my_contributions';" do %>
                実績
               <% end %>
             </div>
@@ -646,41 +646,46 @@ function anchorKeeper() {
   let lastActiveTab = '';
 
   function setActiveTab() {
-    // URLのクエリパラメータを取得
     const urlParams = new URLSearchParams(window.location.search);
     const shuffledOverviewsPage = urlParams.get('shuffled_overviews_page');
     const bookmarkedShuffledOverviewsPage = urlParams.get('bookmarked_shuffled_overviews_page');
+    const contributionsPage = urlParams.get('contributions_page'); // 新しいパラメータ
 
     console.log('shuffledOverviewsPage:', shuffledOverviewsPage);
     console.log('bookmarkedShuffledOverviewsPage:', bookmarkedShuffledOverviewsPage);
+    console.log('contributionsPage:', contributionsPage); // ログ
 
     // デフォルトのタブコンテンツ
-    let hash = '#my-shuffled-overviews-content'; // デフォルト値を設定
+    let hash = '#my-shuffled-overviews-content';
 
-    // ページネーションの最後にクリックされたものに基づいてタブを設定
+    // URLクエリパラメータや最後にアクティブにしたタブで判断
     if (shuffledOverviewsPage) {
       hash = '#my-shuffled-overviews-content';
       lastActiveTab = 'shuffled';
     } else if (bookmarkedShuffledOverviewsPage) {
       hash = '#bookmarked-my-shuffled-overviews-content';
       lastActiveTab = 'bookmarked';
+    } else if (contributionsPage) { // 新しい条件
+      hash = '#my-contributions-content';
+      lastActiveTab = 'contributions';
     } else if (lastActiveTab === 'shuffled') {
       hash = '#my-shuffled-overviews-content';
     } else if (lastActiveTab === 'bookmarked') {
       hash = '#bookmarked-my-shuffled-overviews-content';
+    } else if (lastActiveTab === 'contributions') { // 新しいタブ状態を保持
+      hash = '#my-contributions-content';
     }
 
-    console.log('Determined Hash:', hash); // ハッシュ値をログに出力
+    console.log('Determined Hash:', hash);
 
-    // タブリンクとタブコンテンツを取得
+    // タブリンクとタブコンテンツを非アクティブに設定
     const tabLinks = document.querySelectorAll('.tab-link');
     const tabContents = document.querySelectorAll('.tab-content');
 
-    // すべてのタブとコンテンツを非アクティブにする
     tabLinks.forEach(link => link.classList.remove('active'));
     tabContents.forEach(content => content.classList.remove('active'));
 
-    // ハッシュに一致するタブをアクティブにする
+    // アクティブなタブとコンテンツを設定
     const activeTabLink = Array.from(tabLinks).find(link => link.dataset.target === hash);
     if (activeTabLink) {
       activeTabLink.classList.add('active');
@@ -696,7 +701,7 @@ function anchorKeeper() {
   // 初期ロード時にタブを設定
   setActiveTab();
 
-  // タブリンクのクリック時にハッシュを設定し、タブをアクティブにする
+  // タブリンクのクリック時にタブをアクティブに
   document.querySelectorAll('.tab-link').forEach(link => {
     link.addEventListener('click', function(event) {
       event.preventDefault();
@@ -712,7 +717,13 @@ function anchorKeeper() {
       document.querySelector(target).classList.add('active');
 
       // 最後にクリックされたタブを記録
-      lastActiveTab = target.includes('my-shuffled-overviews-content') ? 'shuffled' : 'bookmarked';
+      if (target.includes('my-shuffled-overviews-content')) {
+        lastActiveTab = 'shuffled';
+      } else if (target.includes('bookmarked-my-shuffled-overviews-content')) {
+        lastActiveTab = 'bookmarked';
+      } else if (target.includes('my-contributions-content')) { // 新しいタブ
+        lastActiveTab = 'contributions';
+      }
       console.log('Updated lastActiveTab:', lastActiveTab);
     });
   });
@@ -720,21 +731,23 @@ function anchorKeeper() {
   // ページネーションのクリック時にタブの状態を維持
   document.querySelectorAll('.pagination-on-profile a').forEach(paginationLink => {
     paginationLink.addEventListener('click', function() {
-      // クリックされたリンクのデータ属性を取得
+      // ページネーションのクリック後にタブを設定
       const paginationLinkTarget = paginationLink.dataset.target;
 
-      // ページネーションのクリック後にタブを設定
       setTimeout(() => {
-        if (paginationLinkTarget.includes('bookmarked')) {
+        if (paginationLinkTarget && paginationLinkTarget.includes('bookmarked')) {
           lastActiveTab = 'bookmarked';
+        } else if (paginationLinkTarget && paginationLinkTarget.includes('contributions')) { // 新しいタブ
+          lastActiveTab = 'contributions';
         } else {
           lastActiveTab = 'shuffled';
         }
         setActiveTab();
-      }, 100); // 遅延を追加してタブの内容が反映されるのを待つ
+      }, 100); // 遅延を追加して反映を待つ
     });
   });
 }
+
 
 document.addEventListener("DOMContentLoaded", anchorKeeper);
 
