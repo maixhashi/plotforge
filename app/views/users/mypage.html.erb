@@ -118,6 +118,23 @@
           </div>
         </div>
       </li>
+      <li>
+        <div class="bookmarked-shuffled-overview-list">
+          <div class="bookmarked-shuffled-overview-list-title-on-profile">
+            <div class="header-selection-wrapper">
+              <i class="fas fa-2x fa-calendar" style="color: #2c4c64;"></i>
+            </div>
+            <div>
+              <%= link_to mypage_path(current_user), class:"header-selection-wrapper" do %>
+               通知
+              <% end %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-2x fa-calendar" style="color: #2c4c64;"></i>
+            </div>
+          </div>
+        </div>
+      </li>
     </ul>
   </div>
   <div class="tab-content active" id="my-shuffled-overviews-content">
