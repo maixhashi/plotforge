@@ -14,7 +14,13 @@ Rails.application.routes.draw do
     # サインアップ関連のルーティング（仮定）
   get 'signup', to: 'users#new', as: :signup
   get 'settings', to: 'users#show', as: :settings
+
   get 'mypage', to: 'users#mypage', as: :mypage
+  get 'mypage/shuffled_overviews', to: 'users#mypage_shuffled_overviews', as: :mypage_shuffled_overviews
+  get 'mypage/bookmarked_shuffled_overviews', to: 'users#mypage_bookmarked_shuffled_overviews', as: :mypage_bookmarked_shuffled_overviews
+  get 'mypage/my_movies', to: 'users#mypage_my_movies', as: :mypage_my_movies
+  get 'mypage/bookmarked_my_movies', to: 'users#mypage_bookmarked_my_movies', as: :mypage_bookmarked_my_movies
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   resource :avatar, only: [:edit, :update]

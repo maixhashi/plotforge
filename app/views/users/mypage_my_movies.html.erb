@@ -36,7 +36,10 @@
               <i class="fas fa-book-open" style="color: #2c4c64;"></i>
             </div>
             <div>
-              <%= link_to 'あらすじ一覧', mypage_shuffled_overviews_path, class: "header-selection-wrapper tab-link active" %>
+            <%= link_to 'あらすじ一覧', mypage_shuffled_overviews_path, class: "header-selection-wrapper tab-link" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-book-open" style="color: #2c4c64;"></i>
             </div>
           </div>
         </div>
@@ -49,7 +52,11 @@
               <i class="fas fa-heart"></i>
             </div>
             <div>
-              <%= link_to 'いいね (あらすじ)', mypage_bookmarked_shuffled_overviews_path, class: "header-selection-wrapper tab-link" %>
+            <%= link_to 'いいね (あらすじ)', mypage_bookmarked_shuffled_overviews_path, class: "header-selection-wrapper tab-link" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-book-open" style="color: #2c4c64;"></i>
+              <i class="fas fa-heart"></i>
             </div>
           </div>
         </div>
@@ -58,10 +65,13 @@
         <div class="bookmarked-shuffled-overview-list">
           <div class="bookmarked-shuffled-overview-list-title-on-profile">
             <div class="header-selection-wrapper">
-              <i class="fas fa-2x fa-film" style="color: #2c4c64;"></i>
+              <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
             </div>
             <div>
-              <%= link_to '映画一覧', mypage_my_movies_path, class: "header-selection-wrapper tab-link" %>
+            <%= link_to '映画一覧', mypage_my_movies_path, class: "header-selection-wrapper tab-link active" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
             </div>
           </div>
         </div>
@@ -70,11 +80,45 @@
         <div class="bookmarked-shuffled-overview-list">
           <div class="bookmarked-shuffled-overview-list-title-on-profile">
             <div class="header-selection-wrapper">
-              <i class="fas fa-2x fa-film" style="color: #2c4c64;"></i>
+              <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
               <i class="fas fa-heart"></i>
             </div>
             <div>
-              <%= link_to 'いいね (映画)', mypage_bookmarked_my_movies_path, class: "header-selection-wrapper tab-link" %>
+            <%= link_to 'いいね (映画)', mypage_bookmarked_my_movies_path, class: "header-selection-wrapper tab-link" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
+              <i class="fas fa-heart"></i>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="bookmarked-shuffled-overview-list">
+          <div class="bookmarked-shuffled-overview-list-title-on-profile">
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-calendar" style="color: #2c4c64;"></i>
+            </div>
+            <div>
+            <%= link_to '実績', mypage_bookmarked_my_movies_path, class: "header-selection-wrapper tab-link" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-calendar" style="color: #2c4c64;"></i>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="bookmarked-shuffled-overview-list">
+          <div class="bookmarked-shuffled-overview-list-title-on-profile">
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-bell" style="color: #2c4c64;"></i>
+            </div>
+            <div>
+            <%= link_to '通知', mypage_bookmarked_my_movies_path, class: "header-selection-wrapper tab-link" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-bell" style="color: #2c4c64;"></i>
             </div>
           </div>
         </div>
@@ -82,22 +126,14 @@
     </ul>
   </div>
 
-  <div class="tab-content active" id="my-shuffled-overviews-content">
-    <div class="pagination-on-profile active">
-      <div>
-        <%= paginate @shuffled_overviews_on_profile, param_name: :shuffled_overviews_page %>
-      </div>
+
+  <div class="tab-content active" id="my-movies-content">
+    <div class="pagination-on-profile">
     </div>
     <div class="scroll-indicator">
-      <div class="scroll-downforward-indicator">
-        <i class="fas fa-chevron-down scroll-indicator-icon"></i>
-      </div>
-      <div class="scroll-upforward-indicator">
-        <i class="fas fa-chevron-up scroll-indicator-icon"></i>
-      </div>
     </div>
     <div class="profile-body">
-        <%= render partial: 'users/shuffled_overviews/shuffled_overview_list_on_profile', locals: { shuffled_overviews_on_profile: @shuffled_overviews_on_profile } %>
+        <%= render partial: 'users/related_movies/related_movie_list_on_profile', locals: { movies_data: @movies_data } %>
     </div>
   </div>
 </div>
@@ -193,12 +229,7 @@
 
 /* 既存のスタイルはそのまま */
 .tab-content {
-  display: none; /* 初期状態では非表示 */
   min-height: 550px;
-}
-
-.tab-content.active {
-  display: block; /* アクティブなコンテンツを表示 */
 }
 
 /* 他のスタイル */
