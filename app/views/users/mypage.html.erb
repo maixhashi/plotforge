@@ -36,7 +36,10 @@
               <i class="fas fa-book-open" style="color: #2c4c64;"></i>
             </div>
             <div>
-              <%= link_to 'あらすじ一覧', mypage_shuffled_overviews_path, class: "header-selection-wrapper tab-link active" %>
+            <%= link_to 'あらすじ一覧', mypage_shuffled_overviews_user_path(@user), class: "header-selection-wrapper tab-link active" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-book-open" style="color: #2c4c64;"></i>
             </div>
           </div>
         </div>
@@ -49,7 +52,11 @@
               <i class="fas fa-heart"></i>
             </div>
             <div>
-              <%= link_to 'いいね (あらすじ)', mypage_bookmarked_shuffled_overviews_path, class: "header-selection-wrapper tab-link" %>
+            <%= link_to 'いいね (あらすじ)', mypage_bookmarked_shuffled_overviews_user_path(@user), class: "header-selection-wrapper tab-link" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-book-open" style="color: #2c4c64;"></i>
+              <i class="fas fa-heart"></i>
             </div>
           </div>
         </div>
@@ -58,10 +65,13 @@
         <div class="bookmarked-shuffled-overview-list">
           <div class="bookmarked-shuffled-overview-list-title-on-profile">
             <div class="header-selection-wrapper">
-              <i class="fas fa-2x fa-film" style="color: #2c4c64;"></i>
+              <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
             </div>
             <div>
-              <%= link_to '映画一覧', mypage_my_movies_path, class: "header-selection-wrapper tab-link" %>
+            <%= link_to '映画一覧', mypage_my_movies_user_path(@user), class: "header-selection-wrapper tab-link" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
             </div>
           </div>
         </div>
@@ -70,17 +80,52 @@
         <div class="bookmarked-shuffled-overview-list">
           <div class="bookmarked-shuffled-overview-list-title-on-profile">
             <div class="header-selection-wrapper">
-              <i class="fas fa-2x fa-film" style="color: #2c4c64;"></i>
+              <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
               <i class="fas fa-heart"></i>
             </div>
             <div>
-              <%= link_to 'いいね (映画)', mypage_bookmarked_my_movies_path, class: "header-selection-wrapper tab-link" %>
+            <%= link_to 'いいね (映画)', mypage_bookmarked_my_movies_user_path(@user), class: "header-selection-wrapper tab-link" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
+              <i class="fas fa-heart"></i>
             </div>
           </div>
         </div>
       </li>
+      <li>
+        <div class="bookmarked-shuffled-overview-list">
+          <div class="bookmarked-shuffled-overview-list-title-on-profile">
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-calendar" style="color: #2c4c64;"></i>
+            </div>
+            <div>
+            <%= link_to '実績', mypage_bookmarked_my_movies_user_path(@user), class: "header-selection-wrapper tab-link" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-calendar" style="color: #2c4c64;"></i>
+            </div>
+          </div>
+        </div>
+      </li>
+        <li>
+          <div class="bookmarked-shuffled-overview-list">
+            <div class="bookmarked-shuffled-overview-list-title-on-profile">
+              <div class="header-selection-wrapper">
+                <i class="fas fa-1x fa-bell" style="color: #2c4c64;"></i>
+              </div>
+              <div>
+                <%= link_to '通知', mypage_notifications_user_path(@user), class: "header-selection-wrapper tab-link" %>
+              </div>
+              <div class="header-selection-wrapper">
+                <i class="fas fa-1x fa-bell" style="color: #2c4c64;"></i>
+              </div>
+            </div>
+          </div>
+        </li>
     </ul>
   </div>
+
 
   <div class="tab-content active" id="my-shuffled-overviews-content">
     <div class="pagination-on-profile active">

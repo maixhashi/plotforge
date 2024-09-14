@@ -2,7 +2,7 @@
   <% @movies_data.each do |movie_id, movie_data| %>
     <div class="related-movie-image-wrapper">
       <div class="user-avatar">
-        <%= link_to mypage_path(movie_data[:user]) do %>
+        <%= link_to mypage_user_path(movie_data[:user]) do %>
           <%= image_tag movie_data[:user].avatar_url, alt: "User Avatar", class: "avatar-image-on-movie" %>
         <% end %>
       </div>

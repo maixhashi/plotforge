@@ -9,7 +9,7 @@
         </button>
 
         <ul>
-        <li><%= link_to 'マイページ', mypage_path %></li>
+        <li><%= link_to 'マイページ', mypage_user_path(current_user) %></li>
         <li><%= link_to '設定', settings_path %></li>
         <li><%= link_to 'タイムライン', timeline_path %></li>
         <li><%= link_to '作成したあらすじ', shuffled_overviews_path %></li>
