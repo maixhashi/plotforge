@@ -1,7 +1,14 @@
 class UsersController < ApplicationController
   skip_before_action :require_login
   helper_method :movie_poster_path
-  before_action :set_user
+  before_action :set_user, only: [
+    "mypage",
+    "mypage_shuffled_overviews",
+    "mypage_bookmarked_shuffled_overviews",
+    "mypage_my_movies",
+    "mypage_bookmarked_my_movies",
+    "mypage_notifications"
+  ]
   
   def new
     @user = User.new
@@ -125,7 +132,11 @@ class UsersController < ApplicationController
   private
 
   def set_user
-    @user = current_user
+    if params[:user_id]
+      @user = User.friendly.find(params[:user_id])
+    else
+      @user = current_user
+    end
   end
 
   def user_params
