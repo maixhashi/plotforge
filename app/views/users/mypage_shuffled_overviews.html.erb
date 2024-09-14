@@ -1,18 +1,18 @@
 <div class="profile">
   <div class="user-info-on-profile">
-  <% if current_user.avatar? %>
+  <% if @user.avatar? %>
     <%= link_to edit_avatar_path, class:"user-avatar-on-profile" do %>
       <div class="user-avatar-wrapper">
-        <%= image_tag current_user.avatar.url, class: 'user-avatar' %>
+        <%= image_tag @user.avatar.url, class: 'user-avatar' %>
       </div>
-      <div class="user-name"><%= current_user.name %></div>
+      <div class="user-name"><%= @user.name %></div>
     <% end %>
   <% else %>
     <%= link_to edit_avatar_path, class:"user-avatar-on-profile" do %>
       <div class="user-avatar-wrapper">
         <i class="fa fa-user-circle fa-2x"></i>
       </div>
-      <div class="user-name"><%= current_user.name %></div>
+      <div class="user-name"><%= @user.name %></div>
     <% end %>
   <% end %>
   </div>
@@ -20,10 +20,10 @@
   
   <div class="follow-info">
     <div>
-    フォロー：<%= current_user.following.count %>
+    フォロー：<%= @user.following.count %>
     </div>
     <div>
-    フォロワー：<%= current_user.followers.count %>
+    フォロワー：<%= @user.followers.count %>
     </div>
   </div>
 
@@ -36,7 +36,7 @@
               <i class="fas fa-book-open" style="color: #2c4c64;"></i>
             </div>
             <div>
-            <%= link_to 'あらすじ一覧', mypage_shuffled_overviews_path, class: "header-selection-wrapper tab-link active" %>
+            <%= link_to 'あらすじ一覧', mypage_shuffled_overviews_user_path, class: "header-selection-wrapper tab-link active" %>
             </div>
             <div class="header-selection-wrapper">
               <i class="fas fa-book-open" style="color: #2c4c64;"></i>
@@ -52,7 +52,7 @@
               <i class="fas fa-heart"></i>
             </div>
             <div>
-            <%= link_to 'いいね (あらすじ)', mypage_bookmarked_shuffled_overviews_path, class: "header-selection-wrapper tab-link" %>
+            <%= link_to 'いいね (あらすじ)', mypage_bookmarked_shuffled_overviews_user_path, class: "header-selection-wrapper tab-link" %>
             </div>
             <div class="header-selection-wrapper">
               <i class="fas fa-book-open" style="color: #2c4c64;"></i>
@@ -68,7 +68,7 @@
               <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
             </div>
             <div>
-            <%= link_to '映画一覧', mypage_my_movies_path, class: "header-selection-wrapper tab-link" %>
+            <%= link_to '映画一覧', mypage_my_movies_user_path, class: "header-selection-wrapper tab-link" %>
             </div>
             <div class="header-selection-wrapper">
               <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
@@ -84,7 +84,7 @@
               <i class="fas fa-heart"></i>
             </div>
             <div>
-            <%= link_to 'いいね (映画)', mypage_bookmarked_my_movies_path, class: "header-selection-wrapper tab-link" %>
+            <%= link_to 'いいね (映画)', mypage_bookmarked_my_movies_user_path, class: "header-selection-wrapper tab-link" %>
             </div>
             <div class="header-selection-wrapper">
               <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
@@ -100,7 +100,7 @@
               <i class="fas fa-1x fa-calendar" style="color: #2c4c64;"></i>
             </div>
             <div>
-            <%= link_to '実績', mypage_bookmarked_my_movies_path, class: "header-selection-wrapper tab-link" %>
+            <%= link_to '実績', mypage_bookmarked_my_movies_user_path, class: "header-selection-wrapper tab-link" %>
             </div>
             <div class="header-selection-wrapper">
               <i class="fas fa-1x fa-calendar" style="color: #2c4c64;"></i>
@@ -115,7 +115,7 @@
               <i class="fas fa-1x fa-bell" style="color: #2c4c64;"></i>
             </div>
             <div>
-            <%= link_to '通知', mypage_bookmarked_my_movies_path, class: "header-selection-wrapper tab-link" %>
+              <%= link_to '通知', mypage_notifications_user_path, class: "header-selection-wrapper tab-link" %>
             </div>
             <div class="header-selection-wrapper">
               <i class="fas fa-1x fa-bell" style="color: #2c4c64;"></i>

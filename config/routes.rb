@@ -15,11 +15,16 @@ Rails.application.routes.draw do
   get 'signup', to: 'users#new', as: :signup
   get 'settings', to: 'users#show', as: :settings
 
-  get 'mypage', to: 'users#mypage', as: :mypage
-  get 'mypage/shuffled_overviews', to: 'users#mypage_shuffled_overviews', as: :mypage_shuffled_overviews
-  get 'mypage/bookmarked_shuffled_overviews', to: 'users#mypage_bookmarked_shuffled_overviews', as: :mypage_bookmarked_shuffled_overviews
-  get 'mypage/my_movies', to: 'users#mypage_my_movies', as: :mypage_my_movies
-  get 'mypage/bookmarked_my_movies', to: 'users#mypage_bookmarked_my_movies', as: :mypage_bookmarked_my_movies
+  resources :users, param: :user_id do
+    member do
+      get 'mypage', to: 'users#mypage', as: :mypage
+      get 'mypage/shuffled_overviews', to: 'users#mypage_shuffled_overviews', as: :mypage_shuffled_overviews
+      get 'mypage/bookmarked_shuffled_overviews', to: 'users#mypage_bookmarked_shuffled_overviews', as: :mypage_bookmarked_shuffled_overviews
+      get 'mypage/my_movies', to: 'users#mypage_my_movies', as: :mypage_my_movies
+      get 'mypage/bookmarked_my_movies', to: 'users#mypage_bookmarked_my_movies', as: :mypage_bookmarked_my_movies
+      get 'mypage/notifications', to: 'users#mypage_notifications', as: :mypage_notifications
+    end
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -75,7 +80,7 @@ Rails.application.routes.draw do
     resources :movies, only: [:show] do
       post 'bookmark', to: 'bookmark_of_movies#bookmark', as: :bookmark_movie
       delete 'unbookmark', to: 'bookmark_of_movies#unbookmark', as: :unbookmark_movie
-     end
+    end
   end
   
   

@@ -5,7 +5,7 @@
         <div class="shuffled-overview-header">
             <div class="author-info">
             <% if shuffled_overview.user.avatar? %>
-              <%= link_to mypage_path(shuffled_overview.user), class: "header-link-of-shuffled-overview" do %>
+              <%= link_to mypage_user_path(shuffled_overview.user), class: "header-link-of-shuffled-overview" do %>
                 <div class="user-avatar-wrapper">
                   <%= image_tag shuffled_overview.user.avatar.url, class: 'user-avatar' %>
                   <% if shuffled_overview.user != current_user %>
@@ -20,7 +20,7 @@
                 </div>
               <% end %>
             <% else %>
-              <%= link_to mypage_path(shuffled_overview.user), class: "header-link-of-shuffled-overview" do %>
+              <%= link_to mypage_user_path(shuffled_overview.user), class: "header-link-of-shuffled-overview" do %>
                 <div class="user-avatar-wrapper">
                   <i class="fa fa-user-circle fa-4x"></i>
                   <% if shuffled_overview.user != current_user %>
