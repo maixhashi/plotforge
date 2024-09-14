@@ -51,7 +51,6 @@ gem 'httparty'
 gem 'dotenv-rails', groups: [:development, :test]
 gem 'simple_calendar'
 gem 'rails-i18n'
-gem "hashid-rails"
 gem "rails-erd"
 gem 'carrierwave'
 gem 'annotate'
@@ -62,6 +61,8 @@ gem "natto"
 ## pagination
 gem 'kaminari'
 
+
+gem 'friendly_id', '~> 5.5.0'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
