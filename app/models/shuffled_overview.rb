@@ -22,13 +22,13 @@ class ShuffledOverview < ApplicationRecord
 
   def create_notification_bookmark!(current_user)
     # すでに「いいね」されているか検索
-    temp = Notification.where(["visitor_id = ? and visited_id = ? and shuffled_overview_id = ? and action = ? ", current_user.id, user_id, id, 'like'])
+    temp = Notification.where(["visitor_id = ? and visited_id = ? and shuffled_overview_id = ? and action = ? ", current_user.id, user_id, id, 'bookmark-of-shuffled-overview'])
     # いいねされていない場合のみ、通知レコードを作成
     if temp.blank?
       notification = current_user.active_notifications.new(
         shuffled_overview_id: id,
         visited_id: user_id,
-        action: 'bookmark'
+        action: 'bookmark-of-shuffled-overview'
       )
       # 自分の投稿に対するいいねの場合は、通知済みとする
       if notification.visitor_id == notification.visited_id
