@@ -1,0 +1,588 @@
+<div class="profile">
+  <div class="user-info-on-profile">
+  <% if current_user.avatar? %>
+    <%= link_to edit_avatar_path, class:"user-avatar-on-profile" do %>
+      <div class="user-avatar-wrapper">
+        <%= image_tag current_user.avatar.url, class: 'user-avatar' %>
+      </div>
+      <div class="user-name"><%= current_user.name %></div>
+    <% end %>
+  <% else %>
+    <%= link_to edit_avatar_path, class:"user-avatar-on-profile" do %>
+      <div class="user-avatar-wrapper">
+        <i class="fa fa-user-circle fa-2x"></i>
+      </div>
+      <div class="user-name"><%= current_user.name %></div>
+    <% end %>
+  <% end %>
+  </div>
+
+  
+  <div class="follow-info">
+    <div>
+    フォロー：<%= current_user.following.count %>
+    </div>
+    <div>
+    フォロワー：<%= current_user.followers.count %>
+    </div>
+  </div>
+
+  <div class="profile-header">
+    <ul>
+      <li>
+        <div class="bookmarked-shuffled-overview-list">
+          <div class="bookmarked-shuffled-overview-list-title-on-profile">
+            <div class="header-selection-wrapper">
+              <i class="fas fa-book-open" style="color: #2c4c64;"></i>
+            </div>
+            <div>
+            <%= link_to 'あらすじ一覧', mypage_shuffled_overviews_user_path, class: "header-selection-wrapper tab-link" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-book-open" style="color: #2c4c64;"></i>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="bookmarked-shuffled-overview-list">
+          <div class="bookmarked-shuffled-overview-list-title-on-profile">
+            <div class="header-selection-wrapper">
+              <i class="fas fa-book-open" style="color: #2c4c64;"></i>
+              <i class="fas fa-heart"></i>
+            </div>
+            <div>
+            <%= link_to 'いいね (あらすじ)', mypage_bookmarked_shuffled_overviews_user_path, class: "header-selection-wrapper tab-link" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-book-open" style="color: #2c4c64;"></i>
+              <i class="fas fa-heart"></i>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="bookmarked-shuffled-overview-list">
+          <div class="bookmarked-shuffled-overview-list-title-on-profile">
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
+            </div>
+            <div>
+            <%= link_to '映画一覧', mypage_my_movies_user_path, class: "header-selection-wrapper tab-link" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="bookmarked-shuffled-overview-list">
+          <div class="bookmarked-shuffled-overview-list-title-on-profile">
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
+              <i class="fas fa-heart"></i>
+            </div>
+            <div>
+            <%= link_to 'いいね (映画)', mypage_bookmarked_my_movies_user_path, class: "header-selection-wrapper tab-link" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
+              <i class="fas fa-heart"></i>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="bookmarked-shuffled-overview-list">
+          <div class="bookmarked-shuffled-overview-list-title-on-profile">
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-calendar" style="color: #2c4c64;"></i>
+            </div>
+            <div>
+            <%= link_to '実績', mypage_bookmarked_my_movies_user_path, class: "header-selection-wrapper tab-link" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-calendar" style="color: #2c4c64;"></i>
+            </div>
+          </div>
+        </div>
+      </li>
+      <% if @user == current_user %>
+      <li>
+        <div class="bookmarked-shuffled-overview-list">
+          <div class="bookmarked-shuffled-overview-list-title-on-profile">
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-bell" style="color: #2c4c64;"></i>
+            </div>
+            <div>
+              <%= link_to '通知', mypage_notifications_user_path, class: "header-selection-wrapper tab-link active" %>
+            </div>
+            <div class="header-selection-wrapper">
+              <i class="fas fa-1x fa-bell" style="color: #2c4c64;"></i>
+            </div>
+          </div>
+        </div>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+
+
+  <div class="tab-content active" id="my-shuffled-overviews-content">
+    <div class="pagination-on-profile active">
+      <div>
+        <%= paginate @notifications_on_mypage, param_name: :notifications_page %>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <div class="scroll-downforward-indicator">
+        <i class="fas fa-chevron-down scroll-indicator-icon"></i>
+      </div>
+      <div class="scroll-upforward-indicator">
+        <i class="fas fa-chevron-up scroll-indicator-icon"></i>
+      </div>
+    </div>
+    <div class="profile-body">
+        <%= render partial: 'users/notifications/notification_list_on_mypage', locals: { notifications_on_mypage: @notifications_on_mypage } %>
+    </div>
+  </div>
+</div>
+
+<div id="movie-info-popup" class="hidden">
+  <div id="popup-title"></div>
+  <img id="popup-image" src="" alt="Movie Image">
+</div>
+
+
+<style>
+.notification-badge {
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.unread {
+  font-weight: bold;
+}
+
+
+/* Kaminari カスタムスタイル */
+
+/* 全体のスタイル */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  list-style: none;
+  padding: 0;
+  text-decoration: none;
+}
+
+.pagination a {
+  display: flex;
+  text-decoration: none;
+  justify-content: center;
+  color: black;
+}
+
+/* ページリンクのスタイル */
+.pagination .page {
+  margin: 0 5px;
+  padding: 10px 15px;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  color: #333;
+  background-color: #f9f9f9;
+}
+
+/* 現在のページのスタイル */
+.pagination .current {
+  background-color: #007bff;
+  color: #fff;
+  border: 1px solid #007bff;
+  font-weight: bold;
+}
+
+/* 無効なリンクのスタイル */
+.pagination .disabled {
+  color: #aaa;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+/* その他のリンクのスタイル */
+.pagination .first,
+.pagination .last,
+.pagination .prev,
+.pagination .next {
+  background-color: #f1f1f1;
+  width: 40px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination .first:hover,
+.pagination .last:hover,
+.pagination .prev:hover,
+.pagination .next:hover {
+  background-color: #e1e1e1;
+}
+
+.tab-link.active {
+  position: relative; /* 擬似要素のために必要 */
+  color: black; /* リンクの色 */
+}
+
+.tab-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0; /* リンクの下部に配置 */
+  left: 0;
+  width: 100%;
+  height: 2px; /* ボーダーの高さ */
+  background-color: blue; /* 青線の色 */
+  border-radius: 0; /* ボーダーの丸みをなくす */
+  z-index: 1; /* ボーダーがリンクの下に表示されないように */
+}
+
+/* 既存のスタイルはそのまま */
+.tab-content {
+  min-height: 550px;
+}
+
+.tab-content.active {
+}
+
+/* 他のスタイル */
+.bookmarked-shuffled-overview-list {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column; /* 縦並びにする */
+  width: 100%; /* 横幅を調整 */
+  box-sizing: border-box;
+}
+
+.bookmarked-shuffled-overview-list-title-on-profile {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.header-selection-wrapper {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+
+  .fa-heart {
+    color: red; /* アイコンの色を赤に変更（任意） */
+    font-size: 14px; /* アイコンのサイズを調整（任意） */
+    vertical-align: middle; /* テキストとアイコンを垂直方向に中央揃え */
+  }
+}
+
+.profile {
+  position: relative; /* 絶対配置から相対配置に変更 */
+  top: 20px;
+  left: 10px;
+  width: calc(100%); /* 画面幅いっぱいに広げる（左マージンの10px分を考慮） */
+//  overflow-y: auto;
+  padding-bottom: 100px;
+}
+
+.user-info-on-profile {
+  z-index: ;
+  display: flex;
+  justify-content: space-between; /* アバターとフォロー情報を左右に配置 */
+  align-items: center;
+}
+
+.follow-info {
+  display: flex;
+  flex-direction: row;
+  text-align: right;
+  position: absolute;
+  top: 0;
+  right: 30px;
+  gap: 30px;
+}
+
+.user-avatar-on-profile {
+  display: flex;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.user-avatar-wrapper {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.user-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.user-name {
+  font-size: 1.5rem;
+}
+
+.profile-contents {
+  margin-top: 20px;
+}
+
+.profile-header {
+  position: relative;
+  width: 100%;
+  background-color: #f8f8f8;
+  box-sizing: border-box;
+  top: -20px;
+}
+
+.profile-header ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: flex-start;
+  gap: 75px;
+  margin-left: 50px;
+  align-items: center;
+}
+
+.profile-header li {
+  font-size: 1.2rem;
+}
+
+.profile-header a {
+  text-decoration: none;
+  color: black;
+  border-radius: 20px; /* 丸みを帯びたボタン風 */
+  position: relative; /* 擬似要素の位置を調整するために必要 */
+  transition: background-color 0.3s ease;
+}
+
+.profile-header a.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px; /* ボーダーをリンクの下に配置 */
+  left: 0;
+  width: 100%;
+  height: 6px; /* ボーダーの高さ */
+  background: rgba(0, 0, 255, 0.5); /* グレーの蛍光ペン風の色 */
+  box-shadow: 0 0 4px rgba(0, 0, 255, 0.2); /* 蛍光ペン風の影 */
+  border-radius: 0; /* 丸みをなくす */
+}
+
+.profile-header a:hover {
+  background-color: #f0f0f0; /* ホバー時の背景色変更 */
+}
+
+.profile-body {
+  position: relative; /* Ensure the profile-body is the reference point for absolute positioning */
+  border: 1px solid #ccc; /* Example border for visual reference */
+  /* Other styles */
+  overflow: auto; /* または scroll */
+  height: 100%; /* 定義された高さが必要です */
+}
+
+.scroll-downforward-indicator {
+  position: absolute;
+  width: 40px; /* Width and height for the circular indicators */
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(128, 128, 128, 0.4); /* Semi-transparent background */
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 50%; /* Round shape */
+  cursor: pointer; /* Pointer cursor on hover */
+  top: 140px; /* Position from the top edge */
+  right: 100px; /* Position from the right edge */
+  z-index: 5;
+}
+
+.scroll-upforward-indicator {
+  position: absolute;
+  width: 40px; /* Width and height for the circular indicators */
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(128, 128, 128, 0.4); /* Semi-transparent background */
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 50%; /* Round shape */
+  cursor: pointer; /* Pointer cursor on hover */
+  top: 140px; /* Position from the top edge */
+  right: 50px; /* Position from the right edge */
+  z-index: 5;
+}
+
+.scroll-indicator-icon {
+  font-size: 20px; /* Adjust icon size */
+}
+
+.hidden {
+  display: none; /* Hide the indicator initially */
+}
+
+
+#movie-info-popup {
+  position: absolute;
+  display: none;
+  background-color: white;
+  border: 1px solid black;
+  padding: 10px;
+  z-index: 1000;
+  max-width: 300px;
+  max-height: 200px;
+  overflow: hidden;
+}
+
+#popup-image {
+  max-width: 100%;
+  max-height: 150px;
+  display: block;
+}
+
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Movie info popup
+  const popup = document.getElementById('movie-info-popup');
+  const popupTitle = document.getElementById('popup-title');
+  const popupImage = document.getElementById('popup-image');
+
+  function enableLinksAndHoverEvents() {
+    document.querySelectorAll('.movie-link').forEach(link => {
+      link.addEventListener('mouseover', (event) => {
+        const movieInfo = event.target.dataset.movieInfo;
+        const movieImage = event.target.dataset.movieImage;
+        popupTitle.textContent = movieInfo;
+        popupImage.src = movieImage;
+
+        popup.style.display = 'block';
+
+        let top = event.clientY + window.scrollY + 10;
+        let left = event.clientX + window.scrollX + 10;
+
+        const popupWidth = popup.offsetWidth;
+        const popupHeight = popup.offsetHeight;
+
+        if (left + popupWidth > window.innerWidth + window.scrollX) {
+          left = window.innerWidth + window.scrollX - popupWidth - 10;
+        }
+
+        if (top + popupHeight > window.innerHeight + window.scrollY) {
+          top = window.innerHeight + window.scrollY - popupHeight - 10;
+        }
+
+        popup.style.top = `${top}px`;
+        popup.style.left = `${left}px`;
+      });
+
+      link.addEventListener('mouseout', () => {
+        popup.style.display = 'none';
+      });
+    });
+  }
+
+  function attachEventListeners() {
+    enableLinksAndHoverEvents();
+    document.querySelectorAll('.read-aloud-button').forEach(button => {
+      button.addEventListener('click', (event) => {
+        const container = event.target.closest('.shuffled-overview-item').querySelector('.shuffled-overview-content');
+        readAloud(container.textContent);
+      });
+    });
+
+    document.querySelectorAll('.stop-button').forEach(button => {
+      button.addEventListener('click', stopReading);
+    });
+  }
+
+  attachEventListeners(); // 初期のDOMContentLoaded時のイベントリスナーの設定
+
+  async function getVoices() {
+    return new Promise(resolve => {
+      let synth = window.speechSynthesis;
+      let id;
+
+      id = setInterval(() => {
+        if (synth.getVoices().length !== 0) {
+          resolve(synth.getVoices());
+          clearInterval(id);
+        }
+      }, 10);
+    });
+  }
+
+  let voices = [];
+
+  async function readAloud(text) {
+    if (voices.length === 0) {
+      voices = await getVoices();
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ja-JP';
+
+    const voiceName = 'Kyoko';
+    const voice = voices.find(v => v.name.includes(voiceName)) || voices[0];
+    utterance.voice = voice;
+
+    speechSynthesis.speak(utterance);
+  }
+
+  function stopReading() {
+    speechSynthesis.cancel();
+  }
+
+  // コンテンツが動的にロードされた後にイベントリスナーを再設定
+  document.addEventListener('ajax:success', (event) => {
+    attachEventListeners();
+  });
+
+const profileBody = document.querySelector('.profile-body');
+const scrollDownforwardIndicator = document.querySelector('.scroll-downforward-indicator');
+const scrollUpforwardIndicator = document.querySelector('.scroll-upforward-indicator');
+
+function scrollProfileBody(direction) {
+  if (direction === 'down') {
+    profileBody.scrollBy({
+      top: profileBody.clientHeight, // ビューポートの高さ分スクロール
+      behavior: 'smooth'
+    });
+  } else if (direction === 'up') {
+    profileBody.scrollBy({
+      top: -profileBody.clientHeight, // ビューポートの高さ分スクロールアップ
+      behavior: 'smooth'
+    });
+  }
+}
+
+scrollDownforwardIndicator.addEventListener('click', function () {
+  scrollProfileBody('down');
+});
+
+scrollUpforwardIndicator.addEventListener('click', function () {
+  scrollProfileBody('up');
+});  
+});
+
+document.addEventListener("DOMContentLoaded", anchorKeeper);
+
+</script>
