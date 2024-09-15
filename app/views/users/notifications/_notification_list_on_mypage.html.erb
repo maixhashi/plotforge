@@ -1,0 +1,9 @@
+<!-- 自分の投稿に対するいいね、コメントは通知に表示しない -->
+<% notifications = @notifications_on_mypage.where.not(visitor_id: current_user.id) %>
+
+<% if notifications.exists? %>
+  <%= render partial: 'users/notifications/notification', collection: notifications %>
+  <%= paginate notifications, param_name: :notifications_page %>
+<% else %>
+  <p>通知はありません</p>
+<% end %>
