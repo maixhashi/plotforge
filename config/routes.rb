@@ -27,6 +27,10 @@ Rails.application.routes.draw do
     member do
       get 'movies/:movie_id', to: 'related_movies#show', as: :movie
     end
+    member do
+      get 'followings', to: 'follows#index_followings', as: :followings
+      get 'followers', to: 'follows#index_followers', as: :followers
+    end
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
