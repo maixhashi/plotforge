@@ -1,0 +1,10 @@
+<%= link_to 'フォローを解除する', follow_path(Follow.find_by(follower_id: current_user.id, followed_id: user.id)), method: :delete, remote: true, class: 'btn btn-primary formal-btn-unfollow' %>
+
+
+<style>
+.formal-btn-unfollow {
+  border: none;
+  background-color:  #ffb5b5;
+  cursor: pointer;
+}
+</style>
