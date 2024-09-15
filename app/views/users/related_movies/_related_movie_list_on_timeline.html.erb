@@ -2,8 +2,14 @@
   <% @movies_data.each do |movie_id, movie_data| %>
     <div class="related-movie-image-wrapper">
       <div class="user-avatar">
-        <%= link_to mypage_user_path(movie_data[:user]) do %>
-          <%= image_tag movie_data[:user].avatar_url, alt: "User Avatar", class: "avatar-image-on-movie" %>
+        <% if movie_data[:user].avatar? %>
+          <%= link_to mypage_user_path(movie_data[:user]), class:"avatar-image-on-movie" do %>
+            <%= image_tag movie_data[:user].avatar.url, class: 'user-avatar' %>
+          <% end %>
+        <% else %>
+          <%= link_to mypage_user_path(movie_data[:user]), class:"avatar-image-on-movie" do %>
+            <i class="fa fa-user-circle fa-2x"></i>
+          <% end %>
         <% end %>
       </div>
       <%= link_to related_movie_path(movie_id) do %>
@@ -27,6 +33,7 @@
   position: absolute;
   z-index: 100;
   border-radius: 50%;
+  color: black;
 }
 
 .related-movie-image-wrapper {
