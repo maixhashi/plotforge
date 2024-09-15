@@ -4,4 +4,6 @@ class Movie < ApplicationRecord
 
   has_many :bookmark_of_movies, dependent: :destroy
   has_many :bookmarked_by_users, through: :bookmark_of_movies, source: :user
+
+  has_many :notifications, dependent: :destroy
 end
