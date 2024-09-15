@@ -1,57 +1,131 @@
 <% visitor = notification.visitor %>
 <% visited = notification.visited %>
 
-<div class="content">
-  <div class="shuffled-overview-list">
-    <div class="shuffled-overview-item">
+<div class="notification-item">
+  <% if visitor.avatar? %>
+    <%= link_to mypage_user_path(visitor), class:"notification-visitor-link" do %>
+      <%= image_tag current_user.avatar.url, class: 'user-avatar' %><%= visitor.name %>
+    <% end %>
+  <% else %>
+    <%= link_to mypage_user_path(visitor), class:"notification-visitor-link" do %>
+      <i class="fa fa-user-circle fa-2x vistor-icon-on-notification"></i>
+    <% end %>
+    <%= link_to mypage_user_path(visitor), class:"notification-visitor-link" do %>
+      <%= visitor.name %>
+    <% end %>
+  <% end %>
 
-      <span>
-        <div class="shuffled-overview-content">
-          <%= link_to mypage_user_path(visitor) do %>
-            <%= image_tag avatar_url(visitor).to_s, class: "icon_mini" %>
-            <strong>
-              <%= visitor.name %>
-            </strong>
-          <% end %>
-          さんが
-    
-          <% case notification.action %>
-          <% when 'follow' %>
-            あなたをフォローしました
-          <% when 'bookmark' %>
-            <%= link_to 'あなたの作成したあらすじ', user_shuffled_overview_path(current_user, notification.shuffled_overview), style: "font-weight: bold;" %>
-            にいいねしました
-          <% when 'comment' %>
-            <% if notification.shuffled_overview.user_id == visited.id %>
-              <%= link_to "あなたの投稿", notification.shuffled_overview, style: "font-weight: bold;" %>
-            <% else %>
-              <span>
-                <%= link_to post_path(notification.shuffled_overview) do %>
-                  <%= image_tag avatar_url(notification.shuffled_overview.user).to_s, class: "icon_mini" %>
-                  <strong>
-                    <%= notification.shuffled_overview.user.name + 'さんの投稿' %>
-                  </strong>
-                <% end %>
-              </span>
-            <% end %>
-            にコメントしました
-            <p class="text-muted mb-0">
-              <%= Comment.find_by(id: notification.comment_id)&.comment %>
-            </p>
+  さんが
+
+<% case notification.action %>
+  <% when 'follow' %>
+    あなたをフォローしました
+  <% when 'bookmark-of-shuffled-overview' %>
+    <% if notification.shuffled_overview.present? %>
+      <%= link_to 'あなたの作成したあらすじ', user_shuffled_overview_path(current_user, notification.shuffled_overview), style: "font-weight: bold; text-decoration: none; color: gray;" %>
+      にいいねしました
+    <% else %>
+      あなたの作成したあらすじにいいねしました
+    <% end %>
+    <div class="notification-meta">
+      <%= time_ago_in_words(notification.created_at).upcase %>
+    </div>
+    <div class="shuffled-overview-item">
+      <div class="shuffled-overview-header">
+      </div>
+
+      <div class="movie-images-container">
+        <div class="movie-images-on-profile">
+          <% notification.shuffled_overview.related_movie_ids.each do |movie_id| %>
+            <% movie = @movies_data_related_of_shuffled_overviews[movie_id] %>
+            <div class="movie-image-wrapper">
+              <%= link_to user_movie_path(current_user, movie_id) do %>
+               <img src="https://image.tmdb.org/t/p/w92<%= movie['poster_path'] %>" alt="Movie Poster">
+              <% end %>
+            </div>
           <% end %>
         </div>
-      </span>
-        
-        
+      </div>
+      <div class="shuffled-overview-content" id="shuffled-overview-content-<%= notification.shuffled_overview.id %>">
+        <% sanitized_content = strip_tags(notification.shuffled_overview.content) %>
+        <%= truncate(sanitized_content, length: 100, omission: '...') %>
         <div class="shuffled-overview-meta">
-          <%= time_ago_in_words(notification.created_at).upcase %>
+          <p>保存日時: <%= notification.shuffled_overview.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
+        </div>
+        <div class="link-icon-to-shuffled-overview-show">
+          <%= link_to user_shuffled_overview_path(current_user, notification.shuffled_overview) do%>
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          <% end %>
         </div>
       </div>
     </div>
-  </div>
+
+  <% when 'bookmark-of-movie' %>
+    <% if notification.movie_id.present? %>
+      <%= link_to 'あなたの映画', user_movie_path(current_user, notification.movie_id), style: "font-weight: bold; text-decoration: none; color: gray;" %>
+      にいいねしました
+    <% else %>
+      あなたの映画にいいねしました
+    <% end %>
+    <div class="notification-meta">
+      <%= time_ago_in_words(notification.created_at).upcase %>
+    </div>
+
+    <% if notification.movie_id.present? %>
+      <% movie = @movies_data[notification.movie_id] %>
+        <div class="movie-poster-on-notification">
+          <%= link_to user_movie_path(visitor, notification.movie_id) do %>
+          <img src="https://image.tmdb.org/t/p/w92<%= movie['poster_path'] %>" alt="Movie Poster">
+        </div>
+      <% end %>
+    <% end %>
+
+  <% when 'comment' %>
+    <% if notification.shuffled_overview.user_id == visited.id %>
+      <%= link_to "あなたの投稿", notification.shuffled_overview, style: "font-weight: bold; text-decoration: none; color: gray;" %>
+    <% else %>
+      <span>
+        <%= link_to post_path(notification.shuffled_overview) do %>
+          <%= image_tag avatar_url(notification.shuffled_overview.user).to_s, class: "icon_mini" %>
+          <strong>
+            <%= notification.shuffled_overview.user.name + 'さんの投稿' %>
+          </strong>
+        <% end %>
+      </span>
+    <% end %>
+    にコメントしました
+    <p class="text-muted mb-0">
+      <%= Comment.find_by(id: notification.comment_id)&.comment %>
+    </p>
+  <% end %>
 </div>
+
       
 <style>
+.notification-meta {
+  font-size: 8pt;
+  color: gray;
+  margin-left: 10pt;
+}
+
+
+.movie-poster-on-notification {
+  margin-left: 50pt;
+}
+
+.vistor-icon-on-notification{
+  position: relative;
+  top: 4pt;
+  margin-right: 2pt;
+  margin-bottom: 4pt;
+}
+
+.notification-visitor-link {
+  text-decoration: none;
+  color: gray;
+  font-weight: bold;
+}
+
 .user-avatar-wrapper {
   position: relative;
   display: inline-block;
@@ -87,29 +161,44 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh; /* ビューポートの高さに合わせる */
+//  height: 100vh; /* ビューポートの高さに合わせる */
 }
 
 .shuffled-overview-list {
   display: flex;
   flex-direction: column;
   width: 95%;
-  height: 100%;
+//  height: 100%;
   box-sizing: border-box;
   margin-top: 10px;
 }
 
 
-.shuffled-overview-item {
-  position: relative; 
-  align-items: flex-start; /* 上揃え */
+.notification-item {
+  position: relative;
+  align-items: center;
   margin-bottom: 20px;
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: #f9f9f9;
   padding: 20px;
-  width: 100%; /* 横幅を100%にして、親コンテナ内での幅を調整 */
+  width: 100%;
   box-sizing: border-box;
+  display: flex;
+}
+
+.shuffled-overview-item {
+  position: relative;
+  left: 50px;
+  align-items: center;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  padding: 20px;
+  width: 50%;
+  box-sizing: border-box;
+  display: flex;
 }
 
 .link-icon-to-shuffled-overview-show {
