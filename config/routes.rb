@@ -24,6 +24,9 @@ Rails.application.routes.draw do
       get 'mypage/bookmarked_my_movies', to: 'users#mypage_bookmarked_my_movies', as: :mypage_bookmarked_my_movies
       get 'mypage/notifications', to: 'users#mypage_notifications', as: :mypage_notifications
     end
+    member do
+      get 'movies/:movie_id', to: 'related_movies#show', as: :movie
+    end
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

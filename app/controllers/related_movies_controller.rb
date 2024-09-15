@@ -35,7 +35,8 @@ class RelatedMoviesController < ApplicationController
 
   def show
     tmdb_service = TmdbService.new
-    @related_movie = tmdb_service.fetch_movie_details(params[:id])
+    @related_movie = tmdb_service.fetch_movie_details(params[:id])     if params[:id]
+    @related_movie = tmdb_service.fetch_movie_details(params[:movie_id])     if params[:movie_id]
     Rails.logger.debug "RelatedMovie details: #{@related_movie}"
   end
 
