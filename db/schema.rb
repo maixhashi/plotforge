@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_13_153058) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_15_112912) do
   create_table "appearance_of_characters", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "character_id", null: false
     t.bigint "shuffled_overview_id", null: false
@@ -129,6 +129,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_13_153058) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.string "avatar"
+    t.string "profile_sentence"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

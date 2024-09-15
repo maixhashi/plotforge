@@ -1,0 +1,12 @@
+<%= link_to 'フォローする' follows_path(followed_id: user.id), method: :post, remote: true, class: 'btn follow-button' do %>
+<% end %>
+
+<style>
+.follow-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color:  black;
+  cursor: pointer;
+}
+</style>

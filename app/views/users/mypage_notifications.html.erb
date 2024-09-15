@@ -17,16 +17,15 @@
   <% end %>
   </div>
 
-  
   <div class="follow-info">
     <div>
-    フォロー：<%= current_user.following.count %>
+      <%= link_to "フォロー：#{@user.following.count}", followings_user_path(@user), class: "link-to-index-following active" %>
     </div>
     <div>
-    フォロワー：<%= current_user.followers.count %>
+      <%= link_to "フォロワー：#{@user.followers.count}", followers_user_path(@user), class: "link-to-index-followers" %>
     </div>
   </div>
-
+  
   <div class="profile-header">
     <ul>
       <li>
@@ -156,6 +155,27 @@
 
 
 <style>
+.following-info {
+
+}
+.link-to-index-following {
+  text-decoration: none;
+  color: black;
+  border-radius: 5px;
+}
+.link-to-index-followers {
+  text-decoration: none;
+  color: black;
+  border-radius: 5px;
+}
+.link-to-index-following:hover {
+  background-color: #e1e1e1;
+}
+.link-to-index-followers:hover {
+  background-color: #e1e1e1;
+}
+
+
 .notification-badge {
   background-color: red;
   color: white;
@@ -428,6 +448,10 @@
   top: 140px; /* Position from the top edge */
   right: 50px; /* Position from the right edge */
   z-index: 5;
+}
+.scroll-indicator {
+  position: relative;
+  top: -160px;
 }
 
 .scroll-indicator-icon {

@@ -23,7 +23,7 @@
       <%= link_to "フォロー：#{@user.following.count}", followings_user_path(@user), class: "link-to-index-following active" %>
     </div>
     <div>
-      <%= link_to "フォロワー：#{@user.followers.count}", followers_user_path(@user), class: "link-to-index-followers" %>
+      <%= link_to "フォロワー：#{@user.followers.count}", followers_user_path(@user), class: "link-to-index-followers active" %>
     </div>
   </div>
 
@@ -68,7 +68,7 @@
               <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
             </div>
             <div>
-            <%= link_to '映画一覧', mypage_my_movies_user_path, class: "header-selection-wrapper tab-link active" %>
+            <%= link_to '映画一覧', mypage_my_movies_user_path, class: "header-selection-wrapper tab-link" %>
             </div>
             <div class="header-selection-wrapper">
               <i class="fas fa-1x fa-film" style="color: #2c4c64;"></i>
@@ -128,12 +128,13 @@
 
 
   <div class="tab-content active" id="my-movies-content">
-    <div class="pagination-on-profile">
+   <div class="pagination-on-profile active">
+      <%= paginate @followers, param_name: :followers_page %>
     </div>
     <div class="scroll-indicator">
     </div>
     <div class="profile-body">
-        <%= render partial: 'users/related_movies/related_movie_list_on_profile', locals: { movies_data: @movies_data } %>
+      <%= render partial: 'follows/follower_list_on_mypage', locals: { followers: @followers } %>
     </div>
   </div>
 </div>
@@ -156,6 +157,7 @@
 .link-to-index-followers {
   text-decoration: none;
   color: black;
+  background-color: #D3DEF1;
   border-radius: 5px;
 }
 .link-to-index-following:hover {
@@ -164,7 +166,6 @@
 .link-to-index-followers:hover {
   background-color: #e1e1e1;
 }
-
 
 /* Kaminari カスタムスタイル */
 
@@ -424,11 +425,11 @@
   right: 50px; /* Position from the right edge */
   z-index: 5;
 }
+
 .scroll-indicator {
   position: relative;
   top: -160px;
 }
-
 .scroll-indicator-icon {
   font-size: 20px; /* Adjust icon size */
 }
