@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   root 'welcome#index'
   get 'shuffled_overviews/create'
   get 'timeline', to: 'timeline#index'
+  get 'timeline/shuffled_overviews', to: 'timeline#timeline_shuffled_overviews', as: :timeline_shuffled_overviews
+  get 'timeline/movies', to: 'timeline#timeline_movies', as: :timeline_movies
   resources :timeline, only: [] do
     get 'update_overviews', on: :collection
   end
