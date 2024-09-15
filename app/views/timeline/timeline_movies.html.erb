@@ -8,7 +8,7 @@
               <i class="fas fa-book-open" style="color: #2c4c64;"></i>
             </div>
             <div>
-              <%= link_to timeline_shuffled_overviews_path, class: "header-selection-wrapper tab-link active" do %>
+              <%= link_to timeline_shuffled_overviews_path, class: "header-selection-wrapper tab-link" do %>
                 あらすじ
               <% end %>
             </div>
@@ -25,7 +25,7 @@
               <i class="fas fa-2x fa-film" style="color: #2c4c64;"></i>
             </div>
             <div>
-              <%= link_to timeline_movies_path, class: "header-selection-wrapper tab-link" do %>
+              <%= link_to timeline_movies_path, class: "header-selection-wrapper tab-link active" do %>
                 映画
               <% end %>
             </div>
@@ -37,31 +37,7 @@
       </li>
     </ul>
   </div>
-  <div class="tab-content active" id="timeline-shuffled-overviews-content">
-    <div class="pagination-on-profile active">
-      <div class="link-icon-container">
-      </div>
-        
-      <div>
-        <%= paginate @shuffled_overviews_on_timeline, param_name: :shuffled_overviews_page %>
-      </div>
-    </div>
-    <div class="scroll-indicator">
-      <div class="scroll-downforward-indicator">
-        <i class="fas fa-chevron-down scroll-indicator-icon"></i>
-      </div>
-      <div class="scroll-upforward-indicator">
-        <i class="fas fa-chevron-up scroll-indicator-icon"></i>
-      </div>
-    </div>
-    <div class="timeline-body">
-        <%= render partial: 'users/shuffled_overviews/shuffled_overview_list_on_timeline', locals: { shuffled_overviews_on_timeline: @shuffled_overviews_on_timeline } %>
-    </div>
-    <div id="no-records-message" class="no-records-message" style="display: none;">
-      レコードがありません
-    </div>
-  </div>
-  <div class="tab-content" id="timeline-movies-content">
+  <div class="tab-content active" id="timeline-movies-content">
     <div class="pagination-on-profile">
     </div>
     <div class="scroll-indicator">
