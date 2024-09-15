@@ -128,10 +128,30 @@ class UsersController < ApplicationController
   end
 
   def mypage_notifications
-    @notifications_on_mypage = @user.passive_notifications.page(params[:notifications_page]).per(20)
+    @notifications_on_mypage = @user.passive_notifications.page(params[:notifications_page]).per(10)
+    Rails.logger.debug "@notifications_on_mypage: #{@notifications_on_mypage.inspect}"
+    Rails.logger.debug "notifications: #{@notifications_on_mypage.where.not(visitor_id: current_user.id).inspect}"
     @notifications_on_mypage.where(checked: false).each do |notification|
       notification.update(checked: true)
     end
+
+    tmdb_service = TmdbService.new
+    @movies_data = {}
+    @notifications_on_mypage
+    .where(action: 'bookmark-of-movie')
+    .where.not(visitor_id: current_user.id).each do |notification_of_bookmarking_movie|
+        @movies_data[notification_of_bookmarking_movie.movie_id] ||= tmdb_service.fetch_movie_details(notification_of_bookmarking_movie.movie_id)
+    end
+    
+    @movies_data_related_of_shuffled_overviews = {}
+    @notifications_on_mypage
+    .where(action: 'bookmark-of-shuffled-overview')
+    .where.not(visitor_id: current_user.id).each do |notification_of_shuffled_overview|
+      notification_of_shuffled_overview.shuffled_overview.related_movie_ids.each do |movie_id|
+        @movies_data_related_of_shuffled_overviews[movie_id] ||= tmdb_service.fetch_movie_details(movie_id)
+      end
+    end
+    
   end
 
   def mark_as_read
