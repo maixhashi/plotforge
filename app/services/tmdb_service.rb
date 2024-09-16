@@ -63,7 +63,7 @@ class TmdbService
     all_movies = []
   
     pages.each do |page|
-      response = Faraday.get("#{@base_url}/movie/popular?api_key=#{@api_key}&language=ja&page=#{page}", headers: { 'Cache-Control' => 'no-cache' })
+      response = self.class.get("#{@base_url}/movie/popular?api_key=#{@api_key}&language=ja&page=#{page}", headers: { 'Cache-Control' => 'no-cache' })
       if response.success?
         movies = JSON.parse(response.body)['results']
         all_movies.concat(movies)
