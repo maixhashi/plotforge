@@ -1,4 +1,14 @@
 ja:
+ja:
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            password:
+              blank: "を入力してください"
+              too_short: "は%{count}文字以上で入力してください"
+
   date:
     abbr_day_names:
       - 日
