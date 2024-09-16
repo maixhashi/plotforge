@@ -8,13 +8,7 @@ Rails.application.routes.draw do
     get 'update_overviews', on: :collection
   end
 
-  get 'login', to: 'sessions#new'  # 追記
-  post 'login', to: 'sessions#create'  # 追記
-  get 'logout', to: 'sessions#destroy'  #
-  delete 'logout', to: 'sessions#destroy'  #
-  resources :users, only: [:new, :create, :destroy]
-    # サインアップ関連のルーティング（仮定）
-  get 'signup', to: 'users#new', as: :signup
+  devise_for :users
   get 'settings', to: 'users#show', as: :settings
 
   resources :users, param: :user_id do
@@ -40,12 +34,6 @@ Rails.application.routes.draw do
   resource :avatar, only: [:edit, :update]
 
   resources :follows, only: [:create, :destroy]
-  resource :users, only: [] do
-    member do
-      get 'edit_password', to: 'users#edit_password'
-      patch 'update_password', to: 'users#update_password'
-    end
-  end
 
   get 'related_movies/:id', to: 'related_movies#show', as: 'related_movie'
   get 'shuffled_overview', to: 'related_movies#show_shuffled_overview', as:'shuffled_overview'

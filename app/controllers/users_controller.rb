@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  skip_before_action :require_login
+  skip_before_action :authenticate_user!
   helper_method :movie_poster_path
   before_action :set_user, only: [
     "mypage",

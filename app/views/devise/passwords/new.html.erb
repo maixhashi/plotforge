@@ -1,0 +1,21 @@
+<div class="form-container">
+  <h2>パスワードの再設定</h2>
+  <p class="form-description">
+    メールアドレスを入力してください。パスワード再設定のリンクが送信されます。
+  </p>
+  <%= form_with url: password_path(resource_name), method: :post, local: true, model: resource do |f| %>
+    <div class="form-group">
+      <i class="fas fa-envelope icon"></i>
+      <%= f.email_field :email, class: 'form-control', placeholder: 'メールアドレス', autofocus: true, autocomplete: "email" %>
+      <% if resource.errors[:email].any? %>
+        <div class="error-message"><%= resource.errors[:email].first %></div>
+      <% end %>
+    </div>
+
+    <div class="form-group">
+      <%= f.submit '送信', class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+
+  <%= render "devise/shared/links" %>
+</div>
