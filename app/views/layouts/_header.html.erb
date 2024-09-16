@@ -10,22 +10,26 @@
       <% end %>
     </div>
     <div class="user-info">
-      <% if current_user.avatar? %>
-        <%= link_to mypage_user_path(current_user), class:"header-link-of-shuffled-overview" do %>
-          <%= image_tag current_user.avatar.url, class: 'user-avatar' %>
-          <div class="user-name-on-header"><%= current_user.name %></div>
+      <% if user_signed_in? %>
+        <% if current_user.avatar.present? %>
+          <%= link_to mypage_user_path(current_user), class: "header-link-of-shuffled-overview" do %>
+            <%= image_tag current_user.avatar.url, class: 'user-avatar' %>
+            <div class="user-name-on-header"><%= current_user.name %></div>
+          <% end %>
+        <% else %>
+          <%= link_to mypage_user_path(current_user), class: "header-link-of-shuffled-overview" do %>
+            <i class="fa fa-user-circle fa-2x"></i>
+            <div class="user-name-on-header"><%= current_user.name %></div>
+          <% end %>
         <% end %>
       <% else %>
-        <%= link_to mypage_user_path(current_user), class:"header-link-of-shuffled-overview" do %>
-          <i class="fa fa-user-circle fa-2x"></i>
-          <div class="user-name-on-header"><%= current_user.name %></div>
-        <% end %>
+        <p>ユーザーがサインインしていません</p>
       <% end %>
     </div>
     <%= render 'layouts/header_navibar' %>
   <% else %>
-        <%= link_to 'ログイン', login_path, class: 'btn btn-login' %>
-        <%= link_to 'サインアップ', signup_path, class: 'btn btn-signup' %>
+        <%= link_to 'ログイン', new_user_session_path, class: 'btn btn-login' %>
+        <%= link_to 'サインアップ', new_user_registration_path, class: 'btn btn-signup' %>
   <% end %>
 </div>
 

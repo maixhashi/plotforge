@@ -1,0 +1,45 @@
+<div class="form-container">
+  <h2>PlotForgeのアカウントを作成しましょう</h2>
+  <p class="form-description">
+    アカウントを作成するために、ユーザー名とメールアドレスとパスワードを入力してください。
+  </p>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: 'form-with' }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <div class="form-group">
+      <i class="fas fa-user icon"></i>
+      <%= f.text_field :name, class: 'form-control', placeholder: '名前' %>
+      <% if resource.errors[:name].any? %>
+        <div class="error-message"><%= resource.errors[:name].first %></div>
+      <% end %>
+    </div>
+
+    <div class="form-group">
+      <i class="fas fa-envelope icon"></i>
+      <%= f.email_field :email, class: 'form-control', placeholder: 'メールアドレス' %>
+      <% if resource.errors[:email].any? %>
+        <div class="error-message"><%= resource.errors[:email].first %></div>
+      <% end %>
+    </div>
+
+    <div class="form-group">
+      <i class="fas fa-lock icon"></i>
+      <%= f.password_field :password, class: 'form-control', placeholder: 'パスワード' %>
+      <% if resource.errors[:password].any? %>
+        <div class="error-message"><%= resource.errors[:password].first %></div>
+      <% end %>
+    </div>
+
+    <div class="form-group">
+      <i class="fas fa-lock icon"></i>
+      <%= f.password_field :password_confirmation, class: 'form-control', placeholder: 'パスワード確認' %>
+      <% if resource.errors[:password_confirmation].any? %>
+        <div class="error-message"><%= resource.errors[:password_confirmation].first %></div>
+      <% end %>
+    </div>
+
+    <div class="form-group">
+      <%= f.submit 'サインアップ', class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+</div>
