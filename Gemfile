@@ -45,7 +45,8 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 # Gemfile Add
-gem 'sorcery'
+gem 'devise'
+
 gem 'sassc-rails'
 gem 'httparty'
 gem 'dotenv-rails', groups: [:development, :test]
