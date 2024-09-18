@@ -1,4 +1,8 @@
 class Movie < ApplicationRecord
+  ## Validation
+  validates :tmdb_id, presence: true
+
+  ## Association
   has_many :link_of_shuffled_overview_movies
   has_many :shuffled_overviews, through: :link_of_shuffled_overview_movies
 
@@ -7,6 +11,7 @@ class Movie < ApplicationRecord
 
   has_many :notifications, dependent: :destroy
 
+  ## Instance Method 
   def create_notification_bookmark!(current_user)
     # すでに「いいね」されているか検索
     temp = Notification.where(["visitor_id = ? and visited_id = ? and movie_id = ? and action = ? ", current_user.id, user_id, id, 'bookmark-of-movie'])
