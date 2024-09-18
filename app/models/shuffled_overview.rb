@@ -1,10 +1,11 @@
 class ShuffledOverview < ApplicationRecord
-  belongs_to :user
+  ## Validation
   validates :content, presence: true
-
-  # Association
+  
+  ## Association
+  belongs_to :user
+  
   has_many :bookmark_of_shuffled_overviews, dependent: :destroy
-
   has_many :users, through: :bookmark_of_shuffled_overviews
 
   has_many :link_of_shuffled_overview_movies, dependent: :destroy
@@ -20,6 +21,7 @@ class ShuffledOverview < ApplicationRecord
 
   has_many :notifications, dependent: :destroy
 
+  ## Instance Method
   def create_notification_bookmark!(current_user)
     # すでに「いいね」されているか検索
     temp = Notification.where(["visitor_id = ? and visited_id = ? and shuffled_overview_id = ? and action = ? ", current_user.id, user_id, id, 'bookmark-of-shuffled-overview'])
