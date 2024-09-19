@@ -24,5 +24,11 @@ RSpec.describe Follow, type: :model do
       follow = Follow.new(follower: user1, followed: nil)
       expect(follow).not_to be_valid
     end
+
+    it 'does not allow a user to follow the same user more than once' do
+      Follow.create(follower: user1, followed: user2)
+      duplicate_follow = Follow.new(follower: user1, followed: user2)
+      expect(duplicate_follow).not_to be_valid
+    end
   end
 end
