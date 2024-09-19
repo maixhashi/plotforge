@@ -7,6 +7,12 @@ RSpec.describe Character, type: :model do
     expect(character).to be_valid
   end
 
+  # モデルが無効な属性である場合をテスト
+  it 'is not valid without a name' do
+    character = Character.new(name: nil)
+    expect(character).not_to be_valid
+  end
+
   # 関連付けのテスト
   describe 'associations' do
     it 'has many appearance_of_characters' do
@@ -28,4 +34,11 @@ RSpec.describe Character, type: :model do
     index = ActiveRecord::Base.connection.indexes('characters').find { |i| i.name == 'index_characters_on_name' }
     expect(index).not_to be_nil
   end
+  
+  # Characterモデルの:nameカラムのレコードはuniqueである必要はないためテストから除外。 
+    # it 'is not valid with a non-unique name' do
+    #   Character.create!(name: 'UniqueName')
+    #   character = Character.new(name: 'UniqueName')
+    #   expect(character).not_to be_valid
+    # end
 end
