@@ -1,8 +1,16 @@
 FactoryBot.define do
   factory :notification do
-    visitor { association(:user) }
-    visited { association(:user) }  # 通知の受信者を定義
+    association :visitor, factory: :user
+    association :visited, factory: :user
     action { "bookmarked" }
     checked { false }
+
+    trait :with_shuffled_overview do
+      association :shuffled_overview
+    end
+
+    trait :with_movie do
+      association :movie
+    end
   end
 end
