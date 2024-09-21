@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     get 'update_overviews', on: :collection
   end
 
-  devise_for :users
+  devise_for :users  
   get 'settings', to: 'users#show', as: :settings
 
   resources :users, param: :user_id do

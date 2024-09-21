@@ -24,19 +24,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # パスワード変更フォームを表示
-  def edit_password
-  end
-
-  # パスワード変更の処理
-  def update_password
-    if current_user.update(password_params)
-      redirect_to user_path(current_user), notice: 'パスワードが変更されました'
-    else
-      render :edit_password
-    end
-  end
-
   def mypage
     @shuffled_overviews_on_profile = @user.shuffled_overviews.page(params[:shuffled_overviews_page]).per(5)
 
@@ -182,6 +169,6 @@ class UsersController < ApplicationController
   end
   
   def password_params
-    params.require(:user).permit(:password, :password_confirmation)
+    params.require(:user).permit(:password, :password_confirmation, :current_password)
   end
 end
