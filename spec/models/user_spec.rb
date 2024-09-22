@@ -140,4 +140,22 @@ RSpec.describe User, type: :model do
       expect(user.following?(other_user)).to be_falsey
     end
   end
+
+  describe "avatar icon" do
+    let(:valid_avatar) { fixture_file_upload('spec/fixtures/avatar.jpeg', 'image/jpeg') }
+    let(:invalid_avatar) { fixture_file_upload('spec/fixtures/invalid_file.txt', 'text/plain') }
+    let(:valid_user) { build(:user, avatar: valid_avatar) }
+    let(:invalid_user) { build(:user, avatar: invalid_avatar) }
+
+    it "accepts valid avatar file types" do
+      expect(valid_user).to be_valid
+    end
+  
+    it "rejects invalid avatar file types" do
+      expect(invalid_user).to_not be_valid
+    end
+  end
 end
+
+
+
