@@ -72,44 +72,23 @@ class ShuffledOverviewsController < ApplicationController
   end
   
 
-def create
-  content = shuffled_overview_params[:content]
-  related_movie_ids = shuffled_overview_params[:related_movie_ids].map(&:to_i)
-
-  @shuffled_overview = current_user.shuffled_overviews.build(shuffled_overview_params)
-
-  @shuffled_overview.related_movie_ids.each do |related_movie_id|
-    movie = Movie.find_or_create_by!(tmdb_id: related_movie_id)
-    @shuffled_overview.movies << movie
-  end
-
-  if @shuffled_overview.save
-    # ここで `update` アクションのロジックを実行
-    extract_characters
-    extract_keywords
-
-    Rails.logger.debug "ShuffledOverview related_movie_ids: #{@shuffled_overview.related_movie_ids.inspect}"
-    Rails.logger.debug "ShuffledOverview movie_ids: #{@shuffled_overview.movie_ids.inspect}"
-    logger.debug("ShuffledOverview ID after save: #{@shuffled_overview.id}")
-
-    render json: { message: 'Shuffled overview saved successfully', id: @shuffled_overview.id }, status: :ok
-  else
-    render json: { errors: @shuffled_overview.errors.full_messages }, status: :unprocessable_entity
-  end
-end
-
-  def update
-    @shuffled_overview = ShuffledOverview.find(params[:id])
-    
-    if @shuffled_overview.update(shuffled_overview_params)
+  def create
+    Rails.logger.info("Received parameters: #{params.inspect}")
+    @shuffled_overview = current_user.shuffled_overviews.build(shuffled_overview_params)
+  
+    related_movie_ids = shuffled_overview_params[:related_movie_ids].map(&:to_i)
+    related_movie_ids.each do |related_movie_id|
+      movie = Movie.find_or_create_by!(tmdb_id: related_movie_id)
+      @shuffled_overview.movies << movie
+    end
+  
+    if @shuffled_overview.save
       extract_characters
       extract_keywords
-      respond_to do |format|
-        format.html { redirect_to user_shuffled_overview_path(@shuffled_overview), notice: 'Shuffled overview was successfully updated.' }
-        format.js   # For AJAX requests
-      end
+  
+      render json: { message: 'Shuffled overview saved successfully', id: @shuffled_overview.id }, status: :ok
     else
-      render :edit
+      render json: { errors: @shuffled_overview.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
