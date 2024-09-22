@@ -1,13 +1,18 @@
 class User < ApplicationRecord
+## gem 'devise'
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+##
+## gem 'carrierwave' 
   mount_uploader :avatar, AvatarUploader
-
+##
+## gem 'friendly_id'
   include FriendlyId
   friendly_id :name
-
+##
+## validation 
   validates :email, uniqueness: true
   validates :email, presence: true
 
@@ -15,7 +20,8 @@ class User < ApplicationRecord
   validates :password, presence: true, if: -> { password.present? || new_record? || changes[:crypted_password] }
   validates :password, confirmation: true, if: -> { password.present? || new_record? || changes[:crypted_password] }
   validates :password_confirmation, presence: true, if: -> { password.present? || new_record? || changes[:crypted_password] }
-  
+## 
+## association  
   has_many :shuffled_overviews, dependent: :destroy
   has_many :bookmark_of_shuffled_overviews
   has_many :bookmarked_shuffled_overviews, through: :bookmark_of_shuffled_overviews, source: :shuffled_overview
@@ -30,7 +36,8 @@ class User < ApplicationRecord
 
   has_many :active_notifications, class_name: 'Notification', foreign_key: 'visitor_id', dependent: :destroy
   has_many :passive_notifications, class_name: 'Notification', foreign_key: 'visited_id', dependent: :destroy
-
+##
+## instance method
   def follow(other_user)
     active_relationships.create(followed_id: other_user.id)
   end
@@ -53,6 +60,7 @@ class User < ApplicationRecord
       notification.save if notification.valid?
     end
   end
+##
 end
 
 
