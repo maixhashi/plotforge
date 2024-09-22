@@ -6,10 +6,10 @@ class ApplicationController < ActionController::Base
 
   # Deviseのストロングパラメーターの設定
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :email, :password, :password_confirmation, :avatar])
     devise_parameter_sanitizer.permit(:account_update, keys: [:name])
   end
-
+  
   # メソッドをDeviseのコールバックに追加
   before_action :configure_permitted_parameters, if: :devise_controller?
 end
