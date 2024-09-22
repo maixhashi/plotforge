@@ -15,6 +15,17 @@
     </div>
 
     <div class="form-group">
+      <i class="fas fa-user-circle icon"></i>
+      <%= f.file_field :avatar, class: 'form-control', placeholder: 'アイコン', id: 'avatar-upload' %>
+      <% if resource.errors[:avatar].any? %>
+        <div class="error-message"><%= resource.errors[:avatar].first %></div>
+      <% end %>
+    </div>
+    <div class="image-preview">
+      <img id="avatar-preview" src="#" alt="アバタープレビュー" style="display: none;" />
+    </div>
+  
+    <div class="form-group">
       <i class="fas fa-envelope icon"></i>
       <%= f.email_field :email, class: 'form-control', placeholder: 'メールアドレス' %>
       <% if resource.errors[:email].any? %>
@@ -43,3 +54,37 @@
     </div>
   <% end %>
 </div>
+
+<style>
+#avatar-preview {
+  max-width: 100px;
+  max-height: 100px;
+  border-radius: 50%; /* 円形にするために50%を指定 */
+  position: relative;
+  left: 120px;
+  margin-bottom: 10px;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const avatarInput = document.getElementById('avatar-upload');
+  const avatarPreview = document.getElementById('avatar-preview');
+
+  avatarInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        avatarPreview.src = e.target.result;
+        avatarPreview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      avatarPreview.src = '#';
+      avatarPreview.style.display = 'none';
+    }
+  });
+});
+</script>
