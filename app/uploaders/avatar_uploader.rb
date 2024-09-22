@@ -42,4 +42,8 @@ class AvatarUploader < CarrierWave::Uploader::Base
   def filename
     "something.jpg" if original_filename
   end
+
+  def extension_allowlist
+    %w(jpg jpeg gif png)
+  end
 end
