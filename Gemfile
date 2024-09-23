@@ -49,7 +49,7 @@ gem 'devise'
 
 gem 'sassc-rails'
 gem 'httparty'
-gem 'dotenv-rails', groups: [:development, :test]
+gem 'dotenv-rails'
 gem 'simple_calendar'
 gem 'rails-i18n'
 gem "rails-erd"
