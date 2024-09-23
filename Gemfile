@@ -49,7 +49,6 @@ gem 'devise'
 
 gem 'sassc-rails'
 gem 'httparty'
-gem 'dotenv-rails'
 gem 'simple_calendar'
 gem 'rails-i18n'
 gem "rails-erd"
@@ -68,6 +67,7 @@ gem 'friendly_id', '~> 5.5.0'
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ]
+  gem 'dotenv-rails'
 end
 
 group :development do
