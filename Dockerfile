@@ -8,6 +8,10 @@ COPY Gemfile.lock /plotforge/Gemfile.lock
 
 RUN gem update --system 3.3.20 && \
     bundle install
+RUN apt-get update -qq && \
+    apt-get install -y build-essential \
+    nodejs \
+    default-mysql-client
 RUN apt-get update && apt-get install -y graphviz
 RUN apt-get install libmecab2 libmecab-dev mecab mecab-ipadic mecab-ipadic-utf8 mecab-utils
 RUN apt-get install -y unidic-mecab
