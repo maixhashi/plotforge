@@ -1,10 +1,10 @@
 FROM ruby:3.1
 
-RUN mkdir /app
-WORKDIR /app
+RUN mkdir /plotforge
+WORKDIR /plotforge
 
-COPY Gemfile /app/Gemfile
-COPY Gemfile.lock /app/Gemfile.lock
+COPY Gemfile /plotforge/Gemfile
+COPY Gemfile.lock /plotforge/Gemfile.lock
 
 RUN gem update --system 3.3.20 && \
     bundle install
@@ -25,4 +25,5 @@ RUN echo "\ndicdir = /var/lib/mecab/dic/unidic" >> /etc/mecabrc
 # RUN sed -i 's/^dicdir/;dicdir/' /etc/mecabrc && \
 #     echo "\ndicdir = /usr/local/mecab-neologd/mecab-ipadic-neologd" >> /etc/mecabrc
     
-COPY . /app
+COPY . /plotforge
+RUN mkdir -p tmp/sockets

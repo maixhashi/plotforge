@@ -11,7 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 2024_09_22_103353) do
-  create_table "appearance_of_characters", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "appearance_of_characters", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "character_id", null: false
     t.bigint "shuffled_overview_id", null: false
     t.datetime "created_at", null: false
@@ -20,7 +20,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_22_103353) do
     t.index ["shuffled_overview_id"], name: "index_appearance_of_characters_on_shuffled_overview_id"
   end
 
-  create_table "bookmark_of_movies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "bookmark_of_movies", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "movie_id", null: false
     t.datetime "created_at", null: false
@@ -29,7 +29,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_22_103353) do
     t.index ["user_id"], name: "index_bookmark_of_movies_on_user_id"
   end
 
-  create_table "bookmark_of_shuffled_overviews", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "bookmark_of_shuffled_overviews", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "shuffled_overview_id", null: false
     t.datetime "created_at", null: false
@@ -39,14 +39,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_22_103353) do
     t.index ["user_id"], name: "index_bookmark_of_shuffled_overviews_on_user_id"
   end
 
-  create_table "characters", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "characters", charset: "utf8mb4", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_characters_on_name"
   end
 
-  create_table "follows", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "follows", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "follower_id"
     t.bigint "followed_id"
     t.datetime "created_at", null: false
@@ -55,13 +55,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_22_103353) do
     t.index ["follower_id"], name: "index_follows_on_follower_id"
   end
 
-  create_table "keywords", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "keywords", charset: "utf8mb4", force: :cascade do |t|
     t.string "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "link_of_shuffled_overview_movies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "link_of_shuffled_overview_movies", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "shuffled_overview_id", null: false
     t.bigint "movie_id", null: false
     t.datetime "created_at", null: false
@@ -71,14 +71,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_22_103353) do
     t.index ["shuffled_overview_id"], name: "index_link_of_shuffled_overview_movies_on_shuffled_overview_id"
   end
 
-  create_table "movies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "movies", charset: "utf8mb4", force: :cascade do |t|
     t.integer "tmdb_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tmdb_id"], name: "index_movies_on_tmdb_id"
   end
 
-  create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "notifications", charset: "utf8mb4", force: :cascade do |t|
     t.integer "visitor_id", null: false
     t.integer "visited_id", null: false
     t.integer "shuffled_overview_id"
@@ -93,7 +93,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_22_103353) do
     t.index ["visitor_id"], name: "index_notifications_on_visitor_id"
   end
 
-  create_table "settings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "settings", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.boolean "notification"
     t.boolean "dark_mode"
@@ -102,7 +102,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_22_103353) do
     t.index ["user_id"], name: "index_settings_on_user_id"
   end
 
-  create_table "shuffled_overview_keywords", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "shuffled_overview_keywords", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "shuffled_overview_id", null: false
     t.bigint "keyword_id", null: false
     t.datetime "created_at", null: false
@@ -111,7 +111,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_22_103353) do
     t.index ["shuffled_overview_id"], name: "index_shuffled_overview_keywords_on_shuffled_overview_id"
   end
 
-  create_table "shuffled_overviews", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "shuffled_overviews", charset: "utf8mb4", force: :cascade do |t|
     t.text "content"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
@@ -121,7 +121,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_22_103353) do
     t.index ["user_id"], name: "index_shuffled_overviews_on_user_id"
   end
 
-  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "users", charset: "utf8mb4", force: :cascade do |t|
     t.string "email", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
