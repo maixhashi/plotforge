@@ -1,30 +1,50 @@
 # PlotForge（プロットフォージ）
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/maixhashi/plotforge)](https://github.com/maixhashi/plotforge/releases)
 [![Rails](https://img.shields.io/badge/Rails-v6.1.6-%23a72332)](https://rubygems.org/gems/rails/versions/6.1.6)
-[![Coverage Status](https://coveralls.io/repos/github/maixhashi/plotforge/badge.svg?branch=develop)](https://coveralls.io/github/maixhashi/plotfforge?branch=develop)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d31e5fff03ec3ea494fa/maintainability)](https://codeclimate.com/github/maixhashi/plotforge/maintainability)
 
 ### **https://plotforge.net**
 
 ## サービス概要
-
+**ランダムに作成される映画のあらすじから「この映画いいかも」を見つけよう**
+<br>
+ランダムに作成されるユニークなあらすじから映画を発掘・共有することができるサービスです
 
 ## 使用画面と機能紹介
 
+| 画面a                                                         | 画面b                                                                                             |
+| :------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------- |
+| ![image](https://github.com/user-attachments/assets/b3b0623f-0a2c-43f6-be0f-fe0eab8635c8) |![image](https://github.com/user-attachments/assets/1d05126b-5e1a-44b5-8698-3d881a4e7481)|
+| 画面a説明              | 画面b説明 |
+
+<br>
+
 | 画面1                                                         | 画面2                                                                                             |
 | :------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------- |
-| <img src="https://i.gyazo.com/xxx.png"> | <img src="https://i.gyazo.com/xxx.png">                                   |
+| ![image](https://github.com/user-attachments/assets/f0222456-d72a-45f7-98f4-03ddca57d7e3)|![image](https://github.com/user-attachments/assets/e1f4741e-65af-46c7-9e36-2c03f13637f8)|
 | 画面1説明              | 画面2説明 |
 
 <br>
 
 | 画面3                                                                                                                | 画面4                                                                                                        |
 | :------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://i.gyazo.com/xxx.png">                                                       | <img src="https://i.gyazo.com/xxx.png">                                                        |
+| ![image](https://github.com/user-attachments/assets/70cd0c80-edd2-4906-9858-e08992772459)| ![image](https://github.com/user-attachments/assets/fda73824-65f5-4611-a482-5fef6589b15a)|
 |画面3説明-1<br>画面3説明-2 | 画面4説明-1<br>画面4説明-2 |
 
 <br>
+
+| 画面5                                                                                                                | 画面6                                                                                                        |
+| :------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- |
+| ![image](https://github.com/user-attachments/assets/xxx)| ![image](https://github.com/user-attachments/assets/xxx)|
+|画面5説明-1<br>画面5説明-2 | 画面6説明-1<br>画面6説明-2 |
+
+<br>
+
+| 画面7                                                                                                                | 画面8                                                                                                        |
+| :------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- |
+| ![image](https://github.com/user-attachments/assets/a197b5cb-2873-4a86-8e85-b3c99dfcdcd7)|![image](https://github.com/user-attachments/assets/f0f9cb0b-bc35-4afc-b923-f820eab6db6d)|
+|画面7説明-1<br>画面7説明-2 | 画面8説明-1<br>画面8説明-2 |
+
 
 ## 使用技術
 
@@ -49,14 +69,14 @@
 ### インフラストラクチャー
 
 - Docker
-- Nginx x.x.x
-- puma x.x.x
+- Nginx 1.15.8
+- puma 6.4.2
 - AWS
   - VPC
   - EC2
     - Amazon Linux 2
   - RDS
-    - MySQL x.x.x
+    - MySQL 8.0.35
   - ALB
   - Route53
   - ACM
@@ -64,5 +84,3 @@
 #### インフラ構成図
 
 [![Image from Gyazo](https://i.gyazo.com/xxx.png)](https://gyazo.com/xxx)
-
-## 環境構築手順
