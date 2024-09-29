@@ -7,7 +7,7 @@
             <% if follower.avatar? %>
               <%= link_to mypage_user_path(follower), class: "header-link-of-shuffled-overview" do %>
                 <div class="follower-avatar-wrapper">
-                  <%= image_tag follower.avatar.url, class: 'user-avatar' %>
+                  <%= image_tag follower.avatar.url, class: 'user-avatar-on-follower-list' %>
                   <% if follower != current_user %>
                     <div id="<%= follower.id %>-follow-button-container" class="follow-button-container">
                       <% if current_user.following?(follower) %>
@@ -76,6 +76,7 @@
 .follower-name {
   font-size: 16px;
   margin-left: 20px;
+  min-width: 200px;
 }
 
 .follower-avatar-wrapper {
@@ -95,10 +96,19 @@
   border-radius: 50%; /* アイコンを丸くする */
 }
 
+.user-avatar-on-follower-list {
+  display: block;
+  min-height: 80px; /* アイコンの最大幅 */
+  min-width: 80px; /* アイコンの最大幅 */
+  max-height: 80px; /* アイコンの最大幅 */
+  max-width: 80px; /* アイコンの最大幅 */
+  border-radius: 50%; /* アイコンを丸くする */
+}
+
 .follow-button-container {
   position: absolute;
   bottom: -15px; /* アイコンの下部からの距離 */
-  right: -5px; /* アイコンの右部からの距離 */
+  right: -30px; /* アイコンの右部からの距離 */
   z-index: 10; /* アイコンの上に表示するため */
 }
 
