@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
-
+  protect_from_forgery with: :null_session
+  
   # Deviseのヘルパーメソッドを使用
   helper_method :user_signed_in?, :current_user
 
