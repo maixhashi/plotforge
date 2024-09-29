@@ -63,8 +63,8 @@
 - natto (登場人物とキーワードの抽出)
 
 #### ER 図
+![image](https://github.com/user-attachments/assets/9a2c1be4-8dc9-42d5-b70c-52ba370647a1)
 
-[![Image from Gyazo](https://i.gyazo.com/xxx.png)](https://gyazo.com/xxx)
 
 ### インフラストラクチャー
 
