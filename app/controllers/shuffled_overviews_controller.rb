@@ -85,10 +85,12 @@ class ShuffledOverviewsController < ApplicationController
     if @shuffled_overview.save
       extract_characters
       extract_keywords
-  
-      render json: { message: 'Shuffled overview saved successfully', id: @shuffled_overview.id }, status: :ok
+
+      flash[:notice] = 'あらすじが保存されました'
+      render json: { message: flash[:notice], id: @shuffled_overview.id }, status: :ok
     else
-      render json: { errors: @shuffled_overview.errors.full_messages }, status: :unprocessable_entity
+      flash[:alert] = @shuffled_overview.errors.full_messages.join(', ')
+      render json: { errors: flash[:alert] }, status: :unprocessable_entity
     end
   end
 

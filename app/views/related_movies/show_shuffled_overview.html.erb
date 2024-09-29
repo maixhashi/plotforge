@@ -286,11 +286,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function saveShuffledOverview() {
     const content = container.innerHTML;
-  
+
     // ユニークな映画のIDを取得
     const movieLinks = document.querySelectorAll('.movie-link');
     const movieIds = Array.from(new Set(Array.from(movieLinks).map(link => link.dataset.movieId)));
-  
+
     fetch(`/users/${userId}/shuffled_overviews`, {
       method: 'POST',
       headers: {
@@ -308,15 +308,39 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(response => response.json())
     .then(data => {
       if (data.message) {
-        console.log(data.message);
+        // フラッシュメッセージを表示する
+        displayFlashMessage(data.message, 'notice');
         // ID を使用して `shuffled_overview#show` ページへリダイレクト
         window.location.href = `/users/${userId}/shuffled_overviews/${data.id}`;
       } else if (data.errors) {
-        console.error(data.errors);
+        // エラーメッセージを表示する
+        displayFlashMessage(data.errors, 'alert');
       }
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+      // エラーメッセージを表示する
+      displayFlashMessage('An error occurred while saving the shuffled overview', 'error');
+      console.error('Error:', error);
+    });
   }
+
+  // フラッシュメッセージを表示する関数
+  function displayFlashMessage(message, type) {
+    const flashMessageDiv = document.createElement('div');
+    flashMessageDiv.classList.add('flash-message', type);
+    flashMessageDiv.innerText = message;
+    document.body.appendChild(flashMessageDiv);
+
+    // メッセージを数秒後にフェードアウトさせる
+    setTimeout(() => {
+      flashMessageDiv.style.transition = 'opacity 1s';
+      flashMessageDiv.style.opacity = '0';
+      setTimeout(() => {
+        flashMessageDiv.remove();
+      }, 1000);
+    }, 3000);
+  }
+
   
   function enableLinksAndHoverEvents() {
     document.querySelectorAll('.movie-link').forEach(link => {

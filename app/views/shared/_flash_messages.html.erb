@@ -1,0 +1,70 @@
+<% flash.each do |type, message| %>
+  <% if message.present? %>
+    <div class="flash-message <%= type %>">
+      <p><%= message %></p>
+    </div>
+  <% end %>
+<% end %>
+
+<style>
+.flash-message {
+  opacity: 0;
+  transform: scale(0.5); /* 初期スケールを0.5に設定（50%の大きさから開始） */
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  text-align: center;
+  position: fixed;
+  z-index: 100;
+  width: 90%;
+}
+
+.flash-message.show {
+  opacity: 1;
+  transform: scale(1); /* 100%の大きさに拡大 */
+}
+
+.flash-message.notice {
+  background-color: #dff0d8;
+  color: #3c763d;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.flash-message.alert {
+  background-color: #f2dede;
+  color: #a94442;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.flash-message.error {
+  background-color: #f2dede;
+  color: #a94442;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const flashMessages = document.querySelectorAll('.flash-message');
+
+  flashMessages.forEach(function(message) {
+    // フラッシュメッセージを表示するために "show" クラスを追加
+    setTimeout(function() {
+      message.classList.add('show');
+    }, 100); // 100ms後にアニメーション開始
+    
+    // 3秒後にメッセージをフェードアウトして非表示にする
+    setTimeout(function() {
+      message.style.transition = 'opacity 1s ease-out';
+      message.style.opacity = '0';
+      setTimeout(function() {
+        message.style.display = 'none';
+      }, 1000); // フェードアウト完了までの時間（1秒）
+    }, 3000); // 3秒後にフェードアウトを開始
+  });
+});
+</script>
