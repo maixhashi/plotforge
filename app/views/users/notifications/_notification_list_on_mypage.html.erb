@@ -1,17 +1,23 @@
 <!-- 自分の投稿に対するいいね、コメントは通知に表示しない -->
 <% notifications = @notifications_on_mypage.where.not(visitor_id: current_user.id) %>
 
-
-<% if notifications.exists? %>
-<div class="content">
-<div class="shuffled-overview-list">
-<% notifications.each do |notification| %>
-      <%= render partial: 'users/notifications/notification', locals: { notification: notification } %>
-    <% end %>
-    <%= paginate notifications, param_name: :notifications_page %>
+<% if current_user.guest? %>
+  <div class="content">
+    <p style="text-align: center;">ログインをすると通知を受け取ることができます</p>
   </div>
 <% else %>
-  <p>通知はありません</p>
+  <% if notifications.exists? %>
+    <div class="content">
+      <div class="shuffled-overview-list">
+        <% notifications.each do |notification| %>
+          <%= render partial: 'users/notifications/notification', locals: { notification: notification } %>
+        <% end %>
+        <%= paginate notifications, param_name: :notifications_page %>
+      </div>
+    </div>
+  <% else %>
+    <div class="content">
+      <p>通知はありません</p>
+    </div>
+  <% end %>
 <% end %>
-</div>
-</div>

@@ -10,7 +10,9 @@
 
         <ul>
           <li><%= link_to 'マイページ', mypage_user_path(current_user) %></li>
+<% unless current_user.guest? %>
           <li><%= link_to '設定',  edit_user_registration_path %></li>
+<% end %>
           <li><%= link_to 'タイムライン', timeline_path %></li>
           <li><%= link_to 'ログアウト', destroy_user_session_path, method: :delete %></li>
         </ul>
