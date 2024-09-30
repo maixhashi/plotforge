@@ -17,7 +17,7 @@
   <% end %>
   </div>
 
-  
+<% unless current_user.guest? %>  
   <div class="follow-info">
     <div>
       <%= link_to "フォロー：#{@user.following.count}", followings_user_path(@user), class: "link-to-index-following" %>
@@ -26,6 +26,7 @@
       <%= link_to "フォロワー：#{@user.followers.count}", followers_user_path(@user), class: "link-to-index-followers" %>
     </div>
   </div>
+<% end %>
 
   <div class="profile-header">
     <ul>
