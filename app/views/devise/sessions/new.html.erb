@@ -20,12 +20,15 @@
       <% end %>
     </div>
 
+
+<% if false %>
     <% if devise_mapping.rememberable? %>
       <div class="form-group">
         <%= f.check_box :remember_me, id: 'remember_me' %>
         <%= f.label :remember_me, 'ログイン情報を記憶する' %>
       </div>
     <% end %>
+<% end %>
 
     <div class="form-group">
       <%= f.submit 'ログイン', class: 'btn btn-primary' %>
