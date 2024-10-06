@@ -1,12 +1,18 @@
 Rails.application.routes.draw do
   root 'welcome#index'
+
   get 'shuffled_overviews/create'
+  
   get 'timeline', to: 'timeline#index'
   get 'timeline/shuffled_overviews', to: 'timeline#timeline_shuffled_overviews', as: :timeline_shuffled_overviews
   get 'timeline/movies', to: 'timeline#timeline_movies', as: :timeline_movies
   resources :timeline, only: [] do
     get 'update_overviews', on: :collection
   end
+
+  post 'tutorial_message/next', to: 'tutorial_messages#next', as: 'tutorial_message_next'
+  get 'tutorial_message', to: 'tutorial_messages#show', as: 'tutorial_message'
+
 
   devise_for :users, controllers: {
     registrations: 'users/registrations',
@@ -15,8 +21,6 @@ Rails.application.routes.draw do
   devise_scope :user do
     post 'users/guest_sign_in', to: 'users/sessions#guest_sign_in'
   end
-
-
 
   get 'settings', to: 'users#show', as: :settings
 
