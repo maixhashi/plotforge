@@ -1,0 +1,293 @@
+<div class="tutorial-message">
+  <p id="typing-text"></p>
+
+  <div class="link-on-tutorial-message" id="synopsis-button">
+    <div class="navi-creating-shuffled-overview-on-tutorial-message">あらすじを作ってみる</div>
+    <div class="caret-down-creating-shuffled-overview-on-tutorial-message shake-animation"><i class="fa-solid fa-2x fa-caret-down"></i></div>
+    <%= link_to shuffled_overview_path, class:"link-to-creating-shuffled-overview-on-tutorial-message" do %>
+      <i class="fa fa-pencil fa-2x"></i>
+      <div>あらすじ</div>
+    <% end %>
+
+    <% if current_user.guest? %>
+      <div class="navi-register-favorite-genre-on-tutorial-message" style="color: gray;">好みの映画ジャンルを登録する</div>
+      <div class="caret-down-register-favorite-genre-on-tutorial-message shake-animation" style="color: gray;"><i class="fa-solid fa-2x fa-caret-down"></i></div>
+      <div class="link-to-register-favorite-genre-on-tutorial-message" style="color: gray;">
+        <i class="fa fa-film fa-2x"></i>
+        <div class="icon-label-register-favorite-genre-on-tutorial-message">カスタマイズ<i class="fa-solid fa-circle-exclamation" id="tooltip-icon" style="color:black; position:relative; left:3px;"></i></div>
+      </div>
+    <% else %>
+      <div class="navi-register-favorite-genre-on-tutorial-message">好みの映画ジャンルを登録する</div>
+      <div class="caret-down-register-favorite-genre-on-tutorial-message shake-animation"><i class="fa-solid fa-2x fa-caret-down"></i></div>
+      <%= link_to shuffled_overview_path, class:"link-to-register-favorite-genre-on-tutorial-message" do %>
+        <i class="fa fa-film fa-2x"></i>
+        <div class="icon-label-register-favorite-genre-on-tutorial-message">カスタマイズ</div>
+      <% end %>
+    <% end %>
+    
+    <% if current_user.guest? %>
+      <div class="navi-follow-on-tutorial-message" style="color: gray;">フォローする</div>
+      <div class="caret-down-follow-on-tutorial-message  shake-animation"  style="color: gray;"><i class="fa-solid fa-2x fa-caret-down"></i></div>
+      <div class="link-to-follow-on-tutorial-message" style="color: gray;">
+        <i class="fa fa-user-plus fa-2x"></i>
+        <div class="icon-label-follow-on-tutorial-message"  style="color: gray;">フォロー<i class="fa-solid fa-circle-exclamation" style="color:black; position:relative; left:3px;"></i></div>
+      </div>
+    <% else %>
+      <div class="navi-follow-on-tutorial-message">フォローする</div>
+      <div class="caret-down-follow-on-tutorial-message  shake-animation"><i class="fa-solid fa-2x fa-caret-down"></i></div>
+      <%= link_to shuffled_overview_path, class:"link-to-follow-on-tutorial-message" do %>
+        <i class="fa fa-user-plus fa-2x"></i>
+        <div class="icon-label-follow-on-tutorial-message">フォロー</div>
+      <% end %>
+    <% end %>
+    
+  </div>
+
+
+  <% if @message.image.present? %>
+    <%= image_tag @message.image, alt: "Tutorial Image", width: 200, height: 250, class: "picture-on-tutorial-message", style: "display: none;" %>
+  <% end %>
+  
+  <%= link_to tutorial_message_next_path, method: :post, class: "btn-to-next-tutorial-message", id: "nextButton" do %>
+    閉じる <i class="fa-solid fa-caret-down"></i>
+  <% end %>
+</div>
+
+<style>
+.navi-creating-shuffled-overview-on-tutorial-message {
+  position: absolute;
+  top: 140px;
+  left: 75px;
+}
+
+.navi-register-favorite-genre-on-tutorial-message {
+  position: absolute;
+  top: 140px;
+  left: 280px;
+}
+
+.navi-follow-on-tutorial-message {
+  position: absolute;
+  top: 140px;
+  left: 550px;
+}
+
+.caret-down-creating-shuffled-overview-on-tutorial-message {
+  position: absolute;
+  top: 160px;
+  left: 135px;
+}
+.caret-down-register-favorite-genre-on-tutorial-message {
+  position: absolute;
+  top: 160px;
+  left: 370px;
+}
+.caret-down-follow-on-tutorial-message {
+  position: absolute;
+  top: 160px;
+  left: 580px;
+}
+
+.link-to-creating-shuffled-overview-on-tutorial-message {
+  position: absolute;
+  top: 200px;
+  left: 120px;
+  text-decoration: none;
+  color: black;
+}
+.link-to-register-favorite-genre-on-tutorial-message {
+  position: absolute;
+  top: 200px;
+  left: 365px;
+  text-decoration: none;
+  color: black;
+}
+.link-to-follow-on-tutorial-message {
+  position: absolute;
+  top: 200px;
+  left:  575px;
+  text-decoration: none;
+  color: black;
+}
+
+.icon-label-register-favorite-genre-on-tutorial-message {
+  position: relative;
+  left: -30px;
+  cursor: pointer;
+}
+.icon-label-follow-on-tutorial-message {
+  position: relative;
+  left: -30px;
+  cursor: pointer;
+}
+.icon-label-follow-on-tutorial-message {
+  position: relative;
+  left: -10px;
+}
+
+/* 矢印のシェイクアニメーション */
+.shake-animation {
+  animation: shake 1s infinite;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.link-on-tutorial-message {
+  position: relative;
+  top: -120px;
+  opacity: 0; /* 初期状態は透明 */
+  transition: opacity 0.5s ease, transform 0.5s ease; /* フェードインのアニメーション */
+}
+
+.picture-on-tutorial-message {
+  position: absolute;
+  right: 150px;
+  top: 15px;
+  border-radius: 15px;
+
+  opacity: 0; /* 初期状態は透明 */
+  transition: opacity 0.5s ease, transform 0.5s ease; /* フェードインのアニメーション */
+}
+
+
+.picture-on-tutorial-message.show {
+  opacity: 1; /* フェードイン後は完全に表示 */
+  transform: translateY(0); /* 元の位置に戻る */
+}
+.link-on-tutorial-message.show {
+  opacity: 1; /* フェードイン後は完全に表示 */
+  transform: translateY(0); /* 元の位置に戻る */
+}
+
+.tutorial-message {
+  top: -25px;
+  overflow-y: auto;
+  padding: 20px;
+  position: relative;
+  height: 300px;
+  width: 1200px; /* 固定幅 */
+  margin: 0 auto; /* コンテナを中央に配置 */
+  background: #eafae0; /* 薄い明るい緑 */
+  box-sizing: border-box; /* パディングとボーダーを含めて幅を計算 */
+  border-radius: 30px 30px 30px 30px;
+  border: 3px solid #333;
+}
+
+.btn-to-next-tutorial-message {
+  position: absolute;
+  right: 20px; /* 右端からの距離 */
+  bottom: 20px; /* 下端からの距離 */
+  padding: 10px 20px; /* ボタンのパディング */
+  background-color: #007bff; /* ボタンの背景色 */
+  color: #fff; /* ボタンのテキスト色 */
+  border-radius: 5px; /* 角を丸くする */
+  text-align: center;
+  font-size: 16px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* オプションでボタンに影をつける */
+  text-decoration: none;
+}
+
+.caret-jump {
+  display: inline-block;
+  animation: caret-jump-animation 0.6s ease-in-out infinite;
+}
+
+@keyframes caret-jump-animation {
+  0%, 100% {
+    transform: translateY(0); /* 初期位置 */
+  }
+  50% {
+    transform: translateY(-3px); /* 上にジャンプする */
+  }
+}
+
+#typing-text {
+  white-space: pre; /* 改行やスペースを保持 */
+  margin-left: 50px;
+  font-size: 16px;
+}
+
+@keyframes shake {
+  0% { transform: translateY(0); }
+  25% { transform: translateY(-5px); }
+  50% { transform: translateY(5px); }
+  75% { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
+}
+
+.shake-animation {
+  animation: shake 0.5s ease-in-out forwards; /* アニメーションを適用 */
+}
+
+/* グレーアウトエフェクト */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* グレーアウトの色 */
+  z-index: 0; /* オーバーレイを最背面に */
+}
+
+/* スポットライトの周りをクリアにする */
+.spotlight {
+  position: relative;
+  z-index: 1; /* スポットライトを前面に表示 */
+}
+
+
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const typingText = document.getElementById("typing-text");
+  const tutorialImage = document.querySelector(".picture-on-tutorial-message");
+  const navigationLinks = document.querySelector(".link-on-tutorial-message");
+  const synopsisButton = document.getElementById("synopsis-button");
+  const arrowNavigation = document.getElementById("arrowNavigation"); // 矢印ナビゲーションをIDで取得
+  const message = "<%= @message.text %>"; // メッセージを取得
+  const showFlagArrowNavigation = "<%= @show_arrow_navigation %>";
+
+  let index = 0;
+  
+
+  function typeWriter() {
+    if (index < message.length) {
+      typingText.innerHTML += message.charAt(index);
+      index++;
+      setTimeout(typeWriter, 50); // タイピング速度
+    } else {
+      // メッセージ表示後に画像を表示
+      if (tutorialImage.src) {
+        tutorialImage.style.display = "block"; // 画像を表示
+        setTimeout(() => {
+          tutorialImage.classList.add("show"); // フェードインアニメーションをトリガー
+          navigationLinks.classList.add("show"); // フェードインアニメーションをトリガー
+        }, 100); // 少し待ってからアニメーションを開始
+      }
+    }
+  }
+  
+  function showArrowNavigation() {
+    if (showFlagArrowNavigation) {
+      arrowNavigation.classList.add('fade-in');
+      arrowNavigation.classList.remove('opacity-hide');
+    } else {
+      arrowNavigation.classList.remove('fade-in');
+      arrowNavigation.classList.add('opacity-hide');
+    }
+  }
+
+  typeWriter(); // タイピングアニメーションを開始
+  showArrowNavigation(); // タイピングアニメーションを開始
+});
+
+</script>

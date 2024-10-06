@@ -41,6 +41,15 @@ class RelatedMoviesController < ApplicationController
   end
 
   def show_shuffled_overview
+    # チュートリアルメッセージを取得するロジックを追加
+    @message = TutorialMessage.all[session[:tutorial_step]] if session[:tutorial_step]
+
+    # @messageがnilの場合の処理
+    if @message.nil?
+      # エラーハンドリングやデフォルトメッセージを設定する
+      @message = TutorialMessage.new(text: 'メッセージが見つかりませんでした。', show_flag_spotlight: false)
+    end
+    
     clear_cache
     tmdb_service = TmdbService.new
     @related_movies = tmdb_service.random_movies(2)
