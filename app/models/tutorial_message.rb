@@ -1,7 +1,7 @@
 class TutorialMessage
   attr_accessor :text, :image, :id, :redirect_path, :show_flag_spotlight
 
-  def initialize(id:, text:, image: nil, redirect_path: nil, show_flag_spotlight: false)
+  def initialize(id: nil, text:, image: nil, redirect_path: nil, show_flag_spotlight: false)
     @id = id
     @text = text
     @image = image
